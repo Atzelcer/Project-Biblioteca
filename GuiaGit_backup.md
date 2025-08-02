@@ -1,5 +1,7 @@
 # 🚀 Guía de Git para Trabajo Remoto - Proyecto Biblioteca
 
+--------------------------
+
 ## 📋 Información del Proyecto
 - **Proyecto**: Sistema de Gestión de Biblioteca
 - **Repositorio**: Project-Biblioteca
