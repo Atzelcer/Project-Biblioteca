@@ -2,10 +2,11 @@
 
 ## 👥 Equipo de Desarrollo
 
+- **Antezana B. Maria Elena**
 - **Cervantes Torres Atzel Alan**
 - **Mendez Condori Alex Ramiro**
 - **Sanchez Lima Diego Francho**
-- **Antezana B. Maria Elena**
+
 
 ## 🏗️ Estructura del Proyecto
 
@@ -40,3 +41,4 @@ project-biblioteca/
 ├── 📁 tests/                      # Pruebas unitarias e integración
 └── 📁 vendor/                     # Dependencias de terceros
 ```
+
