@@ -1,4 +1,4 @@
-<form method="POST" action="procesar-registro">
+<form method="POST" action="../../controllers/AuthController.php">
     <label>Nombre:</label><br>
     <input type="text" name="nombre" required><br>
 
@@ -6,10 +6,10 @@
     <input type="text" name="apellido" required><br>
 
     <label>CI:</label><br>
-    <input type="text" name="ci" pattern="[0-9]+" title="Solo números" maxlength="15" required><br>
+    <input type="text" name="ci" required><br>
 
     <label>Celular:</label><br>
-    <input type="text" name="celular" pattern="[0-9]+" title="Solo números" maxlength="15"><br>
+    <input type="text" name="celular"><br>
 
     <label>Correo:</label><br>
     <input type="email" name="correo" required><br>
@@ -22,4 +22,4 @@
 
     <button type="submit">Registrar</button>
 </form>
-<p>Ya tienes cuenta? <a href="login">Inicia sesión</a></p>
+<p>Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>

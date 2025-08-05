@@ -1,59 +1,21 @@
 <?php
 session_start();
-require_once __DIR__ . '/../models/User.php';
-include('../config/verificarSesion.php');
+include("../config/database.php");
+include("../config/verificarSesion.php");
 
-class AuthController {
-    private $user;
+$nombres = $_POST["nombre"];
+$apellidos = $_POST["apellido"];
+$ci = $_POST["ci"];
+$celular = $_POST["celular"];
+$correo = $_POST["correo"];
+$password = sha1($_POST["password"]);
+$direccion = $_POST["direccion"];
+$rol = "lector";
 
-    public function __construct($conexion) {
-        $this->user = new User($conexion);
-    }
+$stmt = $conexion->prepare("INSERT INTO usuario (nombre, apellido, CI, celular, correo, password, direccion, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssssss", $nombres, $apellidos, $ci, $celular, $correo, $password, $direccion, $rol);
 
-    public function login() {
-        require __DIR__ . '/../views/auth/login.php';
-    }
-
-    public function procesarLogin() {
-        $ci = $_POST['ci'];
-        $password = $_POST['password'];
-        $usuario = $this->user->autenticarPorCI($ci, $password);
-
-        if ($usuario) {
-            $_SESSION['usuario'] = $usuario;
-            header("Location: /Project-Biblioteca/public/dashboard");
-        } else {
-            echo "CI o contraseña incorrectos.";
-        }
-    }
-
-    public function register() {
-        require __DIR__ . '/../views/auth/register.php';
-    }
-
-    public function procesarRegistro() {
-        $data = [
-            'ci' => $_POST['ci'],
-            'nombre' => $_POST['nombre'],
-            'apellido' => $_POST['apellido'],
-            'rol' => 'lector',
-            'celular' => $_POST['celular'],
-            'password' => $_POST['password'],
-            'direccion' => $_POST['direccion'],
-            'correo' => $_POST['correo']
-        ];
-
-        $ok = $this->user->crear($data);
-
-        if ($ok) {
-            header("Location: /Project-Biblioteca/public/login");
-        } else {
-            echo "Error al registrar usuario.";
-        }
-    }
-
-    public function logout() {
-        session_destroy();
-        header("Location: /Project-Biblioteca/public/login");
-    }
+if ($stmt->execute()) {
+    header("Location: ../views/auth/login.php");
+    exit();
 }
