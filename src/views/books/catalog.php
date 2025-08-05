@@ -6,7 +6,7 @@
     <title>Catalogo de Libros - Lector</title>
 </head>
 <body>
-    <h1>LECTOR</h1>
+    <h1>LIBROS</h1>
     
     <?php if (isset($_GET['message'])): ?>
         <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #f0f0f0;">

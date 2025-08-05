@@ -1,9 +1,9 @@
-<form method="POST" action="procesar-login">
+<form method="POST" action="../../config/autenticar.php">
     <label for="ci">CI:</label><br>
-    <input type="text" name="ci" pattern="[0-9]+" title="Solo números" maxlength="15" required><br><br>
+    <input type="text" name="CI" id="CI" required><br><br>
 
     <label for="password">Contraseña:</label><br>
-    <input type="password" name="password" required><br><br>
+    <input type="password" name="password" id="password" required><br><br>
 
     <button type="submit">Iniciar sesión</button>
 </form>

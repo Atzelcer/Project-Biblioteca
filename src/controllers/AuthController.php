@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__ . '/../models/User.php';
 session_start();
+require_once __DIR__ . '/../models/User.php';
+include('../config/verificarSesion.php');
 
 class AuthController {
     private $user;

@@ -1,5 +1,7 @@
 <?php
-require_once '../config/conexion.php';
+session_start();
+require_once '../config/database.php';
+include('../config/verificarSesion.php');
 
 class BookRepository {
     private $conexion;
@@ -51,8 +53,8 @@ class BooksController {
     private $service;
     
     public function __construct() {
-        global $con;
-        $repository = new BookRepository($con);
+        global $conexion;
+        $repository = new BookRepository($conexion);
         $this->service = new BookService($repository);
     }
     
