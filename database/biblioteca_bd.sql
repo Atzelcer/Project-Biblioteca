@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-08-2025 a las 03:46:18
+-- Tiempo de generación: 04-08-2025 a las 03:37:35
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -52,6 +52,32 @@ INSERT INTO `libros` (`id_libro`, `codigo_libro`, `nombre`, `autor`, `estado`, `
 (9, 'MATH004', 'Análisis Matemático', 'Tom M. Apostol', 'Disponible', '00:00:00'),
 (10, 'PROG006', 'The Pragmatic Programmer', 'Andrew Hunt, David T. Thomas', 'No disponible', '00:00:00');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id_usuario` int(10) UNSIGNED NOT NULL,
+  `CI` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `apellido` varchar(50) NOT NULL,
+  `rol` enum('lector','bibliotecario','bloqueado') NOT NULL DEFAULT 'lector',
+  `celular` int(11) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `direccion` varchar(100) DEFAULT NULL,
+  `correo` varchar(100) NOT NULL,
+  `tiempo_bloqueo` time DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id_usuario`, `CI`, `nombre`, `apellido`, `rol`, `celular`, `password`, `direccion`, `correo`, `tiempo_bloqueo`) VALUES
+(1, 0, '', '', 'lector', NULL, 'da39a3ee5e6b4b0d3255bfef95601890afd80709', NULL, '', NULL);
+
 --
 -- Índices para tablas volcadas
 --
@@ -63,6 +89,12 @@ ALTER TABLE `libros`
   ADD PRIMARY KEY (`id_libro`);
 
 --
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id_usuario`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -71,6 +103,12 @@ ALTER TABLE `libros`
 --
 ALTER TABLE `libros`
   MODIFY `id_libro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Redirigir todas las peticiones que no sean archivos o directorios existentes al index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Opcional: Forzar HTTPS (descomenta si usas HTTPS)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
