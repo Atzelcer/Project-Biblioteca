@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../controllers/AuthController.php';
+include("/../config/database.php");
+include("/../controllers/AuthController.php");
 
 $controller = new AuthController($conexion);
 
