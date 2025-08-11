@@ -8,6 +8,10 @@
 <body>
     <h1>LIBROS</h1>
     
+    <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'bibliotecario'): ?>
+        <p><strong>Panel de Bibliotecario:</strong> <a href="usuarios.php">Gestionar Usuarios</a></p>
+    <?php endif; ?>
+    
     <?php if (isset($_GET['message'])): ?>
         <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #f0f0f0;">
             <?php echo htmlspecialchars($_GET['message']); ?>
