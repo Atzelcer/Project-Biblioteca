@@ -3,10 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-08-2025 a las 04:48:07
+-- Tiempo de generación: 11-08-2025 a las 03:41:16
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
-
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -77,7 +76,10 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id_usuario`, `CI`, `nombre`, `apellido`, `rol`, `celular`, `password`, `direccion`, `correo`, `tiempo_bloqueo`) VALUES
-(1, 0, '', '', 'lector', NULL, 'da39a3ee5e6b4b0d3255bfef95601890afd80709', NULL, '', NULL);
+(1, 0, '', '', 'lector', NULL, 'da39a3ee5e6b4b0d3255bfef95601890afd80709', NULL, '', NULL),
+(2, 12398028, 'Alex', 'Mendez', 'lector', 69688100, '98fc2c4a28b8c59cd2026605da64eb4ea654c32a', 'german busch 709', 'pilotomendez777@gmail.com', '00:00:00'),
+(3, 3639672, 'Victor', 'Mendez', 'bibliotecario', 74426126, '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'german busch 709', 'victorramiromendezcondori77@gmail.com', '00:00:00'),
+(6, 12345678, 'Tilin', 'Tolon', 'lector', 77777777, '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'americas', 'tilinTolon@gmail.com', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -109,7 +111,7 @@ ALTER TABLE `libros`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
