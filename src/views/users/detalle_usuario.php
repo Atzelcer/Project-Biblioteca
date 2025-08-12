@@ -1,10 +1,18 @@
 <?php
 require_once '../../../src/config/conexion.php';
 
-if (!isset($usuario) && isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $query = mysqli_query($conexion, "SELECT * FROM usuario WHERE id_usuario = $id");
-    $usuario = mysqli_fetch_assoc($query);
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    echo "ID de usuario no válido";
+    exit;
+}
+
+$id = $_GET['id'];
+$query = mysqli_query($conexion, "SELECT * FROM usuario WHERE id_usuario = $id");
+$usuario = mysqli_fetch_assoc($query);
+
+if (!$usuario) {
+    echo "Usuario no encontrado";
+    exit;
 }
 ?>
 <!DOCTYPE html>

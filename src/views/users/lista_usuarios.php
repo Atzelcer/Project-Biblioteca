@@ -4,7 +4,7 @@ require_once '../../../src/config/conexion.php';
 $buscar = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
 
 if (!empty($buscar)) {
-    $query = mysqli_query($conexion, "SELECT * FROM usuario WHERE nombre LIKE '%$buscar%' OR CI LIKE '%$buscar%' ORDER BY nombre ASC");
+    $query = mysqli_query($conexion, "SELECT * FROM usuario WHERE CI LIKE '%$buscar%' OR nombre LIKE '%$buscar%' OR apellido LIKE '%$buscar%' ORDER BY nombre ASC");
 } else {
     $query = mysqli_query($conexion, "SELECT * FROM usuario ORDER BY nombre ASC");
 }
@@ -23,7 +23,7 @@ while($row = mysqli_fetch_assoc($query)) {
     <h1>Gestión de Usuarios</h1>
     
     <form method="GET">
-        <input type="text" name="buscar" placeholder="Buscar usuario" value="<?= htmlspecialchars($buscar ?? '') ?>">
+        <input type="text" name="buscar" placeholder="Buscar por CI, nombre o apellido" value="<?= htmlspecialchars($buscar) ?>">
         <button type="submit">Buscar</button>
     </form>
     
