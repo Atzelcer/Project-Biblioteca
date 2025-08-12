@@ -6,7 +6,6 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $libro_id = $_GET['id'];
-// -------------------------
 
 $sql = "SELECT * FROM libros WHERE id_libro = ?";
 
@@ -20,7 +19,6 @@ if ($stmt = mysqli_prepare($conexion, $sql)) {
     }
 
     $libro = mysqli_fetch_assoc($resultado);
-    // ----------------------------------------
     
     mysqli_stmt_close($stmt);
 
