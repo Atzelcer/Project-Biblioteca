@@ -20,6 +20,15 @@
     <label>Dirección:</label><br>
     <input type="text" name="direccion"><br><br>
 
+    <label>CI anverso:</label><br>
+    <input type="file" name="ci_anverso"><br><br>
+
+    <label>CI reverso:</label><br>
+    <input type="file" name="ci_reverso"><br><br>
+
+    <label>Foto de perfil:</label><br>
+    <input type="file" name="foto_perfil"><br><br>
+
     <button type="submit">Registrar</button>
 </form>
 <p>Ya tienes cuenta? <a href="login">Inicia sesión</a></p>
