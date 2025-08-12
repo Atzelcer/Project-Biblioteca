@@ -48,10 +48,7 @@ if (!isset($usuario) && isset($_GET['id'])) {
             <td><strong>Dirección:</strong></td>
             <td><?= $usuario['direccion'] ? htmlspecialchars($usuario['direccion']) : 'No registrada' ?></td>
         </tr>
-        <tr>
-            <td><strong>Estado:</strong></td>
-            <td><?= $usuario['tiempo_bloqueo'] ? 'Bloqueado' : 'Activo' ?></td>
-        </tr>
+       
     </table>
     
     <br>
