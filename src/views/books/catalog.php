@@ -6,7 +6,7 @@
     <title>Catalogo de Libros - Lector</title>
 </head>
 <body>
-    <h1>LIBROS</h1>
+    <h1>LECTOR</h1>
     
     <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'bibliotecario'): ?>
         <p><strong>Panel de Bibliotecario:</strong> <a href="usuarios.php">Gestionar Usuarios</a></p>
@@ -44,7 +44,7 @@
                         <td><?php echo htmlspecialchars($libro['estado']); ?></td>
                         <td>
                             <?php if ($libro['estado'] == 'Disponible'): ?>
-                                <button>Reservar</button>
+                                <a href="../views/books/reservation.php?id=<?php echo $libro['id_libro']; ?>">Reservar</a>
                             <?php elseif ($libro['estado'] == 'Reservado'): ?>
                                 <button disabled>Reservado</button>
                             <?php else: ?>
