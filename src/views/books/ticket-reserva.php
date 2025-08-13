@@ -2,7 +2,6 @@
 session_start();
 include("../../config/verificarSesion.php");
 
-// Verificar que se recibieron todos los parámetros necesarios
 if (!isset($_GET['ticket']) || !isset($_GET['libro']) || !isset($_GET['usuario'])) {
     die("Parámetros de ticket incompletos.");
 }

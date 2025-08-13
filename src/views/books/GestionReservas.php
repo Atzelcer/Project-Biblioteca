@@ -3,14 +3,12 @@ session_start();
 require_once '../../config/database.php';
 require_once '../../config/verificarSesion.php';
 
-// Procesar acciones del bibliotecario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['accion']) && isset($_POST['id_reserva'])) {
         $id_reserva = $_POST['id_reserva'];
         $accion = $_POST['accion'];
         
         if ($accion === 'autorizar') {
-            // Autorizar reserva: establecer fechaReserva y fechaDevolucion
             $fechaReserva = date('Y-m-d H:i:s');
             $fechaDevolucion = date('Y-m-d H:i:s', strtotime('+2 days'));
             
@@ -25,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $stmt->close();
         } elseif ($accion === 'cancelar') {
-            // Cancelar reserva y liberar el libro
             $sql_cancelar = "UPDATE reservas SET estado = 'cancelada' WHERE id_reserva = ?";
             $sql_liberar = "UPDATE libros SET estado = 'Disponible' WHERE id_libro = (SELECT id_libro FROM reservas WHERE id_reserva = ?)";
             
@@ -44,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Obtener todas las reservas con información del usuario y libro
 $sql = "SELECT 
     r.id_reserva,
     r.fichaReserva,

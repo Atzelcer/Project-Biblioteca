@@ -81,25 +81,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Obtener hora actual
 $hora_actual = date('H:i');
 $es_horario_valido = ($hora_actual >= '08:00' && $hora_actual <= '18:00');
 
-// Calcular próximo día hábil
 function obtenerProximoDiaHabil() {
     $fecha = new DateTime();
-    $dia_semana = $fecha->format('N'); // 1 = Lunes, 7 = Domingo
+    $dia_semana = $fecha->format('N'); 
     
     if ($dia_semana == 6) { // Sábado
-        $fecha->add(new DateInterval('P2D')); // Agregar 2 días (lunes)
+        $fecha->add(new DateInterval('P2D')); 
     } elseif ($dia_semana == 7) { // Domingo
-        $fecha->add(new DateInterval('P1D')); // Agregar 1 día (lunes)
+        $fecha->add(new DateInterval('P1D')); 
     } else {
-        // Es día de semana, verificar si es muy tarde
         $hora_actual = date('H:i');
         if ($hora_actual > '18:00') {
-            $fecha->add(new DateInterval('P1D')); // Próximo día
-            // Verificar si el próximo día es fin de semana
+            $fecha->add(new DateInterval('P1D')); 
+  
             $nuevo_dia = $fecha->format('N');
             if ($nuevo_dia == 6) {
                 $fecha->add(new DateInterval('P2D'));
