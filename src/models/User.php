@@ -7,11 +7,11 @@ class User {
     }
 
     public function crear($data) {
-        $sql = "INSERT INTO usuario (CI, nombre, apellido, rol, celular, password, direccion, correo)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO usuario (fotografia, ci_anverso, ci_reverso, CI, nombre, apellido, rol, celular, password, direccion, correo)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         $hash = sha1($data['password']);
-        $stmt->bind_param("isssisss", $data['ci'], $data['nombre'], $data['apellido'], $data['rol'],
+        $stmt->bind_param("sssisssisss", '', '', '', $data['ci'], $data['nombre'], $data['apellido'], $data['rol'],
                           $data['celular'], $hash, $data['direccion'], $data['correo']);
         return $stmt->execute();
     }

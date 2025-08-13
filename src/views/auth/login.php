@@ -7,4 +7,4 @@
 
     <button type="submit">Iniciar sesión</button>
 </form>
-<p>No tienes cuenta? <a href="register">Regístrate</a></p>
+<p>No tienes cuenta? <a href="register.php">Regístrate</a></p>
