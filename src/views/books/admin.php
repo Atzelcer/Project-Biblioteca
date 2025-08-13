@@ -29,7 +29,6 @@
                 <th>Nombre</th>
                 <th>Autor</th>
                 <th>Disponibilidad</th>
-                <th>Tiempo Restante</th>
                 <th>Botón de reserva</th>
             </tr>
         </thead>
@@ -41,7 +40,6 @@
                         <td><?php echo htmlspecialchars($libro['nombre']); ?></td>
                         <td><?php echo htmlspecialchars($libro['autor']); ?></td>
                         <td><?php echo htmlspecialchars($libro['estado']); ?></td>
-                        <td><?php echo $libro['tiempo_restante'] ?? '-'; ?></td>
                         <td>
                             <button>Autorizar</button>
                         </td>

@@ -36,6 +36,9 @@ switch ($cleanUri) {
     case '/logout':
         $controller->logout();
         break;
+    case '/action=logout':
+        $controller->logout();
+        break;
     default:
         http_response_code(404);
         echo "Ruta no encontrada: " . $cleanUri;

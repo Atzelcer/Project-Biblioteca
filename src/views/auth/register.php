@@ -1,4 +1,4 @@
-<form method="POST" action="procesar-registro">
+<form method="POST" action="../../config/procesar_registro.php">
     <label>Nombre:</label><br>
     <input type="text" name="nombre" required><br>
 
@@ -20,13 +20,15 @@
     <label>Dirección:</label><br>
     <input type="text" name="direccion"><br><br>
 
-    <label>CI anverso:</label><br>
+    <p><em>Los siguientes campos son opcionales:</em></p>
+
+    <label>CI anverso (opcional):</label><br>
     <input type="file" name="ci_anverso"><br><br>
 
-    <label>CI reverso:</label><br>
+    <label>CI reverso (opcional):</label><br>
     <input type="file" name="ci_reverso"><br><br>
 
-    <label>Foto de perfil:</label><br>
+    <label>Foto de perfil (opcional):</label><br>
     <input type="file" name="foto_perfil"><br><br>
 
     <button type="submit">Registrar</button>

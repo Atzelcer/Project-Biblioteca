@@ -79,13 +79,13 @@ class BooksController {
     private function showReaderCatalog() {
         $search = $_GET['search'] ?? '';
         $libros = $this->service->getReaderCatalog($search);
-        include '../views/books/catalog.php';
+        include '../views/books/LectorPanel-Principal.php';
     }
     
     private function showLibrarianCatalog() {
         $search = $_GET['search'] ?? '';
         $libros = $this->service->getLibrarianCatalog($search);
-        include '../views/books/admin.php';
+        include '../views/books/GestionReservas.php';
     }
     
     
