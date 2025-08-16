@@ -83,7 +83,7 @@ $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
             <a href="BibliotecarioPanel-Principal.php">
                 <button type="button">Volver al Panel</button>
             </a>
-            <a href="../../../public/logout.php">
+            <a href="../../config/logout.php">
                 <button type="button">Cerrar Sesión</button>
             </a>
         </div>

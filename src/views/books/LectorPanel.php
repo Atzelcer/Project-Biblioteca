@@ -40,7 +40,7 @@ $libros = $repository->findBooks($search);
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h1>LECTOR - Bienvenido <?php echo htmlspecialchars($_SESSION['nombre'] ?? 'Usuario'); ?></h1>
-        <a href="../../../public/logout.php">
+        <a href="../../config/logout.php">
             <button type="button">Cerrar Sesión</button>
         </a>
     </div>
@@ -56,7 +56,7 @@ $libros = $repository->findBooks($search);
                value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
         <button type="submit">BUSCAR</button>
     </form>
-    
+    <br><br>
 
     <table border="1" style="width: 100%; border-collapse: collapse;">
         <thead>
