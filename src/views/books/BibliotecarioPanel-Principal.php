@@ -8,7 +8,7 @@
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h1>BIBLIOTECARIO</h1>
-        <a href="../../../public/logout.php">
+        <a href="../../config/logout.php">
             <button type="button">Cerrar Sesión</button>
         </a>
     </div>

@@ -22,7 +22,7 @@
 
     <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once '../src/config/database.php';
+        require_once '../../src/config/database.php';
         
         $ci = $_POST['CI'];
         $password = sha1($_POST['password']);
@@ -42,10 +42,10 @@
             $_SESSION['rol'] = $row['rol'];
             
             if ($_SESSION['rol'] === 'lector') {
-                header('Location: ../src/views/books/LectorPanel.php');
+                header('Location: ../../src/views/books/LectorPanel.php');
                 exit();
             } elseif ($_SESSION['rol'] === 'bibliotecario') {
-                header('Location: ../src/views/books/BibliotecarioPanel-Principal.php');
+                header('Location: ../../src/views/books/BibliotecarioPanel-Principal.php');
                 exit();
             }
         } else {
