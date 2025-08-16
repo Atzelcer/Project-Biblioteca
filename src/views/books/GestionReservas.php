@@ -41,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$busqueda = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
+
 $sql = "SELECT 
     r.id_reserva,
     r.fichaReserva,
@@ -55,8 +57,23 @@ $sql = "SELECT
     l.autor
 FROM reservas r
 JOIN usuario u ON r.id_usuario = u.id_usuario
-JOIN libros l ON r.id_libro = l.id_libro
-ORDER BY 
+JOIN libros l ON r.id_libro = l.id_libro";
+
+if (!empty($busqueda)) {
+    $busqueda_escaped = $conexion->real_escape_string($busqueda);
+    $sql .= " WHERE (
+        u.nombre LIKE '%{$busqueda_escaped}%' OR 
+        u.apellido LIKE '%{$busqueda_escaped}%' OR 
+        CONCAT(u.nombre, ' ', u.apellido) LIKE '%{$busqueda_escaped}%' OR
+        u.CI LIKE '%{$busqueda_escaped}%' OR
+        r.fichaReserva LIKE '%{$busqueda_escaped}%' OR
+        l.nombre LIKE '%{$busqueda_escaped}%' OR
+        l.autor LIKE '%{$busqueda_escaped}%' OR
+        l.codigo_libro LIKE '%{$busqueda_escaped}%'
+    )";
+}
+
+$sql .= " ORDER BY 
     CASE r.estado 
         WHEN 'pendiente' THEN 1
         WHEN 'autorizada' THEN 2
@@ -67,6 +84,7 @@ ORDER BY
 
 $result = $conexion->query($sql);
 $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+$totalResultados = count($reservas);
 ?>
 
 <!DOCTYPE html>
@@ -91,7 +109,46 @@ $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     
     <?php if (isset($mensaje)): ?>
         <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
+             <?php echo htmlspecialchars($mensaje); ?>
+        </div>
+    <?php endif; ?>
+
+        <?php if (isset($mensaje)): ?>
+        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
             <?php echo htmlspecialchars($mensaje); ?>
+        </div>
+    <?php endif; ?>
+
+    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;">
+        <form method="GET" action="">
+            <label for="buscar">Buscar:</label>
+            <input 
+                type="text" 
+                id="buscar" 
+                name="buscar" 
+                placeholder="Nombre, CI, Ticket, Libro o Autor..." 
+                value="<?php echo htmlspecialchars($busqueda); ?>"
+                style="padding: 8px 12px; width: 300px; border: 1px solid #ccc;"
+            >
+            <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+                Buscar
+            </button>
+            <?php if (!empty($busqueda)): ?>
+                <a href="?" style="text-decoration: none;">
+                    <button type="button" style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; cursor: pointer;">
+                        Limpiar
+                    </button>
+                </a>
+            <?php endif; ?>
+        </form>
+    </div>
+    <?php if (isset($busqueda) && !empty($busqueda)): ?>
+        <div style="background-color: #e3f2fd; padding: 10px; margin-bottom: 15px;">
+            Resultados para: "<?php echo htmlspecialchars($busqueda); ?>" - <?php echo $totalResultados; ?> reserva(s) encontrada(s)
+        </div>
+    <?php else: ?>
+        <div style="background-color: #f5f5f5; padding: 10px; margin-bottom: 15px;">
+            Total de reservas: <?php echo $totalResultados; ?>
         </div>
     <?php endif; ?>
 
@@ -140,30 +197,36 @@ $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                                     <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer;" onclick="return confirm('¿Estás seguro de cancelar esta reserva?')">Cancelar</button>
                                 </form>
                             <?php elseif ($reserva['estado'] === 'autorizada'): ?>
-                                <span style="color: green;">✓ Autorizada</span>
+                                <span style="color: green;">Autorizada</span>
                             <?php elseif ($reserva['estado'] === 'finalizada'): ?>
-                                <span style="color: blue;">✓ Completada</span>
+                                <span style="color: blue;">Completada</span>
                             <?php else: ?>
-                                <span style="color: red;">✗ Cancelada</span>
+                                <span style="color: red;">Cancelada</span>
                             <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="9" style="padding: 20px; text-align: center;">No hay solicitudes de reservas</td>
+                    <td colspan="9" style="text-align: center; padding: 20px;">
+                        <?php if (isset($busqueda) && !empty($busqueda)): ?>
+                            No se encontraron reservas que coincidan con la búsqueda "<?php echo htmlspecialchars($busqueda); ?>"
+                        <?php else: ?>
+                            No hay solicitudes de reservas
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
     
     <div style="margin-top: 20px;">
-        <h4>Leyenda de Estados:</h4>
+        <h4>Estados:</h4>
         <ul>
-            <li><strong>PENDIENTE:</strong> Solicitud nueva, esperando autorización</li>
-            <li><strong>AUTORIZADA:</strong> Reserva aprobada, lector puede recoger el libro</li>
-            <li><strong>FINALIZADA:</strong> Libro devuelto correctamente</li>
-            <li><strong>CANCELADA:</strong> Reserva rechazada o cancelada</li>
+            <li>PENDIENTE: Esperando autorización</li>
+            <li>AUTORIZADA: Puede recoger el libro</li>
+            <li>FINALIZADA: Libro devuelto</li>
+            <li>CANCELADA: Reserva cancelada</li>
         </ul>
     </div>
 </body>
