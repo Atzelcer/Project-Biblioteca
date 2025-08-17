@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #0D0D0D;
-    color: #6A17E3;
+    color: #EAEAEA;;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,12 +12,12 @@ div.formulario {
     border: 1px solid #6A17E3;
     margin-top: 150px;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     text-align: center;
 }
 
 h1 {
-    color: #6A17E3;
+    color: #EAEAEA;
     text-align: center;
 }
 
@@ -35,12 +35,12 @@ input.login-input {
     border: 1px solid #6A17E3;
     border-radius: 5px;
     background-color: #090319;
-    color: #FFFFFF;
+    color: #EAEAEA;;
 }
 
 button {
     background-color: #6A17E3;
-    color: #FFFFFF;
+    color: #EAEAEA;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
@@ -52,11 +52,49 @@ button:hover {
 }
 
 img.fondo {
-    position: fixed;       /* Se queda fija en el fondo */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;          
     object-fit: cover;
     z-index: -1;
+}
+
+div.datos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div.dato {
+    margin: 10px 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-label {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, #5A15C3, #9B04E9);
+    color: #EAEAEA;;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.custom-file-label:hover {
+    background: linear-gradient(90deg, #9B04E9, #DF3CF7);
+    transform: scale(1.05);
+}
+
+.file-name {
+    margin-left: 10px;
+    font-size: 13px;
+    color: #EAEAEA;;
 }
