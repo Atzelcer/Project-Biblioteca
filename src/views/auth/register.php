@@ -13,43 +13,43 @@
         <form method="POST" action="../../config/procesar_registro.php">
             <div class="datos">
                 <div class="dato">
-                    <label>Nombre:</label>
+                    <label class="label-register">Nombre:</label>
                     <input class="login-input" type="text" name="nombre" required>
                 </div>
                 <div class="dato">
-                    <label>Apellido:</label>
+                    <label class="label-register">Apellido:</label>
                     <input class="login-input" type="text" name="apellido" required>
                 </div>
             </div>
             <div class="datos">
                 <div class="dato">
-                    <label>CI:</label>
+                    <label class="label-register">CI:</label>
                     <input class="login-input" type="text" name="ci" pattern="[0-9]+" title="Solo números" maxlength="15" required>
                 </div>
                 <div class="dato">
-                    <label>Celular:</label>
+                    <label class="label-register">Celular:</label>
                     <input class="login-input" type="text" name="celular" pattern="[0-9]+" title="Solo números" maxlength="15">
                 </div>
             </div>
             <div class="datos">
                 <div class="dato">
-                    <label>Correo:</label>
+                    <label class="label-register">Correo:</label>
                     <input class="login-input" type="email" name="correo" required>
                 </div>
                 <div class="dato">
-                    <label>Contraseña:</label>
+                    <label class="label-register">Contraseña:</label>
                     <input class="login-input" type="password" name="password" required>
                 </div>
             </div>
             <div class="datos">
                 <div class="dato">
-                    <label>Dirección:</label>
+                    <label class="label-register">Dirección:</label>
                     <input class="login-input" type="text" name="direccion">
                 </div>
             </div>
             
-            <p><em>Los siguientes campos son opcionales:</em></p>
-            <div class="datos">
+            <p class="texto">Los siguientes campos son opcionales:</p>
+            <div class="files">
                 <div class="file-upload">
                     <label for="ci_anverso" class="custom-file-label">Subir CI anverso</label>
                     <input type="file" id="ci_anverso" name="ci_anverso" onchange="mostrarNombre(this, 'file-anverso')">

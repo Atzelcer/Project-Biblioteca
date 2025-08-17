@@ -1,7 +1,9 @@
+/* Estilos generales */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #0D0D0D;
-    color: #EAEAEA;;
+    color: #EAEAEA;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,17 +18,17 @@ div.formulario {
     text-align: center;
 }
 
-h1 {
-    color: #EAEAEA;
-    text-align: center;
-}
-
 form.login {
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+h1 {
+    color: #EAEAEA;
+    text-align: center;
 }
 
 input.login-input {
@@ -48,7 +50,7 @@ button {
 }
 
 button:hover {
-    background-color: #5A15C3;
+    background-color: #DF3CF7;
 }
 
 img.fondo {
@@ -61,18 +63,25 @@ img.fondo {
     z-index: -1;
 }
 
+/* Estilos para registro de cuenta */
+
 div.datos {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
 }
 
 div.dato {
     margin: 10px 0;
-    text-align: left;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+
+label.label-register {
+    color: #EAEAEA;
+    margin-bottom: 10px;
 }
 
 input[type="file"] {
@@ -97,4 +106,17 @@ input[type="file"] {
     margin-left: 10px;
     font-size: 13px;
     color: #EAEAEA;;
+}
+
+p.texto {
+    color: #EAEAEA;
+    font-size: 15px;
+    margin: 0;
+}
+
+div.files {
+    margin: 25px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
