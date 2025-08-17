@@ -19,7 +19,7 @@ if (isset($_POST['CI']) && isset($_POST['password'])) {
         if ($_SESSION['rol'] === 'lector') {
             header('Location: ../controllers/books_controller.php?action=catalog_reader');
         } elseif ($_SESSION['rol'] === 'bibliotecario') {
-            header('Location: ../views/books/BibliotecarioPanel-Principal.php');
+            header('Location: ../views/books/Bibliotecario.php');
         } else {
             echo "Rol no reconocido.";
         }

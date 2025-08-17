@@ -1,6 +1,6 @@
 <?php
 if (!isset($_SESSION["CI"])) 
 {
-    header('Location: ../views/auth/login.php');
+    header('Location: ../auth/login.php');
     die();
 }
