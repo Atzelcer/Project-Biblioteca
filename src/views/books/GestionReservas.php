@@ -186,11 +186,17 @@ $totalResultados = count($reservas);
                         <td style="padding: 8px;"><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : '-'; ?></td>
                         <td style="padding: 8px;">
                             <?php if ($reserva['estado'] === 'pendiente'): ?>
-                                <form method="POST" style="display: inline;">
-                                    <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
-                                    <input type="hidden" name="accion" value="autorizar">
-                                    <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer;">Autorizar</button>
-                                </form>
+                                <button type="button" 
+                                        onclick="abrirModalAutorizar(
+                                            '<?php echo $reserva['id_reserva']; ?>',
+                                            '<?php echo htmlspecialchars($reserva['fichaReserva'], ENT_QUOTES); ?>',
+                                            '<?php echo htmlspecialchars($reserva['libro_nombre'], ENT_QUOTES); ?>',
+                                            '<?php echo htmlspecialchars($reserva['codigo_libro'], ENT_QUOTES); ?>',
+                                            '<?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido'], ENT_QUOTES); ?>'
+                                        )" 
+                                        style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                                    Autorizar
+                                </button>
                                 <form method="POST" style="display: inline;">
                                     <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
                                     <input type="hidden" name="accion" value="cancelar">
@@ -229,5 +235,68 @@ $totalResultados = count($reservas);
             <li>CANCELADA: Reserva cancelada</li>
         </ul>
     </div>
+
+    <!-- Modal de confirmación de autorización -->
+    <div id="modalAutorizar" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 500px; border-radius: 5px;">
+            <h3 style="margin-top: 0;">Confirmar Autorización de Reserva</h3>
+            <p>¿Está seguro que desea autorizar la siguiente reserva?</p>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 3px; margin: 15px 0;">
+                <p><strong>Ticket:</strong> <span id="modalTicket"></span></p>
+                <p><strong>Libro:</strong> <span id="modalLibro"></span></p>
+                <p><strong>Ejemplar:</strong> <span id="modalEjemplar"></span></p>
+                <p><strong>Solicitante:</strong> <span id="modalSolicitante"></span></p>
+            </div>
+            
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="button" onclick="cerrarModal()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 3px;">
+                    Cancelar
+                </button>
+                <button type="button" onclick="confirmarAutorizacion()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario oculto para autorización -->
+    <form id="formAutorizar" method="POST" style="display: none;">
+        <input type="hidden" name="id_reserva" id="hiddenIdReserva">
+        <input type="hidden" name="accion" value="autorizar">
+    </form>
+
+    <script>
+        let reservaSeleccionada = null;
+
+        function abrirModalAutorizar(idReserva, ticket, libro, ejemplar, solicitante) {
+            reservaSeleccionada = idReserva;
+            document.getElementById('modalTicket').textContent = ticket;
+            document.getElementById('modalLibro').textContent = libro;
+            document.getElementById('modalEjemplar').textContent = ejemplar;
+            document.getElementById('modalSolicitante').textContent = solicitante;
+            document.getElementById('modalAutorizar').style.display = 'block';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalAutorizar').style.display = 'none';
+            reservaSeleccionada = null;
+        }
+
+        function confirmarAutorizacion() {
+            if (reservaSeleccionada) {
+                document.getElementById('hiddenIdReserva').value = reservaSeleccionada;
+                document.getElementById('formAutorizar').submit();
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalAutorizar');
+            if (event.target == modal) {
+                cerrarModal();
+            }
+        }
+    </script>
 </body>
 </html>
