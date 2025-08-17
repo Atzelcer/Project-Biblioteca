@@ -26,7 +26,7 @@ while($row = mysqli_fetch_assoc($query)) {
             <a href="../books/BibliotecarioPanel-Principal.php">
                 <button type="button">Volver al Panel</button>
             </a>
-            <a href="../../../public/logout.php">
+            <a href="../../config/logout.php">
                 <button type="button">Cerrar Sesión</button>
             </a>
         </div>

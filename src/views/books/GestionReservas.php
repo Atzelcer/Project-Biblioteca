@@ -41,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$busqueda = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
+
 $sql = "SELECT 
     r.id_reserva,
     r.fichaReserva,
@@ -55,8 +57,23 @@ $sql = "SELECT
     l.autor
 FROM reservas r
 JOIN usuario u ON r.id_usuario = u.id_usuario
-JOIN libros l ON r.id_libro = l.id_libro
-ORDER BY 
+JOIN libros l ON r.id_libro = l.id_libro";
+
+if (!empty($busqueda)) {
+    $busqueda_escaped = $conexion->real_escape_string($busqueda);
+    $sql .= " WHERE (
+        u.nombre LIKE '%{$busqueda_escaped}%' OR 
+        u.apellido LIKE '%{$busqueda_escaped}%' OR 
+        CONCAT(u.nombre, ' ', u.apellido) LIKE '%{$busqueda_escaped}%' OR
+        u.CI LIKE '%{$busqueda_escaped}%' OR
+        r.fichaReserva LIKE '%{$busqueda_escaped}%' OR
+        l.nombre LIKE '%{$busqueda_escaped}%' OR
+        l.autor LIKE '%{$busqueda_escaped}%' OR
+        l.codigo_libro LIKE '%{$busqueda_escaped}%'
+    )";
+}
+
+$sql .= " ORDER BY 
     CASE r.estado 
         WHEN 'pendiente' THEN 1
         WHEN 'autorizada' THEN 2
@@ -67,6 +84,7 @@ ORDER BY
 
 $result = $conexion->query($sql);
 $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+$totalResultados = count($reservas);
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +101,7 @@ $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
             <a href="BibliotecarioPanel-Principal.php">
                 <button type="button">Volver al Panel</button>
             </a>
-            <a href="../../../public/logout.php">
+            <a href="../../config/logout.php">
                 <button type="button">Cerrar Sesión</button>
             </a>
         </div>
@@ -91,7 +109,46 @@ $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     
     <?php if (isset($mensaje)): ?>
         <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
+             <?php echo htmlspecialchars($mensaje); ?>
+        </div>
+    <?php endif; ?>
+
+        <?php if (isset($mensaje)): ?>
+        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
             <?php echo htmlspecialchars($mensaje); ?>
+        </div>
+    <?php endif; ?>
+
+    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;">
+        <form method="GET" action="">
+            <label for="buscar">Buscar:</label>
+            <input 
+                type="text" 
+                id="buscar" 
+                name="buscar" 
+                placeholder="Nombre, CI, Ticket, Libro o Autor..." 
+                value="<?php echo htmlspecialchars($busqueda); ?>"
+                style="padding: 8px 12px; width: 300px; border: 1px solid #ccc;"
+            >
+            <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+                Buscar
+            </button>
+            <?php if (!empty($busqueda)): ?>
+                <a href="?" style="text-decoration: none;">
+                    <button type="button" style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; cursor: pointer;">
+                        Limpiar
+                    </button>
+                </a>
+            <?php endif; ?>
+        </form>
+    </div>
+    <?php if (isset($busqueda) && !empty($busqueda)): ?>
+        <div style="background-color: #e3f2fd; padding: 10px; margin-bottom: 15px;">
+            Resultados para: "<?php echo htmlspecialchars($busqueda); ?>" - <?php echo $totalResultados; ?> reserva(s) encontrada(s)
+        </div>
+    <?php else: ?>
+        <div style="background-color: #f5f5f5; padding: 10px; margin-bottom: 15px;">
+            Total de reservas: <?php echo $totalResultados; ?>
         </div>
     <?php endif; ?>
 
@@ -129,42 +186,117 @@ $reservas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                         <td style="padding: 8px;"><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : '-'; ?></td>
                         <td style="padding: 8px;">
                             <?php if ($reserva['estado'] === 'pendiente'): ?>
-                                <form method="POST" style="display: inline;">
-                                    <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
-                                    <input type="hidden" name="accion" value="autorizar">
-                                    <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer;">Autorizar</button>
-                                </form>
+                                <button type="button" 
+                                        onclick="abrirModalAutorizar(
+                                            '<?php echo $reserva['id_reserva']; ?>',
+                                            '<?php echo htmlspecialchars($reserva['fichaReserva'], ENT_QUOTES); ?>',
+                                            '<?php echo htmlspecialchars($reserva['libro_nombre'], ENT_QUOTES); ?>',
+                                            '<?php echo htmlspecialchars($reserva['codigo_libro'], ENT_QUOTES); ?>',
+                                            '<?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido'], ENT_QUOTES); ?>'
+                                        )" 
+                                        style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                                    Autorizar
+                                </button>
                                 <form method="POST" style="display: inline;">
                                     <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
                                     <input type="hidden" name="accion" value="cancelar">
                                     <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer;" onclick="return confirm('¿Estás seguro de cancelar esta reserva?')">Cancelar</button>
                                 </form>
                             <?php elseif ($reserva['estado'] === 'autorizada'): ?>
-                                <span style="color: green;">✓ Autorizada</span>
+                                <span style="color: green;">Autorizada</span>
                             <?php elseif ($reserva['estado'] === 'finalizada'): ?>
-                                <span style="color: blue;">✓ Completada</span>
+                                <span style="color: blue;">Completada</span>
                             <?php else: ?>
-                                <span style="color: red;">✗ Cancelada</span>
+                                <span style="color: red;">Cancelada</span>
                             <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="9" style="padding: 20px; text-align: center;">No hay solicitudes de reservas</td>
+                    <td colspan="9" style="text-align: center; padding: 20px;">
+                        <?php if (isset($busqueda) && !empty($busqueda)): ?>
+                            No se encontraron reservas que coincidan con la búsqueda "<?php echo htmlspecialchars($busqueda); ?>"
+                        <?php else: ?>
+                            No hay solicitudes de reservas
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
     
     <div style="margin-top: 20px;">
-        <h4>Leyenda de Estados:</h4>
+        <h4>Estados:</h4>
         <ul>
-            <li><strong>PENDIENTE:</strong> Solicitud nueva, esperando autorización</li>
-            <li><strong>AUTORIZADA:</strong> Reserva aprobada, lector puede recoger el libro</li>
-            <li><strong>FINALIZADA:</strong> Libro devuelto correctamente</li>
-            <li><strong>CANCELADA:</strong> Reserva rechazada o cancelada</li>
+            <li>PENDIENTE: Esperando autorización</li>
+            <li>AUTORIZADA: Puede recoger el libro</li>
+            <li>FINALIZADA: Libro devuelto</li>
+            <li>CANCELADA: Reserva cancelada</li>
         </ul>
     </div>
+
+    <!-- Modal de confirmación de autorización -->
+    <div id="modalAutorizar" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 500px; border-radius: 5px;">
+            <h3 style="margin-top: 0;">Confirmar Autorización de Reserva</h3>
+            <p>¿Está seguro que desea autorizar la siguiente reserva?</p>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 3px; margin: 15px 0;">
+                <p><strong>Ticket:</strong> <span id="modalTicket"></span></p>
+                <p><strong>Libro:</strong> <span id="modalLibro"></span></p>
+                <p><strong>Ejemplar:</strong> <span id="modalEjemplar"></span></p>
+                <p><strong>Solicitante:</strong> <span id="modalSolicitante"></span></p>
+            </div>
+            
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="button" onclick="cerrarModal()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 3px;">
+                    Cancelar
+                </button>
+                <button type="button" onclick="confirmarAutorizacion()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario oculto para autorización -->
+    <form id="formAutorizar" method="POST" style="display: none;">
+        <input type="hidden" name="id_reserva" id="hiddenIdReserva">
+        <input type="hidden" name="accion" value="autorizar">
+    </form>
+
+    <script>
+        let reservaSeleccionada = null;
+
+        function abrirModalAutorizar(idReserva, ticket, libro, ejemplar, solicitante) {
+            reservaSeleccionada = idReserva;
+            document.getElementById('modalTicket').textContent = ticket;
+            document.getElementById('modalLibro').textContent = libro;
+            document.getElementById('modalEjemplar').textContent = ejemplar;
+            document.getElementById('modalSolicitante').textContent = solicitante;
+            document.getElementById('modalAutorizar').style.display = 'block';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalAutorizar').style.display = 'none';
+            reservaSeleccionada = null;
+        }
+
+        function confirmarAutorizacion() {
+            if (reservaSeleccionada) {
+                document.getElementById('hiddenIdReserva').value = reservaSeleccionada;
+                document.getElementById('formAutorizar').submit();
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalAutorizar');
+            if (event.target == modal) {
+                cerrarModal();
+            }
+        }
+    </script>
 </body>
 </html>
