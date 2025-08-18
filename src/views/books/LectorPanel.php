@@ -11,11 +11,13 @@ class BookRepository {
     }
     
     public function findBooks($search = '') {
-        $sql = "SELECT id_libro, nombre, autor, estado FROM libros";
+        //$sql = "SELECT id_libro, nombre, autor, estado FROM libros";
+        $sql = "SELECT id_libro, nombre, autor, estado FROM libros libros WHERE estado = 'Disponible'";
         
         if (!empty($search)) {
             $search = $this->conexion->real_escape_string($search);
-            $sql .= " WHERE nombre LIKE '%{$search}%' OR autor LIKE '%{$search}%'";
+            //$sql .= " WHERE nombre LIKE '%{$search}%' OR autor LIKE '%{$search}%'";
+            $sql .= " AND nombre LIKE '%{$search}%' OR autor LIKE '%{$search}%'";
         }
         
         $sql .= " ORDER BY nombre ASC";
@@ -130,15 +132,19 @@ $libros = $repository->findBooks($search);
                         <td style="padding: 8px;"><?php echo htmlspecialchars($libro['autor']); ?></td>
                         <td style="padding: 8px;"><?php echo htmlspecialchars($libro['estado']); ?></td>
                         <td style="padding: 8px;">
-                            <?php if ($libro['estado'] == 'Disponible'): ?>
-                                <a href="reservation.php?id=<?php echo $libro['id_libro']; ?>">
-                                    <button type="button">Reservar</button>
-                                </a>
-                            <?php elseif ($libro['estado'] == 'Reservado'): ?>
-                                <button type="button" disabled>Reservado</button>
-                            <?php else: ?>
-                                <button type="button" disabled>No disponible</button>
-                            <?php endif; ?>
+                            <!-- <?php //if ($libro['estado'] == 'Disponible'): ?> -->
+                                <!-- <a href="reservation.php?id=<?php //echo $libro['id_libro']; ?>"> -->
+                                    <!-- <button type="button">Reservar</button> -->
+                                <!-- </a> -->
+                            <!-- <?php //elseif ($libro['estado'] == 'Reservado'): ?> -->
+                                <!-- <button type="button" disabled>Reservado</button> -->
+                            <!-- <?php //else: ?> -->
+                                <!-- <button type="button" disabled>No disponible</button> -->
+                            <!-- <?php //endif; ?> -->
+
+                             <a href="reservation.php?id=<?php echo $libro['id_libro']; ?>">
+                                <button type="button">Reservar</button>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
