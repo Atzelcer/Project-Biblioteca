@@ -253,7 +253,11 @@ $totalResultados = count($reservas);
                 <button type="button" onclick="cerrarModal()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 3px;">
                     Cancelar
                 </button>
-                <button type="button" onclick="confirmarAutorizacion()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">
+                <!-- <button type="button" onclick="confirmarAutorizacion()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;"> -->
+                    <!-- Confirmar -->
+                <!-- </button> -->
+                 <button type="button" onclick="confirmarAutorizacion()" 
+                style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">
                     Confirmar
                 </button>
             </div>
@@ -298,5 +302,6 @@ $totalResultados = count($reservas);
             }
         }
     </script>
+    <script src="../../../public/js/reserva.js"></script>
 </body>
 </html>
