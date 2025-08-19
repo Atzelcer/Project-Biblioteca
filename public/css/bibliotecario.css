@@ -25,6 +25,7 @@ div.container {
     position: fixed;
     top: 0;
     left: 0;
+    border-right: 1px solid var(--detalles);
 }
 
 ul {
@@ -53,7 +54,7 @@ ul {
 
 div.contenido {
     width: 90%;
-    margin-left: 12%; 
+    margin-left: 10%; 
     right: 0;
 }
 
@@ -78,5 +79,6 @@ footer {
     padding: 15px;
     font-size: 14px;
     bottom: 0;
-    width: 100%;
+    width: 90%;
+    right: 0;
 }
