@@ -1,3 +1,5 @@
+/* Estilos generales */
+
 body {
     font-family: Arial, sans-serif;
     --color-principal: #E63946;
@@ -14,41 +16,15 @@ body {
     background-color: var(--color-fondo);
 }
 
-h1 {
-    color: var(--texto-principal);
-    font-size: 35px;
-}
-
-main#contenedor {
-    padding: 20px;
-    background-color: var(--color-fondo);
-}
-
-div.contenido {
-    width: 100%;
-}
+/* Estilos para la lista de navegación */
 
 div.container {
     background-color: var(--barra-lateral);
-    height: 100%;
+    height: 100vh;   /* en vez de 100% */
     width: 10%;
-}
-
-.icon {
-    width: 30px;
-    height: 30px;
-    stroke: var(--texto-secundario);
-}
-
-.nav-item:hover .icon {
-    stroke: var(--color-secundario);
-}
-
-header {
-    background-color: var(--color-fondo);
-    width: 100%;
-    margin: auto;
-    padding: 15px;
+    position: fixed; /* opcional, si quieres que quede fija aunque hagas scroll */
+    top: 0;
+    left: 0;
 }
 
 ul {
@@ -63,26 +39,45 @@ ul {
     padding: 50px 0;
 }
 
-a {
-    text-decoration: none;
-    color: var(--texto-primario);
+.icon {
+    width: 30px;
+    height: 30px;
+    stroke: var(--texto-secundario);
 }
 
-form {
+.nav-item:hover .icon {
+    stroke: var(--color-secundario);
+}
+
+/* Contenido */
+
+div.contenido {
+    width: 90%;
+    margin-left: 12%; 
+    right: 0;
+}
+
+
+h1 {
+    color: var(--texto-principal);
+    font-size: 35px;
+    margin: 0;
+    padding: 30px;
+}
+
+main#contenedor {
+    padding: 20px;
+    background-color: var(--color-fondo);
+}
+
+/* Estilos para el pie de página */
+
+footer {
     background-color: var(--barra-lateral);
-    width: 30%;
-    border-radius: 5px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-input {
-    background-color: var(--color-lateral);
-    color: var(--texto-primario);
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 15px;
+    color: var(--texto-secundario);
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    bottom: 0;
+    width: 100%;
 }

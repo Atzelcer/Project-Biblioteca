@@ -8,3 +8,11 @@ function cargar(pagina) {
         })
         .catch(error => console.error('Error:', error));
 }
+
+function cerrarSesion() {
+    fetch('logout.php')
+        .then(() => {
+            window.location.href = '../auth/login.php';
+        })
+        .catch(error => console.error('Error:', error));
+}
