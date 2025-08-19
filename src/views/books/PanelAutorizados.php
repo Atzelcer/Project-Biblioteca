@@ -11,20 +11,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($accion === 'registrar_devolucion') {
             $fechaDevolucionReal = date('Y-m-d H:i:s');
             
-            $sql_devolucion = "UPDATE reservas SET estado = 'finalizada' WHERE id_reserva = ?";
+            // Actualizar la reserva con la fecha de devolución real y cambiar estado a finalizada
+            $sql_devolucion = "UPDATE reservas SET estado = 'finalizada', fechaDevolucionReal = ? WHERE id_reserva = ?";
             $stmt = $conexion->prepare($sql_devolucion);
-            $stmt->bind_param('i', $id_reserva);
+            $stmt->bind_param('si', $fechaDevolucionReal, $id_reserva);
             
             if ($stmt->execute()) {
+                // Liberar el libro y cambiar su estado a Disponible
                 $sql_liberar = "UPDATE libros SET estado = 'Disponible' WHERE id_libro = (SELECT id_libro FROM reservas WHERE id_reserva = ?)";
                 $stmt2 = $conexion->prepare($sql_liberar);
                 $stmt2->bind_param('i', $id_reserva);
-                $stmt2->execute();
-                $stmt2->close();
                 
-                $mensaje = "Devolución registrada exitosamente";
+                if ($stmt2->execute()) {
+                    $mensaje = "Devolución registrada exitosamente el " . date('d/m/Y H:i', strtotime($fechaDevolucionReal));
+                    $mensaje_tipo = "success";
+                } else {
+                    $mensaje = "Error al liberar el libro";
+                    $mensaje_tipo = "error";
+                }
+                $stmt2->close();
             } else {
                 $mensaje = "Error al registrar la devolución";
+                $mensaje_tipo = "error";
             }
             $stmt->close();
         } elseif ($accion === 'bloquear') {
@@ -40,8 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt2->close();
                 
                 $mensaje = "Reserva bloqueada y libro liberado";
+                $mensaje_tipo = "warning";
             } else {
                 $mensaje = "Error al bloquear la reserva";
+                $mensaje_tipo = "error";
             }
             $stmt->close();
         }
@@ -106,6 +116,51 @@ $totalResultados = count($reservas);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Autorizados - Bibliotecario</title>
     <script src="../../../public/js/modalDevolucion.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .mensaje-exito {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .fila-eliminando {
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+        
+        .boton-procesando {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Mejorar estilo del modal */
+        .modal-content {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .button-success {
+            background-color: #28a745 !important;
+            transition: background-color 0.2s ease;
+        }
+        
+        .button-success:hover {
+            background-color: #218838 !important;
+        }
+        
+        .button-cancel {
+            background-color: #6c757d !important;
+            transition: background-color 0.2s ease;
+        }
+        
+        .button-cancel:hover {
+            background-color: #545b62 !important;
+        }
+    </style>
 </head>
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -121,8 +176,34 @@ $totalResultados = count($reservas);
     </div>
     
     <?php if (isset($mensaje)): ?>
-        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
-            <?php echo htmlspecialchars($mensaje); ?>
+        <?php 
+        $estilo_mensaje = "padding: 10px; border: 1px solid; margin: 10px 0; border-radius: 5px; font-weight: bold;";
+        $color_fondo = "#e6ffe6"; // verde por defecto
+        $color_borde = "#28a745";
+        $icono = "✅";
+        
+        if (isset($mensaje_tipo)) {
+            switch($mensaje_tipo) {
+                case 'success':
+                    $color_fondo = "#d4edda";
+                    $color_borde = "#28a745";
+                    $icono = "✅";
+                    break;
+                case 'error':
+                    $color_fondo = "#f8d7da";
+                    $color_borde = "#dc3545";
+                    $icono = "❌";
+                    break;
+                case 'warning':
+                    $color_fondo = "#fff3cd";
+                    $color_borde = "#ffc107";
+                    $icono = "⚠️";
+                    break;
+            }
+        }
+        ?>
+        <div style="<?php echo $estilo_mensaje; ?> background-color: <?php echo $color_fondo; ?>; border-color: <?php echo $color_borde; ?>;">
+            <?php echo $icono . " " . htmlspecialchars($mensaje); ?>
         </div>
     <?php endif; ?>
 
@@ -260,7 +341,7 @@ $totalResultados = count($reservas);
     </table>
     
     <div id="modalDevolucion" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
-        <div style="background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 500px; border-radius: 10px; position: relative;">
+        <div class="modal-content" style="background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 500px; border-radius: 10px; position: relative;">
             <div style="text-align: center; margin-bottom: 20px;">
                 <h2 style="color: #007bff; margin-bottom: 5px;">Registrar devolución</h2>
                 <p style="margin: 0; color: #666; font-size: 14px;">Datos del libro</p>
@@ -307,11 +388,11 @@ $totalResultados = count($reservas);
                 <form id="formDevolucion" method="POST" style="display: inline;">
                     <input type="hidden" name="id_reserva" id="idReservaModal" value="">
                     <input type="hidden" name="accion" value="registrar_devolucion">
-                    <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 5px; font-size: 14px;">
+                    <button type="submit" class="button-success" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 5px; font-size: 14px;">
                         Registrar devolución
                     </button>
                 </form>
-                <button type="button" onclick="cerrarModalDevolucion()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-size: 14px;">
+                <button type="button" class="button-cancel" onclick="cerrarModalDevolucion()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-size: 14px;">
                     Cancelar
                 </button>
             </div>
