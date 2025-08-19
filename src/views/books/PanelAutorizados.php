@@ -61,9 +61,11 @@ $sql = "SELECT
     u.nombre,
     u.apellido,
     u.CI,
+    u.fotografia,
     l.codigo_libro,
     l.nombre as libro_nombre,
-    l.autor
+    l.autor,
+    l.foto_libro
 FROM reservas r
 JOIN usuario u ON r.id_usuario = u.id_usuario
 JOIN libros l ON r.id_libro = l.id_libro
@@ -103,6 +105,7 @@ $totalResultados = count($reservas);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Autorizados - Bibliotecario</title>
+    <script src="../../../public/js/modalDevolucion.js"></script>
 </head>
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -221,11 +224,19 @@ $totalResultados = count($reservas);
                         <td style="padding: 8px;"><?php echo $reserva['fechaReserva'] ? date('d/m/Y H:i', strtotime($reserva['fechaReserva'])) : 'N/A'; ?></td>
                         <td style="padding: 8px;"><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : 'N/A'; ?></td>
                         <td style="padding: 8px;">
-                            <form method="POST" style="display: inline;">
-                                <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
-                                <input type="hidden" name="accion" value="registrar_devolucion">
-                                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 4px 8px; cursor: pointer; margin-right: 5px; font-size: 12px;" onclick="return confirm('¿Confirmar devolución del libro?')">Registrar Devo</button>
-                            </form>
+                            <button type="button" 
+                                style="background-color: #28a745; color: white; border: none; padding: 4px 8px; cursor: pointer; margin-right: 5px; font-size: 12px;" 
+                                onclick="abrirModalDevolucion(
+                                    '<?php echo $reserva['id_reserva']; ?>',
+                                    '<?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido'], ENT_QUOTES); ?>',
+                                    '<?php echo $reserva['CI']; ?>',
+                                    '<?php echo htmlspecialchars($reserva['libro_nombre'], ENT_QUOTES); ?>',
+                                    '<?php echo htmlspecialchars($reserva['autor'], ENT_QUOTES); ?>',
+                                    '<?php echo $reserva['fotografia'] ? '../../../public/images/usersFotos/' . $reserva['fotografia'] : '../../../public/images/usersFotos/default-user.svg'; ?>',
+                                    '<?php echo $reserva['foto_libro'] ? '../../../public/images/booksPortada/' . $reserva['foto_libro'] : '../../../public/images/booksPortada/default-book.svg'; ?>'
+                                )">
+                                Registrar Devo
+                            </button>
                             <form method="POST" style="display: inline;">
                                 <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
                                 <input type="hidden" name="accion" value="bloquear">
@@ -248,5 +259,64 @@ $totalResultados = count($reservas);
         </tbody>
     </table>
     
+    <div id="modalDevolucion" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div style="background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 500px; border-radius: 10px; position: relative;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: #007bff; margin-bottom: 5px;">Registrar devolución</h2>
+                <p style="margin: 0; color: #666; font-size: 14px;">Datos del libro</p>
+            </div>
+            
+            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 100px; border: 2px solid #ddd; border-radius: 5px; overflow: hidden; background-color: #f8f9fa;">
+                        <img id="fotoLibro" src="" alt="Portada del libro" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Foto libro</p>
+                </div>
+                
+
+                <div style="flex: 1;">
+                    <p style="margin: 5px 0; font-weight: bold;">Nombre: <span id="nombreLibro" style="font-weight: normal;"></span></p>
+                    <p style="margin: 5px 0; font-weight: bold;">Autor: <span id="autorLibro" style="font-weight: normal;"></span></p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <p style="margin: 5px 0; color: #666; font-size: 14px;">Datos del lector</p>
+                
+                <div style="display: flex; gap: 20px; align-items: center;">
+
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; border: 2px solid #ddd; border-radius: 5px; overflow: hidden; background-color: #f8f9fa;">
+                            <img id="fotoUsuario" src="" alt="Foto del usuario" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Foto lector</p>
+                    </div>
+                    
+
+                    <div style="flex: 1;">
+                        <p style="margin: 5px 0; font-weight: bold;">Nombre: <span id="nombreUsuario" style="font-weight: normal;"></span></p>
+                        <p style="margin: 5px 0; font-weight: bold;">Apellido: <span id="apellidoUsuario" style="font-weight: normal;"></span></p>
+                        <p style="margin: 5px 0; font-weight: bold;">CI: <span id="ciUsuario" style="font-weight: normal;"></span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <form id="formDevolucion" method="POST" style="display: inline;">
+                    <input type="hidden" name="id_reserva" id="idReservaModal" value="">
+                    <input type="hidden" name="accion" value="registrar_devolucion">
+                    <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 5px; font-size: 14px;">
+                        Registrar devolución
+                    </button>
+                </form>
+                <button type="button" onclick="cerrarModalDevolucion()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-size: 14px;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
