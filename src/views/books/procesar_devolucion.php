@@ -12,24 +12,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($accion === 'registrar_devolucion') {
             $fechaDevolucionReal = date('Y-m-d H:i:s');
             
-            // Verificar si existe la columna fechaDevolucionReal
             $sql_check = "SHOW COLUMNS FROM reservas LIKE 'fechaDevolucionReal'";
             $result_check = $conexion->query($sql_check);
             
             if ($result_check && $result_check->num_rows > 0) {
-                // La columna existe, usar la consulta completa
                 $sql_devolucion = "UPDATE reservas SET estado = 'finalizada', fechaDevolucionReal = ? WHERE id_reserva = ?";
                 $stmt = $conexion->prepare($sql_devolucion);
                 $stmt->bind_param('si', $fechaDevolucionReal, $id_reserva);
             } else {
-                // La columna no existe, solo actualizar el estado
                 $sql_devolucion = "UPDATE reservas SET estado = 'finalizada' WHERE id_reserva = ?";
                 $stmt = $conexion->prepare($sql_devolucion);
                 $stmt->bind_param('i', $id_reserva);
             }
             
             if ($stmt->execute()) {
-                // Liberar el libro
+          
                 $sql_liberar = "UPDATE libros SET estado = 'Disponible' WHERE id_libro = (SELECT id_libro FROM reservas WHERE id_reserva = ?)";
                 $stmt2 = $conexion->prepare($sql_liberar);
                 $stmt2->bind_param('i', $id_reserva);

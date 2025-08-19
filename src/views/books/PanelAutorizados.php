@@ -11,13 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($accion === 'registrar_devolucion') {
             $fechaDevolucionReal = date('Y-m-d H:i:s');
             
-            // Actualizar la reserva con la fecha de devolución real y cambiar estado a finalizada
             $sql_devolucion = "UPDATE reservas SET estado = 'finalizada', fechaDevolucionReal = ? WHERE id_reserva = ?";
             $stmt = $conexion->prepare($sql_devolucion);
             $stmt->bind_param('si', $fechaDevolucionReal, $id_reserva);
             
             if ($stmt->execute()) {
-                // Liberar el libro y cambiar su estado a Disponible
                 $sql_liberar = "UPDATE libros SET estado = 'Disponible' WHERE id_libro = (SELECT id_libro FROM reservas WHERE id_reserva = ?)";
                 $stmt2 = $conexion->prepare($sql_liberar);
                 $stmt2->bind_param('i', $id_reserva);
@@ -137,7 +135,6 @@ $totalResultados = count($reservas);
             cursor: not-allowed;
         }
         
-        /* Mejorar estilo del modal */
         .modal-content {
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             animation: fadeIn 0.3s ease-in;
@@ -166,10 +163,10 @@ $totalResultados = count($reservas);
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h1>BIBLIOTECARIO - Autorizados</h1>
         <div>
-            <a href="BibliotecarioPanel-Principal.php">
+            <a href="Bibliotecario.php">
                 <button type="button">Volver al Panel</button>
             </a>
-            <a href="../../../public/logout.php">
+            <a href="../../../public/images/logout.php">
                 <button type="button">Cerrar Sesión</button>
             </a>
         </div>

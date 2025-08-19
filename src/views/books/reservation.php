@@ -3,14 +3,12 @@ session_start();
 include("../../config/database.php");
 include("../../config/verificarSesion.php");
 
-// Verificar que hay un ID de libro válido
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("ID de libro no válido.");
 }
 
 $libro_id = $_GET['id'];
 
-// Obtener información del libro
 $sql = "SELECT * FROM libros WHERE id_libro = ?";
 if ($stmt = mysqli_prepare($conexion, $sql)) {
     mysqli_stmt_bind_param($stmt, "i", $libro_id);
@@ -27,9 +25,8 @@ if ($stmt = mysqli_prepare($conexion, $sql)) {
     die("Error al preparar la consulta: " . mysqli_error($conexion));
 }
 
-// Procesar la reserva si se envió el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Generar código de ficha reserva aleatorio
+    
     function generarFichaReserva() {
         $letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $numeros = '0123456789';
@@ -38,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $fichaReserva = generarFichaReserva();
     
-    // Obtener el id_usuario desde la base de datos usando el CI de la sesión
     $ci_usuario = $_SESSION['CI'];
     $sql_usuario = "SELECT id_usuario FROM usuario WHERE CI = ?";
     $stmt_usuario = mysqli_prepare($conexion, $sql_usuario);
@@ -53,19 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     mysqli_stmt_close($stmt_usuario);
     
-    // Insertar la reserva en estado pendiente
     $sql_reserva = "INSERT INTO reservas (id_usuario, id_libro, fichaReserva, estado) VALUES (?, ?, ?, 'pendiente')";
     if ($stmt_reserva = mysqli_prepare($conexion, $sql_reserva)) {
         mysqli_stmt_bind_param($stmt_reserva, "iis", $id_usuario, $libro_id, $fichaReserva);
         
         if (mysqli_stmt_execute($stmt_reserva)) {
-            // Actualizar estado del libro a Reservado
             $sql_update = "UPDATE libros SET estado = 'Reservado' WHERE id_libro = ?";
             $stmt_update = mysqli_prepare($conexion, $sql_update);
             mysqli_stmt_bind_param($stmt_update, "i", $libro_id);
             mysqli_stmt_execute($stmt_update);
             
-            // Redirigir a la página de ticket
             $nombre_completo = ($_SESSION['nombre'] ?? 'Usuario') . ' ' . ($_SESSION['apellido'] ?? '');
             $params = http_build_query([
                 'ticket' => $fichaReserva,
