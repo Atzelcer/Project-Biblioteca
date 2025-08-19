@@ -1,31 +1,22 @@
--- =========================================================
--- Script de creación para la base de datos: biblioteca_bd
--- Solo nombres de archivo (sin rutas)
--- =========================================================
+-- Base de datos del Sistema de Biblioteca
+-- Versión limpia sin conflictos
 
 SET FOREIGN_KEY_CHECKS = 0;
-
--- Crear la BD
-CREATE DATABASE IF NOT EXISTS biblioteca_bd
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+DROP DATABASE IF EXISTS biblioteca_bd;
+CREATE DATABASE biblioteca_bd;
 USE biblioteca_bd;
-
--- Eliminar tablas si existen
-DROP TABLE IF EXISTS reservas;
-DROP TABLE IF EXISTS libros;
-DROP TABLE IF EXISTS usuario;
 
 -- ========================
 -- Tabla: usuario
 -- ========================
 CREATE TABLE usuario (
   id_usuario INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  fotografia VARCHAR(255) DEFAULT NULL COMMENT 'Nombre del archivo de la foto',
-  CI INT(11) NOT NULL,
+  fotografia VARCHAR(255) DEFAULT NULL COMMENT 'Nombre del archivo de fotografía',
+  CI INT NOT NULL,
   nombre VARCHAR(50) NOT NULL,
   apellido VARCHAR(50) NOT NULL,
-  rol ENUM('lector','bibliotecario','bloqueado') NOT NULL DEFAULT 'lector',
-  celular INT(11) DEFAULT NULL,
+  rol ENUM('bibliotecario','lector') NOT NULL DEFAULT 'lector',
+  celular INT DEFAULT NULL,
   password VARCHAR(255) NOT NULL,
   direccion VARCHAR(100) DEFAULT NULL,
   correo VARCHAR(100) NOT NULL,
@@ -36,7 +27,6 @@ CREATE TABLE usuario (
 
 -- Datos iniciales de usuario (solo nombres de archivo)
 INSERT INTO usuario (fotografia, CI, nombre, apellido, rol, celular, password, direccion, correo) VALUES
-<<<<<<< HEAD
 ('1_Maria_Martinez.jpg', 12345, 'Maria Elena', 'Antezana', 'bibliotecario', 70123456, '8cb2237d0679ca88db6464eac60da96345513964', 'Av. Principal 123', 'bibliotecario@biblioteca.edu'),
 ('7_Pedro_Lopez.jpg', 11111, 'Juan Carlos', 'Perez', 'lector', 70234567, '7b21848ac9af35be0ddb2d6b9fc3851934db8420', 'Calle Los Pinos 456', 'juan.perez@gmail.com'),
 ('4_Ana_Gonzalez.jpg', 22222, 'Ana Maria', 'Rodriguez', 'lector', 70345678, '1a9b9508b6003b68ddfe03a9c8cbc4bd4388339b', 'Av. Libertadores 789', 'ana.rodriguez@gmail.com'),
@@ -45,18 +35,10 @@ INSERT INTO usuario (fotografia, CI, nombre, apellido, rol, celular, password, d
 ('8_Jorge_Martinez.jpg', 55555, 'Diego Fernando', 'Martinez', 'lector', 70678901, '69df79bef9287d3bcb8f104a408b06de6a108fd8', 'Calle Bolivar 987', 'diego.martinez@gmail.com'),
 ('6_Luis_Vargas.jpg', 67890, 'Laura Patricia', 'Vargas', 'lector', 70789012, '230991abcd77e8173edb0af392e1f11120051e29', 'Calle Murillo 147', 'laura.vargas@gmail.com'),
 ('15_Roberto_Lopez.jpg', 13579, 'Roberto', 'Silva', 'lector', 70890123, '93ba1608fc10b710894fb9f8c89724c6eeb44d11', 'Av. 6 de Agosto 258', 'roberto.silva@gmail.com'),
-('12_Carlos_Ramirez.jpg', 24680, 'Carmen', 'Torres', 'lector', 70901234, '23fbf23c9201b754adcb2fca0c8e4b19b8a7c740', 'Calle Comercio 369', 'carmen.torres@gmail.com');
-=======
-('1_Lucia_Perez.jpg', 12345, 'Maria Elena', 'Antezana', 'bibliotecario', 70123456, '8cb2237d0679ca88db6464eac60da96345513964', 'Av. Principal 123', 'bibliotecario@biblioteca.edu'),
-('7_Juan_Gonzalez.jpg', 11111, 'Juan Carlos', 'Perez', 'lector', 70234567, '7b21848ac9af35be0ddb2d6b9fc3851934db8420', 'Calle Los Pinos 456', 'juan.perez@gmail.com'),
-('13_Lucia_Ramirez.jpg', 22222, 'Ana Maria', 'Rodriguez', 'lector', 70345678, '1a9b9508b6003b68ddfe03a9c8cbc4bd4388339b', 'Av. Libertadores 789', 'ana.rodriguez@gmail.com'),
-('23_Pedro_Torres.jpg', 33333, 'Carlos Alberto', 'Lopez', 'lector', 70456789, '403d9917c3e950798601addf7ba82cd3c83f344b', 'Calle San Martin 321', 'carlos.lopez@gmail.com'),
-('11_Laura_Perez.jpg', 44444, 'Sofia', 'Gonzalez', 'lector', 70567890, '3e511da7577d1864871b760ab30e05b56943c9b2', 'Av. America 654', 'sofia.gonzalez@gmail.com'),
-('28_Diego_Fernandez.jpg', 55555, 'Diego Fernando', 'Martinez', 'lector', 70678901, '69df79bef9287d3bcb8f104a408b06de6a108fd8', 'Calle Bolivar 987', 'diego.martinez@gmail.com'),
-('14_Maria_Rodriguez.jpg', 67890, 'Laura Patricia', 'Vargas', 'lector', 70789012, '230991abcd77e8173edb0af392e1f11120051e29', 'Calle Murillo 147', 'laura.vargas@gmail.com'),
-('10_Roberto_Gonzalez.jpg', 13579, 'Roberto', 'Silva', 'lector', 70890123, '93ba1608fc10b710894fb9f8c89724c6eeb44d11', 'Av. 6 de Agosto 258', 'roberto.silva@gmail.com'),
-('12_Carmen_Ramirez.jpg', 24680, 'Carmen', 'Torres', 'lector', 70901234, '23fbf23c9201b754adcb2fca0c8e4b19b8a7c740', 'Calle Comercio 369', 'carmen.torres@gmail.com');
->>>>>>> 43b27efc4739435760172368ff2aac72421cc471
+('12_Carlos_Ramirez.jpg', 24680, 'Carmen', 'Torres', 'lector', 70901234, '23fbf23c9201b754adcb2fca0c8e4b19b8a7c740', 'Calle Comercio 369', 'carmen.torres@gmail.com'),
+('9_Juan_Rodriguez.jpg', 35790, 'Fernando', 'Morales', 'lector', 71012345, 'c7b47a7beafeaccac334dd6b4b18f5c00b8797ec', 'Av. Ballivián 741', 'fernando.morales@gmail.com'),
+('11_Jorge_Gonzalez.jpg', 46801, 'Patricia', 'Herrera', 'lector', 71123456, '5e8c5c98e7e1dda8a8c61e13ef9c7b5c7b93c5bb', 'Calle Sucre 852', 'patricia.herrera@gmail.com'),
+('3_Maria_Rodriguez.jpg', 57912, 'Luis', 'Mendoza', 'lector', 71234567, 'a12b4b24e25eb2f68e3b5c83b6fba2c9c4e8f9af', 'Av. Arce 963', 'luis.mendoza@gmail.com');
 
 -- ========================
 -- Tabla: libros
@@ -77,11 +59,7 @@ INSERT INTO libros (codigo_libro, nombre, autor, estado, foto_libro) VALUES
 ('PROG001', 'Estructura de Datos con C', 'Luis Joyanes Aguilar', 'Disponible', 'Estructura_de_Datos_con_C.jpg'),
 ('PROG002', 'Fundamentos de Programacion', 'Kenneth A. Lambert', 'Disponible', 'Fundamentos_de_Programacion.jpg'),
 ('MATH001', 'Algebra Lineal y sus Aplicaciones', 'David C. Lay', 'Reservado', 'Algebra_Lineal_y_sus_Aplicaciones.jpg'),
-<<<<<<< HEAD
 ('MATH002', 'Calculo Infinitesimal', 'Michael Spivak', 'No disponible', 'Calculo_Infinitesimal.jpg'),
-=======
-('MATH002', 'Calculo Infinitesimal', 'Michael Spivak', 'No disponible', 'Automate_the_Boring_Stuff.jpg'),
->>>>>>> 43b27efc4739435760172368ff2aac72421cc471
 ('PROG003', 'Clean Code', 'Robert C. Martin', 'Disponible', 'Clean_Code.jpg'),
 ('MATH003', 'Introduccion a la Teoria de Numeros', 'G.H. Hardy', 'Reservado', 'Introduccion_a_la_Teoria_de_Numeros.jpg'),
 ('PROG004', 'Eloquent JavaScript', 'Marijn Haverbeke', 'Disponible', 'Eloquent_JavaScript.jpg'),
@@ -101,7 +79,6 @@ INSERT INTO libros (codigo_libro, nombre, autor, estado, foto_libro) VALUES
 ('PROG017', 'Cracking the Coding Interview', 'Gayle McDowell', 'Disponible', 'Cracking_the_Coding_Interview.jpg'),
 ('PROG018', 'JavaScript The Good Parts', 'Douglas Crockford', 'Disponible', 'JavaScript_The_Good_Parts.jpg'),
 ('PROG019', 'Python Crash Course', 'Eric Matthes', 'Disponible', 'Python_Crash_Course.jpg'),
-<<<<<<< HEAD
 ('PROG020', 'Automate the Boring Stuff', 'Al Sweigart', 'No disponible', 'Automate_the_Boring_Stuff.jpg'),
 ('MATH005', 'Calculo de Variable Compleja', 'James Ward Brown', 'Disponible', 'Calculo_de_Variable_Compleja.jpg'),
 ('MATH006', 'Algebra Abstracta', 'David S. Dummit', 'Disponible', 'Algebra_Abstracta.jpg'),
@@ -131,9 +108,6 @@ INSERT INTO libros (codigo_libro, nombre, autor, estado, foto_libro) VALUES
 ('LIT002', 'Cien Anos de Soledad', 'Gabriel Garcia Marquez', 'Disponible', 'Cien_Anos_de_Soledad.jpg'),
 ('LIT003', 'El Principito', 'Antoine de Saint-Exupery', 'Reservado', 'El_Principito.jpg'),
 ('LIT004', 'Cronica de una Muerte Anunciada', 'Gabriel Garcia Marquez', 'Disponible', 'Cronica_de_una_Muerte_Anunciada.jpg');
-=======
-('PROG020', 'Automate the Boring Stuff', 'Al Sweigart', 'No disponible', 'Automate_the_Boring_Stuff.jpg');
->>>>>>> 43b27efc4739435760172368ff2aac72421cc471
 
 -- ========================
 -- Tabla: reservas
@@ -145,7 +119,11 @@ CREATE TABLE reservas (
   fichaReserva VARCHAR(10) NOT NULL UNIQUE,
   fechaReserva DATETIME DEFAULT NULL COMMENT 'Fecha cuando el bibliotecario autoriza la reserva',
   fechaDevolucion DATETIME DEFAULT NULL COMMENT 'Fecha límite de devolución',
+<<<<<<< HEAD
+  fechaDevolucionReal DATETIME DEFAULT NULL COMMENT 'Fecha real de devolución',
+=======
   fechaDevolucionReal DATETIME DEFAULT NULL COMMENT 'Fecha real cuando se devolvió el libro',
+>>>>>>> e7aa0ec84faceb4e5d581c1e3cf54b6249d7932f
   estado ENUM('pendiente','autorizada','finalizada','cancelada') NOT NULL DEFAULT 'pendiente',
   PRIMARY KEY (id_reserva),
   KEY idx_reservas_usuario (id_usuario),
@@ -159,26 +137,39 @@ CREATE TABLE reservas (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-<<<<<<< HEAD
--- Datos de ejemplo para reservas
--- Datos de ejemplo para reservas
-=======
--- Datos de ejemplo reservas
->>>>>>> 43b27efc4739435760172368ff2aac72421cc471
+-- Datos de ejemplo para reservas con más variedad
 INSERT INTO reservas (id_usuario, id_libro, fichaReserva, fechaReserva, fechaDevolucion, estado) VALUES
-(2, 3, 'Let45A', '2025-08-10 10:00:00', '2025-08-12 10:00:00', 'autorizada'),
-(3, 6, 'Met78B', '2025-08-11 14:30:00', '2025-08-13 14:30:00', 'autorizada'),
-(4, 8, 'Boo12C', NULL, NULL, 'pendiente'),
-(5, 1, 'Cod89D', '2025-08-09 09:15:00', '2025-08-11 09:15:00', 'finalizada'),
+-- Reservas autorizadas para devolución (para probar el modal)
+(2, 3, 'Let45A', '2025-01-10 10:00:00', '2025-01-12 10:00:00', 'autorizada'),
+(3, 6, 'Met78B', '2025-01-11 14:30:00', '2025-01-13 14:30:00', 'autorizada'),
+(4, 10, 'Tec21E', '2025-01-15 11:00:00', '2025-01-17 11:00:00', 'autorizada'),
+(5, 14, 'Mat33F', '2025-01-16 09:45:00', '2025-01-18 09:45:00', 'autorizada'),
+(6, 16, 'Pro56G', '2025-01-17 14:20:00', '2025-01-19 14:20:00', 'autorizada'),
+(7, 27, 'Phy77H', '2025-01-18 08:10:00', '2025-01-20 08:10:00', 'autorizada'),
+(8, 30, 'His89I', '2025-01-19 15:00:00', '2025-01-21 15:00:00', 'autorizada'),
+(9, 35, 'Lit90J', '2025-01-20 13:30:00', '2025-01-22 13:30:00', 'autorizada'),
+(10, 40, 'Eng65K', '2025-01-21 16:45:00', '2025-01-23 16:45:00', 'autorizada'),
+(11, 42, 'Che87L', '2025-01-22 10:25:00', '2025-01-24 10:25:00', 'autorizada'),
 
--- Reservas adicionales autorizadas
-(6, 10, 'Tec21E', '2025-08-15 11:00:00', '2025-08-17 11:00:00', 'autorizada'),
-(7, 12, 'Mat33F', '2025-08-16 09:45:00', '2025-08-18 09:45:00', 'autorizada'),
-(8, 15, 'Pro56G', '2025-08-17 14:20:00', '2025-08-19 14:20:00', 'autorizada'),
-(9, 18, 'Phy77H', '2025-08-18 08:10:00', '2025-08-20 08:10:00', 'autorizada'),
-(2, 20, 'His89I', '2025-08-19 15:00:00', '2025-08-21 15:00:00', 'autorizada'),
-(3, 25, 'Lit90J', '2025-08-20 13:30:00', '2025-08-22 13:30:00', 'autorizada'),
-(4, 30, 'Eng65K', '2025-08-21 16:45:00', '2025-08-23 16:45:00', 'autorizada'),
-(5, 35, 'Che87L', '2025-08-22 10:25:00', '2025-08-24 10:25:00', 'autorizada');
+-- Reservas pendientes (esperando autorización del bibliotecario)
+(2, 8, 'Boo12C', NULL, NULL, 'pendiente'),
+(4, 12, 'Dev45M', NULL, NULL, 'pendiente'),
+(6, 18, 'Sci78N', NULL, NULL, 'pendiente'),
+(8, 22, 'Art91P', NULL, NULL, 'pendiente'),
+(10, 25, 'His34Q', NULL, NULL, 'pendiente'),
+
+-- Reservas finalizadas (ya devueltas)
+(3, 1, 'Cod89D', '2025-01-05 09:15:00', '2025-01-07 09:15:00', 'finalizada'),
+(5, 5, 'Cle12R', '2025-01-06 11:30:00', '2025-01-08 11:30:00', 'finalizada'),
+(7, 9, 'Des56S', '2025-01-07 14:45:00', '2025-01-09 14:45:00', 'finalizada'),
+(9, 15, 'Ref78T', '2025-01-08 16:20:00', '2025-01-10 16:20:00', 'finalizada'),
+
+-- Más reservas autorizadas para probar el sistema
+(12, 19, 'Pyt67U', '2025-01-23 09:00:00', '2025-01-25 09:00:00', 'autorizada'),
+(2, 24, 'Mat89V', '2025-01-24 11:15:00', '2025-01-26 11:15:00', 'autorizada'),
+(4, 28, 'Phy45W', '2025-01-25 13:40:00', '2025-01-27 13:40:00', 'autorizada'),
+(6, 32, 'Che67X', '2025-01-26 15:20:00', '2025-01-28 15:20:00', 'autorizada'),
+(8, 37, 'Eng89Y', '2025-01-27 08:30:00', '2025-01-29 08:30:00', 'autorizada'),
+(10, 41, 'His12Z', '2025-01-28 10:45:00', '2025-01-30 10:45:00', 'autorizada');
 
 SET FOREIGN_KEY_CHECKS = 1;
