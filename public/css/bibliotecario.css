@@ -1,54 +1,82 @@
+/* Estilos generales */
+
 body {
     font-family: Arial, sans-serif;
+    --color-principal: #E63946;
+    --color-fondo: #01050B;
+    --barra-lateral: #050810;
+    --detalles: #2C2C54;
+    --color-secundario: #1D9BF0;
+    --hover: #0A74DA;
+    --texto-primario: #EAEAEA;
+    --texto-secundario: #B0B0B0;
     display: flex;
     margin: 0;
-    color: #EAEAEA;
-    background-color: #090319;
+    color: var(--texto-primario);
+    background-color: var(--color-fondo);
 }
 
-main#contenedor {
-    padding: 20px;
-    background-color: #090319;
-}
-
-div.contenido {
-    width: 100%;
-}
+/* Estilos para la lista de navegación */
 
 div.container {
-    background-color: #090319;
-    height: 100%;
-    width: 20%;
-    padding: 2%;
-    border-right: 1px solid #2E2E2E;
-}
-
-header {
-    background-color: #090319;
-    width: 100%;
-    margin: auto;
-    border-bottom: 1px solid #2E2E2E;
-    padding: 15px;
+    background-color: var(--barra-lateral);
+    height: 100vh;
+    width: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 ul {
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-li {
-    margin-top: 10px;
-}
-
-a {
-    text-decoration: none;
-    color: #EAEAEA;
-}
-
-ul.nav-head {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 50px;
+    padding: 50px 0;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    stroke: var(--texto-secundario);
+}
+
+.nav-item:hover .icon {
+    stroke: var(--color-secundario);
+}
+
+/* Contenido */
+
+div.contenido {
+    width: 90%;
+    margin-left: 12%; 
+    right: 0;
+}
+
+h1 {
+    color: var(--texto-principal);
+    font-size: 35px;
+    margin: 0;
+    padding: 30px;
+}
+
+main#contenedor {
+    padding: 20px;
+    background-color: var(--color-fondo);
+}
+
+/* Estilos para el pie de página */
+
+footer {
+    background-color: var(--barra-lateral);
+    color: var(--texto-secundario);
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    bottom: 0;
+    width: 100%;
 }

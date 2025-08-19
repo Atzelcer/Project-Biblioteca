@@ -119,7 +119,11 @@ CREATE TABLE reservas (
   fichaReserva VARCHAR(10) NOT NULL UNIQUE,
   fechaReserva DATETIME DEFAULT NULL COMMENT 'Fecha cuando el bibliotecario autoriza la reserva',
   fechaDevolucion DATETIME DEFAULT NULL COMMENT 'Fecha límite de devolución',
+<<<<<<< HEAD
   fechaDevolucionReal DATETIME DEFAULT NULL COMMENT 'Fecha real de devolución',
+=======
+  fechaDevolucionReal DATETIME DEFAULT NULL COMMENT 'Fecha real cuando se devolvió el libro',
+>>>>>>> e7aa0ec84faceb4e5d581c1e3cf54b6249d7932f
   estado ENUM('pendiente','autorizada','finalizada','cancelada') NOT NULL DEFAULT 'pendiente',
   PRIMARY KEY (id_reserva),
   KEY idx_reservas_usuario (id_usuario),
