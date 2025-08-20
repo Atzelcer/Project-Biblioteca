@@ -137,11 +137,11 @@ $libros = $repository->findBooks($search);
             </div>
             
             <div style="text-align: center; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
-                <button type="button" onclick="imprimirTicket()" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 3px;">
-                    📄 Imprimir
+                <button type="button" onclick="imprimirTicket()" style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; border: none; padding: 12px 25px; margin-right: 15px; cursor: pointer; border-radius: 8px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 123, 255, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 123, 255, 0.3)'">
+                    �️ Imprimir Ticket
                 </button>
-                <button type="button" onclick="cerrarTicketModal()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">
-                    ✅ Cerrar
+                <button type="button" onclick="cerrarTicketModal()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 12px 25px; cursor: pointer; border-radius: 8px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(40, 167, 69, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(40, 167, 69, 0.3)'">
+                    ✅ Entendido
                 </button>
             </div>
         </div>

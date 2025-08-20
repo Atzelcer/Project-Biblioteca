@@ -109,31 +109,72 @@ function mostrarTicketReserva(ticket) {
     const horaReserva = new Date().toLocaleTimeString('es-ES');
     
     ticketContent.innerHTML = `
-        <div style="text-align: center; border: 2px solid #28a745; padding: 20px; border-radius: 10px; background-color: #f8f9fa;">
-            <h2 style="color: #28a745; margin-bottom: 20px;">🎫 TICKET DE RESERVA</h2>
+        <div style="text-align: center; border: 3px solid #28a745; padding: 25px; border-radius: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 8px 25px rgba(40, 167, 69, 0.15);">
             
-            <div style="background-color: white; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #28a745;">
-                <h3 style="margin: 0 0 15px 0; color: #333;">Información del Libro</h3>
-                <p><strong>Nombre:</strong> ${ticket.libro_nombre}</p>
-                <p><strong>Autor:</strong> ${ticket.libro_autor}</p>
-                <p><strong>Código:</strong> ${ticket.codigo_reserva}</p>
+            <!-- Header del Ticket -->
+            <div style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 20px; border-radius: 10px; margin: -10px -10px 20px -10px; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+                <h1 style="margin: 0; font-size: 28px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                    🎫 TICKET DE RESERVA
+                </h1>
+                <p style="margin: 5px 0 0 0; font-size: 16px; opacity: 0.9;">Sistema de Biblioteca Digital</p>
             </div>
             
-            <div style="background-color: #e7f3ff; padding: 15px; border-radius: 5px; margin: 15px 0;">
-                <h4 style="margin: 0 0 10px 0;">HORARIOS DE ATENCIÓN</h4>
-                <p style="margin: 5px 0;">Lunes a Viernes de 8:00 a 12:00</p>
-                <p style="margin: 5px 0;">y de 14:00 a 18:00</p>
-                <p style="margin: 10px 0 0 0; font-weight: bold;">Horario válido: Podrás recoger el libro hoy o en días hábiles empezando desde el 20/08/2025</p>
+            <!-- Información Principal -->
+            <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 6px solid #28a745; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="margin: 0 0 15px 0; color: #28a745; font-size: 20px; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;">
+                    📚 Información del Libro
+                </h3>
+                <div style="text-align: left;">
+                    <p style="margin: 8px 0; font-size: 16px;"><strong style="color: #495057;">Título:</strong> <span style="color: #212529;">${ticket.libro_nombre}</span></p>
+                    <p style="margin: 8px 0; font-size: 16px;"><strong style="color: #495057;">Autor:</strong> <span style="color: #212529;">${ticket.libro_autor}</span></p>
+                    <p style="margin: 8px 0; font-size: 16px;"><strong style="color: #495057;">Código de Reserva:</strong> <span style="background: #28a745; color: white; padding: 4px 8px; border-radius: 5px; font-weight: bold; font-family: monospace;">${ticket.codigo_reserva}</span></p>
+                </div>
             </div>
             
-            <div style="background-color: #fff3cd; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #ffc107;">
-                <p><strong>Fecha de Reserva:</strong> ${fechaReserva}</p>
-                <p><strong>Hora de Reserva:</strong> ${horaReserva}</p>
-                <p><strong>Usuario:</strong> ${ticket.usuario_nombre}</p>
+            <!-- Información del Usuario -->
+            <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 6px solid #007bff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="margin: 0 0 15px 0; color: #007bff; font-size: 18px; border-bottom: 2px solid #cce7ff; padding-bottom: 10px;">
+                    👤 Datos del Usuario
+                </h3>
+                <div style="text-align: left;">
+                    <p style="margin: 8px 0; font-size: 16px;"><strong style="color: #495057;">Usuario:</strong> <span style="color: #212529;">${ticket.usuario_nombre}</span></p>
+                    <p style="margin: 8px 0; font-size: 16px;"><strong style="color: #495057;">Fecha:</strong> <span style="color: #212529;">${fechaReserva}</span></p>
+                    <p style="margin: 8px 0; font-size: 16px;"><strong style="color: #495057;">Hora:</strong> <span style="color: #212529;">${horaReserva}</span></p>
+                </div>
             </div>
             
-            <div style="margin-top: 20px;">
-                <p style="font-size: 14px; color: #666;">¡Reserva exitosa! Presenta este ticket en la biblioteca para recoger tu libro.</p>
+            <!-- Horarios de Atención -->
+            <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 6px solid #ffc107; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="margin: 0 0 15px 0; color: #856404; font-size: 18px; border-bottom: 2px solid #ffeaa7; padding-bottom: 10px;">
+                    🕒 HORARIOS DE ATENCIÓN
+                </h3>
+                <div style="text-align: left;">
+                    <p style="margin: 8px 0; font-size: 16px; font-weight: bold; color: #856404;">📅 Lunes a Viernes</p>
+                    <p style="margin: 5px 0; font-size: 15px; color: #6c757d;">🌅 Mañana: 8:00 AM - 12:00 PM</p>
+                    <p style="margin: 5px 0; font-size: 15px; color: #6c757d;">🌆 Tarde: 2:00 PM - 6:00 PM</p>
+                    <div style="background: #fd7e14; color: white; padding: 10px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin: 0; font-weight: bold; font-size: 14px;">⏰ <strong>Horario válido:</strong> Podrás recoger el libro hoy o en días hábiles empezando desde el 20/08/2025</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instrucciones -->
+            <div style="background: #d1ecf1; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 6px solid #17a2b8; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="margin: 0 0 15px 0; color: #0c5460; font-size: 18px;">
+                    📋 Instrucciones Importantes
+                </h3>
+                <div style="text-align: left; color: #0c5460;">
+                    <p style="margin: 8px 0; font-size: 15px;">✅ Presenta este ticket en la biblioteca para recoger tu libro</p>
+                    <p style="margin: 8px 0; font-size: 15px;">📱 Guarda una captura de pantalla o imprime este ticket</p>
+                    <p style="margin: 8px 0; font-size: 15px;">🆔 Lleva tu documento de identificación</p>
+                    <p style="margin: 8px 0; font-size: 15px;">⚠️ La reserva vence si no recoges el libro en 3 días hábiles</p>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #e9ecef;">
+                <p style="font-size: 14px; color: #6c757d; margin: 5px 0;">Sistema de Biblioteca Digital - ${new Date().getFullYear()}</p>
+                <p style="font-size: 12px; color: #adb5bd; margin: 0;">¡Gracias por usar nuestros servicios!</p>
             </div>
         </div>
     `;
@@ -159,19 +200,49 @@ function imprimirTicket() {
     ventanaImpresion.document.write(`
         <html>
             <head>
-                <title>Ticket de Reserva</title>
+                <title>Ticket de Reserva - Biblioteca Digital</title>
                 <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; }
-                    @media print { body { margin: 0; } }
+                    body { 
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                        margin: 20px; 
+                        background: white;
+                        color: #333;
+                        line-height: 1.6;
+                    }
+                    @media print { 
+                        body { 
+                            margin: 0; 
+                            background: white !important;
+                        }
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            color-adjust: exact !important;
+                        }
+                    }
+                    @page {
+                        margin: 1cm;
+                        size: A4;
+                    }
+                    .no-print {
+                        display: none;
+                    }
                 </style>
             </head>
             <body>
-                ${ticketContent}
+                <div style="max-width: 600px; margin: 0 auto;">
+                    ${ticketContent}
+                </div>
+                <script>
+                    window.onload = function() {
+                        setTimeout(function() {
+                            window.print();
+                        }, 500);
+                    }
+                </script>
             </body>
         </html>
     `);
     ventanaImpresion.document.close();
-    ventanaImpresion.print();
 }
 
 // Event listeners
