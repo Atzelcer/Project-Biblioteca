@@ -90,50 +90,17 @@ $totalResultados = count($reservas);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitudes de Reserva - Bibliotecario</title>
+    <link rel="stylesheet" href="../../../public/css/solicitudes.css">
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>SOLICITUDES DE RESERVA</h1>
-        <div style="display: flex; gap: 15px;>
-            <a href="BibliotecarioPanel-Principal.php">
-                <button type="button">Volver al Panel</button>
-            </a>
-            <a href="../../config/logout.php">
-                <button type="button">Cerrar Sesión</button>
-            </a>
-        </div>
-    </div>
-    
-    <?php if (isset($mensaje)): ?>
-        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6; text-align: center;">
-             <?php echo htmlspecialchars($mensaje); ?>
-        </div>
-    <?php endif; ?>
+    <h1>SOLICITUDES DE RESERVA</h1>
 
-    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;text-align:center; border-radius: 10px;">
-        <form method="GET" action="" style="display: inline-block;">
-           
-            <input 
-                type="text" 
-                id="buscar" 
-                name="buscar" 
-                placeholder="Nombre, CI, Ticket, Libro o Autor..." 
-                value="<?php echo htmlspecialchars($busqueda); ?>"
-                style="padding: 8px 12px; width: 300px; border: 1px solid #ccc;"
-            >
-            <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+    <div class="buscador">
+        <form method="GET" action="">
+            <input type="text" id="buscar" value="<?php echo htmlspecialchars($busqueda); ?>">
+            <button type="submit">
                 Buscar
             </button>
-            <?php if (!empty($busqueda)): ?>
-                <a href="?" style="text-decoration: none;">
-                    <button type="button" style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; cursor: pointer;">
-                        Limpiar
-                    </button>
-                </a>
-            <?php endif; ?>
         </form>
     </div>
     <?php if (isset($busqueda) && !empty($busqueda)): ?>
