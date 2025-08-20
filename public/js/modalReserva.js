@@ -3,6 +3,8 @@
  * Maneja la funcionalidad del modal para reservar libros
  */
 
+console.log('modalReserva.js cargado correctamente');
+
 let libroSeleccionado = null;
 
 /**
@@ -10,12 +12,13 @@ let libroSeleccionado = null;
  * @param {number} idLibro - ID del libro a reservar
  */
 function abrirModalReserva(idLibro) {
+    console.log('abrirModalReserva llamada con ID:', idLibro);
     libroSeleccionado = idLibro;
     // Mostrar el modal
     document.getElementById('reservaModal').style.display = 'block';
     
     // Obtener información del libro con fetch
-    fetch('../../controllers/books_controller.php', {
+    fetch('../src/controllers/books_controller.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -56,7 +59,7 @@ function confirmarReserva() {
     if (!libroSeleccionado) return;
     
     // Realizar la reserva
-    fetch('../../controllers/books_controller.php', {
+    fetch('../src/controllers/books_controller.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

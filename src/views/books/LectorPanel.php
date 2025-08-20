@@ -90,7 +90,8 @@ $libros = $repository->findBooks($search);
                                 <!-- <button type="button" disabled>No disponible</button> -->
                             <!-- <?php //endif; ?> -->
 
-                            <button type="button" onclick="abrirModalReserva(<?php echo $libro['id_libro']; ?>)" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">Reservar</button>
+                            <button type="button" onclick="abrirModalReserva(<?php echo $libro['id_libro']; ?>)" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; margin-right: 5px;">Reservar</button>
+                            <button type="button" onclick="testModalReserva(<?php echo $libro['id_libro']; ?>)" style="background-color: #007bff; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">Test</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -148,6 +149,17 @@ $libros = $repository->findBooks($search);
     </div>
 
     <!-- Script externo para el modal -->
-    <script src="../../public/js/modalReserva.js"></script>
+    <script src="../../../public/js/modalReserva.js"></script>
+    
+    <!-- Script de prueba inline -->
+    <script>
+        console.log('Script inline cargado');
+        
+        // Función de prueba
+        function testModalReserva(idLibro) {
+            console.log('testModalReserva llamada con ID:', idLibro);
+            alert('Test: botón funcionando con ID: ' + idLibro);
+        }
+    </script>
 </body>
 </html>
