@@ -97,7 +97,7 @@ $totalResultados = count($reservas);
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h1>SOLICITUDES DE RESERVA</h1>
-        <div>
+        <div style="display: flex; gap: 15px;>
             <a href="BibliotecarioPanel-Principal.php">
                 <button type="button">Volver al Panel</button>
             </a>
@@ -108,14 +108,14 @@ $totalResultados = count($reservas);
     </div>
     
     <?php if (isset($mensaje)): ?>
-        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
+        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6; text-align: center;">
              <?php echo htmlspecialchars($mensaje); ?>
         </div>
     <?php endif; ?>
 
-    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;">
-        <form method="GET" action="">
-            <label for="buscar">Buscar:</label>
+    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;text-align:center; border-radius: 10px;">
+        <form method="GET" action="" style="display: inline-block;">
+           
             <input 
                 type="text" 
                 id="buscar" 
