@@ -18,7 +18,7 @@ function abrirModalReserva(idLibro) {
     document.getElementById('reservaModal').style.display = 'block';
     
     // Obtener información del libro con fetch
-    fetch('../src/controllers/ajax_books.php', {
+    fetch('/Project-Biblioteca/public/ajax_books.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -67,7 +67,7 @@ function confirmarReserva() {
     if (!libroSeleccionado) return;
     
     // Realizar la reserva
-    fetch('../src/controllers/ajax_books.php', {
+    fetch('/Project-Biblioteca/public/ajax_books.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
