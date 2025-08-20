@@ -113,12 +113,6 @@ $totalResultados = count($reservas);
         </div>
     <?php endif; ?>
 
-        <?php if (isset($mensaje)): ?>
-        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
-            <?php echo htmlspecialchars($mensaje); ?>
-        </div>
-    <?php endif; ?>
-
     <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;">
         <form method="GET" action="">
             <label for="buscar">Buscar:</label>
@@ -171,11 +165,7 @@ $totalResultados = count($reservas);
         <tbody>
             <?php if (!empty($reservas)): ?>
                 <?php foreach ($reservas as $reserva): ?>
-                    <tr style="background-color: <?php 
-                        echo $reserva['estado'] === 'pendiente' ? '#fff3cd' : 
-                            ($reserva['estado'] === 'autorizada' ? '#d4edda' : 
-                            ($reserva['estado'] === 'finalizada' ? '#d1ecf1' : '#f8d7da')); 
-                    ?>">
+                    <tr>
                         <td style="padding: 8px; font-weight: bold;"><?php echo htmlspecialchars($reserva['fichaReserva']); ?></td>
                         <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido']); ?></td>
                         <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['CI']); ?></td>
@@ -225,16 +215,6 @@ $totalResultados = count($reservas);
             <?php endif; ?>
         </tbody>
     </table>
-    
-    <div style="margin-top: 20px;">
-        <h4>Estados:</h4>
-        <ul>
-            <li>PENDIENTE: Esperando autorización</li>
-            <li>AUTORIZADA: Puede recoger el libro</li>
-            <li>FINALIZADA: Libro devuelto</li>
-            <li>CANCELADA: Reserva cancelada</li>
-        </ul>
-    </div>
 
     <!-- Modal de confirmación de autorización -->
     <div id="modalAutorizar" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
@@ -253,11 +233,7 @@ $totalResultados = count($reservas);
                 <button type="button" onclick="cerrarModal()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 3px;">
                     Cancelar
                 </button>
-                <!-- <button type="button" onclick="confirmarAutorizacion()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;"> -->
-                    <!-- Confirmar -->
-                <!-- </button> -->
-                 <button type="button" onclick="confirmarAutorizacion()" 
-                style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">
+                <button type="button" onclick="confirmarAutorizacion()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">
                     Confirmar
                 </button>
             </div>
@@ -270,38 +246,6 @@ $totalResultados = count($reservas);
         <input type="hidden" name="accion" value="autorizar">
     </form>
 
-    <script>
-        let reservaSeleccionada = null;
-
-        function abrirModalAutorizar(idReserva, ticket, libro, ejemplar, solicitante) {
-            reservaSeleccionada = idReserva;
-            document.getElementById('modalTicket').textContent = ticket;
-            document.getElementById('modalLibro').textContent = libro;
-            document.getElementById('modalEjemplar').textContent = ejemplar;
-            document.getElementById('modalSolicitante').textContent = solicitante;
-            document.getElementById('modalAutorizar').style.display = 'block';
-        }
-
-        function cerrarModal() {
-            document.getElementById('modalAutorizar').style.display = 'none';
-            reservaSeleccionada = null;
-        }
-
-        function confirmarAutorizacion() {
-            if (reservaSeleccionada) {
-                document.getElementById('hiddenIdReserva').value = reservaSeleccionada;
-                document.getElementById('formAutorizar').submit();
-            }
-        }
-
-        // Cerrar modal al hacer clic fuera de él
-        window.onclick = function(event) {
-            const modal = document.getElementById('modalAutorizar');
-            if (event.target == modal) {
-                cerrarModal();
-            }
-        }
-    </script>
-    <script src="../../../public/js/reserva.js"></script>
+    <script src="../../../public/js/autorizarReserva.js"></script>
 </body>
 </html>

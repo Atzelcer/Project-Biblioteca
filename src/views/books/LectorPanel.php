@@ -87,7 +87,6 @@ $libros = $repository->findBooks($search);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Principal - Lector</title>
-    <link rel="stylesheet" href="../../../public/css/form.css">
 </head>
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -98,17 +97,19 @@ $libros = $repository->findBooks($search);
     </div>
     
     <?php if (isset($_GET['message'])): ?>
-        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #f0f0f0;">
+        <div style="padding: 10px; border: 1px solid #ccc; margin: 10px 0; background-color: #e6ffe6;">
             <?php echo htmlspecialchars($_GET['message']); ?>
         </div>
     <?php endif; ?>
     
-    <form method="GET" action="">
-        <input type="text" name="search" placeholder="Buscar por nombre o autor" 
-               value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-        <button type="submit">BUSCAR</button>
-    </form>
-    <br><br>
+    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;">
+        <form method="GET" action="">
+            <input type="text" name="search" placeholder="Buscar por nombre o autor" 
+                   value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+                   style="padding: 8px 12px; width: 300px; border: 1px solid #ccc;">
+            <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer;">BUSCAR</button>
+        </form>
+    </div>
 
     <table border="1" style="width: 100%; border-collapse: collapse;">
         <thead>
@@ -124,8 +125,7 @@ $libros = $repository->findBooks($search);
                 <?php foreach ($libros as $libro): ?>
                     <tr>
                         <td style="padding: 8px;">
-                            <a href="#" class="libro-link" data-id="<?php echo $libro['id_libro']; ?>" 
-                               style="color: #DF3CF7; text-decoration: none; cursor: pointer;">
+                            <a href="#" data-id="<?php echo $libro['id_libro']; ?>" style="color: #007bff; text-decoration: none; cursor: pointer;">
                                 <?php echo htmlspecialchars($libro['nombre']); ?>
                             </a>
                         </td>
@@ -143,7 +143,7 @@ $libros = $repository->findBooks($search);
                             <!-- <?php //endif; ?> -->
 
                              <a href="reservation.php?id=<?php echo $libro['id_libro']; ?>">
-                                <button type="button">Reservar</button>
+                                <button type="button" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer;">Reservar</button>
                             </a>
                         </td>
                     </tr>
@@ -157,20 +157,18 @@ $libros = $repository->findBooks($search);
     </table>
 
     <!-- Modal de libro -->
-    <div id="bookModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Detalles del Libro</h2>
-                <span class="close">&times;</span>
+    <div id="bookModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 5px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Detalles del Libro</h2>
+                <span style="font-size: 24px; cursor: pointer;" onclick="closeModal()">&times;</span>
             </div>
-            <div class="modal-body">
-                <div id="modalContent">
-                    <p style="color: #EAEAEA; text-align: center;">Cargando...</p>
-                </div>
+            <div id="modalContent">
+                <p>Cargando...</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-modal btn-secondary" onclick="closeModal()">Cerrar</button>
-                <button type="button" class="btn-modal" id="reserveBtn" style="display: none;">Reservar</button>
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="button" onclick="closeModal()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; border-radius: 3px;">Cerrar</button>
+                <button type="button" id="reserveBtn" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 3px;">Reservar</button>
             </div>
         </div>
     </div>
@@ -180,10 +178,10 @@ $libros = $repository->findBooks($search);
         const modal = document.getElementById('bookModal');
         const modalContent = document.getElementById('modalContent');
         const reserveBtn = document.getElementById('reserveBtn');
-        const closeBtn = document.querySelector('.close');
+        const closeBtn = document.querySelector('span[onclick="closeModal()"]');
 
         // Event listeners para abrir el modal
-        document.querySelectorAll('.libro-link').forEach(link => {
+        document.querySelectorAll('a[data-id]').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const bookId = this.getAttribute('data-id');
@@ -202,7 +200,6 @@ $libros = $repository->findBooks($search);
         // Función para abrir el modal
         function openBookModal(bookId) {
             modal.style.display = 'block';
-            modal.classList.add('show');
             
             // Cargar detalles del libro
             fetch(`?action=get_book_details&id=${bookId}`)
@@ -226,33 +223,31 @@ $libros = $repository->findBooks($search);
             const imageUrl = libro.foto_libro ? `../../../public/uploads/${libro.foto_libro}` : null;
             
             modalContent.innerHTML = `
-                <div class="book-info">
-                    <div class="book-image">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
+                    <div style="display: flex; justify-content: center; align-items: center;">
                         ${imageUrl ? 
-                            `<img src="${imageUrl}" alt="${libro.nombre}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Sin imagen disponible</div>'">` :
-                            '<div class="no-image">Sin imagen disponible</div>'
+                            `<img src="${imageUrl}" alt="${libro.nombre}" style="max-width: 120px; max-height: 160px; border: 1px solid #ccc; border-radius: 4px;" onerror="this.parentElement.innerHTML='<div style=\\'width: 120px; height: 160px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; text-align: center;\\'>Sin imagen disponible</div>'">` :
+                            '<div style="width: 120px; height: 160px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; text-align: center;">Sin imagen disponible</div>'
                         }
                     </div>
-                    <div class="book-details">
-                        <h3>${libro.nombre}</h3>
-                        <p><span class="label">Autor:</span> ${libro.autor}</p>
-                        <p><span class="label">Código:</span> ${libro.codigo_libro}</p>
-                        <p><span class="label">Estado:</span> 
-                            <span class="copy-status status-${libro.estado.toLowerCase().replace(' ', '-')}">${libro.estado}</span>
-                        </p>
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; font-size: 20px;">${libro.nombre}</h3>
+                        <p style="margin: 8px 0; font-size: 14px;"><strong>Autor:</strong> ${libro.autor}</p>
+                        <p style="margin: 8px 0; font-size: 14px;"><strong>Código:</strong> ${libro.codigo_libro}</p>
+                        <p style="margin: 8px 0; font-size: 14px;"><strong>Estado:</strong> ${libro.estado}</p>
                     </div>
                 </div>
                 
-                <div class="copies-section">
+                <div>
                     <h4>Ejemplares Disponibles</h4>
-                    <div class="copies-list">
+                    <div>
                         ${ejemplares.map(ejemplar => `
-                            <div class="copy-item">
-                                <div class="copy-info">
-                                    <div class="copy-code">Código: ${ejemplar.codigo}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                                <div>
+                                    <div style="font-weight: 600; font-size: 14px;">Código: ${ejemplar.codigo}</div>
                                     <div>Ubicación: ${ejemplar.ubicacion}</div>
                                 </div>
-                                <span class="copy-status status-${ejemplar.estado.toLowerCase().replace(' ', '-')}">${ejemplar.estado}</span>
+                                <span style="padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; border: 1px solid #ccc;">${ejemplar.estado}</span>
                             </div>
                         `).join('')}
                     </div>
@@ -274,7 +269,6 @@ $libros = $repository->findBooks($search);
         // Función para cerrar el modal
         function closeModal() {
             modal.style.display = 'none';
-            modal.classList.remove('show');
             reserveBtn.style.display = 'none';
         }
     </script>
