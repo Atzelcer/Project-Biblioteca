@@ -50,7 +50,7 @@ include('../../config/verificarSesion.php');
     <div class="contenido">
         <h1>Biblioteca Virtual</h1>
         <main id="contenedor">
-
+            
         </main>
         <footer>
             <p>© 2025 Biblioteca Virtual - Todos los derechos reservados</p>
