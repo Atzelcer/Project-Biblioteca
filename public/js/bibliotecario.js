@@ -5,7 +5,7 @@ window.onload = () => {
 };
 
 function cargarInicio() {
-    fetch('GestionLibros.html')
+    fetch('GestionLibros.php')
         .then(response => response.text())
         .then(data => {
             contenedor.innerHTML = data;
