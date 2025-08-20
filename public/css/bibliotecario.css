@@ -62,7 +62,7 @@ h1 {
     color: var(--texto-principal);
     font-size: 35px;
     margin: 0;
-    padding: 30px;
+    padding: 35px 0 10px 30px;
 }
 
 img.logo {

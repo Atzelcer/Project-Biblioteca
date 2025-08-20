@@ -112,87 +112,35 @@ $totalResultados = count($reservas);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../public/css/solicitud.css">
     <title>Panel de Autorizados - Bibliotecario</title>
     <script src="../../../public/js/modalDevolucion.js"></script>
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .mensaje-exito {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        .fila-eliminando {
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            opacity: 0;
-            transform: translateX(-100%);
-        }
-        
-        .boton-procesando {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .modal-content {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            animation: fadeIn 0.3s ease-in;
-        }
-        
-        .button-success {
-            background-color: #28a745 !important;
-            transition: background-color 0.2s ease;
-        }
-        
-        .button-success:hover {
-            background-color: #218838 !important;
-        }
-        
-        .button-cancel {
-            background-color: #6c757d !important;
-            transition: background-color 0.2s ease;
-        }
-        
-        .button-cancel:hover {
-            background-color: #545b62 !important;
-        }
-    </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>BIBLIOTECARIO - Autorizados</h1>
-        <div>
-            <a href="Bibliotecario.php">
-                <button type="button">Volver al Panel</button>
-            </a>
-            <a href="../../../public/images/logout.php">
-                <button type="button">Cerrar Sesión</button>
-            </a>
-        </div>
-    </div>
+    
+    <h2>BIBLIOTECARIO - Autorizados</h2>
     
     <?php if (isset($mensaje)): ?>
         <?php 
         $estilo_mensaje = "padding: 10px; border: 1px solid; margin: 10px 0; border-radius: 5px; font-weight: bold;";
-        $color_fondo = "#e6ffe6"; // verde por defecto
+        $color_fondo = "#01050B"; // verde por defecto
         $color_borde = "#28a745";
         $icono = "✅";
         
         if (isset($mensaje_tipo)) {
             switch($mensaje_tipo) {
                 case 'success':
-                    $color_fondo = "#d4edda";
+                    $color_fondo = "#01050B";
                     $color_borde = "#28a745";
                     $icono = "✅";
                     break;
                 case 'error':
-                    $color_fondo = "#f8d7da";
+                    $color_fondo = "#01050B";
                     $color_borde = "#dc3545";
                     $icono = "❌";
                     break;
                 case 'warning':
-                    $color_fondo = "#fff3cd";
+                    $color_fondo = "#01050B";
                     $color_borde = "#ffc107";
                     $icono = "⚠️";
                     break;
@@ -204,10 +152,10 @@ $totalResultados = count($reservas);
         </div>
     <?php endif; ?>
 
-    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9;">
+    <div>
         <form method="GET" action="">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 8px;">
+            <div>
+                <div>
                     <label for="buscar" style="font-weight: bold;">Buscar:</label>
                     <input 
                         type="text" 
@@ -215,59 +163,56 @@ $totalResultados = count($reservas);
                         name="buscar" 
                         placeholder="CI, Ticket, Apellido o Nombre..." 
                         value="<?php echo htmlspecialchars($busqueda); ?>"
-                        style="padding: 8px 12px; width: 250px; border: 1px solid #ccc;"
                     >
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div>
                     <label for="fecha_inicio" style="font-weight: bold;">Desde:</label>
                     <input 
                         type="date" 
                         id="fecha_inicio" 
                         name="fecha_inicio" 
                         value="<?php echo htmlspecialchars($fecha_inicio); ?>"
-                        style="padding: 8px; border: 1px solid #ccc;"
                     >
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div>
                     <label for="fecha_fin" style="font-weight: bold;">Hasta:</label>
                     <input 
                         type="date" 
                         id="fecha_fin" 
                         name="fecha_fin" 
                         value="<?php echo htmlspecialchars($fecha_fin); ?>"
-                        style="padding: 8px; border: 1px solid #ccc;"
                     >
                 </div>
                 
-                <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+                <button type="submit">
                     Buscar
                 </button>
                 
                 <?php if (!empty($busqueda) || !empty($fecha_inicio) || !empty($fecha_fin)): ?>
-                    <a href="?" style="text-decoration: none;">
-                        <button type="button" style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; cursor: pointer;">
+                    <a href="?">
+                        <button type="button">
                             Limpiar
                         </button>
                     </a>
                 <?php endif; ?>
             </div>
             
-            <div style="margin-top: 15px; text-align: center; padding-top: 10px; border-top: 1px solid #ddd;">
-                <span style="font-weight: bold; margin-right: 15px;">Filtros rápidos:</span>
+            <div>
+                <span>
                 <a href="?fecha_inicio=<?php echo date('Y-m-d'); ?>" style="text-decoration: none; margin-right: 8px;">
-                    <button type="button" style="padding: 4px 8px; background-color: #17a2b8; color: white; border: none; cursor: pointer; font-size: 12px;">
+                    <button type="button">
                         Hoy
                     </button>
                 </a>
                 <a href="?fecha_inicio=<?php echo date('Y-m-d', strtotime('-7 days')); ?>&fecha_fin=<?php echo date('Y-m-d'); ?>" style="text-decoration: none; margin-right: 8px;">
-                    <button type="button" style="padding: 4px 8px; background-color: #17a2b8; color: white; border: none; cursor: pointer; font-size: 12px;">
+                    <button type="button">
                         Últimos 7 días
                     </button>
                 </a>
                 <a href="?fecha_inicio=<?php echo date('Y-m-01'); ?>&fecha_fin=<?php echo date('Y-m-d'); ?>" style="text-decoration: none;">
-                    <button type="button" style="padding: 4px 8px; background-color: #17a2b8; color: white; border: none; cursor: pointer; font-size: 12px;">
+                    <button type="button">
                         Este mes
                     </button>
                 </a>
@@ -277,7 +222,7 @@ $totalResultados = count($reservas);
 
     <h3>Lista de Solicitudes de Reserva</h3>
     
-    <table border="1" style="width: 100%; border-collapse: collapse;">
+    <table border="1">
         <thead>
             <tr>
                 <th style="padding: 8px;">Ticket</th>
@@ -293,17 +238,16 @@ $totalResultados = count($reservas);
         <tbody>
             <?php if (count($reservas) > 0): ?>
                 <?php foreach ($reservas as $reserva): ?>
-                    <tr style="background-color: #d4edda;">
-                        <td style="padding: 8px; font-weight: bold;"><?php echo htmlspecialchars($reserva['fichaReserva']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['CI']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['libro_nombre']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['autor']); ?></td>
-                        <td style="padding: 8px;"><?php echo $reserva['fechaReserva'] ? date('d/m/Y H:i', strtotime($reserva['fechaReserva'])) : 'N/A'; ?></td>
-                        <td style="padding: 8px;"><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : 'N/A'; ?></td>
-                        <td style="padding: 8px;">
+                    <tr>
+                        <td><?php echo htmlspecialchars($reserva['fichaReserva']); ?></td>
+                        <td><?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido']); ?></td>
+                        <td><?php echo htmlspecialchars($reserva['CI']); ?></td>
+                        <td><?php echo htmlspecialchars($reserva['libro_nombre']); ?></td>
+                        <td><?php echo htmlspecialchars($reserva['autor']); ?></td>
+                        <td><?php echo $reserva['fechaReserva'] ? date('d/m/Y H:i', strtotime($reserva['fechaReserva'])) : 'N/A'; ?></td>
+                        <td><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : 'N/A'; ?></td>
+                        <td>
                             <button type="button" 
-                                style="background-color: #28a745; color: white; border: none; padding: 4px 8px; cursor: pointer; margin-right: 5px; font-size: 12px;" 
                                 onclick="abrirModalDevolucion(
                                     '<?php echo $reserva['id_reserva']; ?>',
                                     '<?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido'], ENT_QUOTES); ?>',
@@ -318,7 +262,7 @@ $totalResultados = count($reservas);
                             <form method="POST" style="display: inline;">
                                 <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
                                 <input type="hidden" name="accion" value="bloquear">
-                                <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 4px 8px; cursor: pointer; font-size: 12px;" onclick="return confirm('¿Bloquear esta reserva?')">Bloquear</button>
+                                <button type="submit" font-size: 12px;" onclick="return confirm('¿Bloquear esta reserva?')">Bloquear</button>
                             </form>
                         </td>
                     </tr>
