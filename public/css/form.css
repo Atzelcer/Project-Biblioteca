@@ -158,7 +158,6 @@ div.files {
 }
 
 .modal-header {
-    background-color: #1A1A1A;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -194,7 +193,6 @@ div.files {
 .modal-body {
     padding: 20px;
     margin-bottom: 0;
-    background-color: #0D0D0D;
 }
 
 .book-info {
@@ -203,7 +201,6 @@ div.files {
     gap: 20px;
     margin-bottom: 20px;
     padding: 15px;
-    background-color: #1A1A1A;
     border: 1px solid #6A17E3;
     border-radius: 4px;
 }
@@ -224,7 +221,6 @@ div.files {
 .book-image .no-image {
     width: 120px;
     height: 160px;
-    background-color: #1A1A1A;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -282,7 +278,6 @@ div.files {
     align-items: center;
     padding: 10px;
     margin-bottom: 8px;
-    background-color: #1A1A1A;
     border: 1px solid #6A17E3;
     border-radius: 4px;
 }
@@ -310,25 +305,21 @@ div.files {
 }
 
 .status-disponible {
-    background-color: #28a745;
     color: #EAEAEA;
-    border: 1px solid #28a745;
+    border: 1px solid #6A17E3;
 }
 
 .status-reservado {
-    background-color: #ffc107;
-    color: #0D0D0D;
-    border: 1px solid #ffc107;
+    color: #EAEAEA;
+    border: 1px solid #6A17E3;
 }
 
 .status-no-disponible {
-    background-color: #dc3545;
     color: #EAEAEA;
-    border: 1px solid #dc3545;
+    border: 1px solid #6A17E3;
 }
 
 .modal-footer {
-    background-color: #1A1A1A;
     text-align: right;
     padding: 15px 20px;
     border-top: 1px solid #6A17E3;
