@@ -68,5 +68,6 @@ include('../../config/verificarSesion.php');
     
     <script src="../../../public/js/bibliotecario.js"></script>
     <script src="../../../public/js/autorizarReserva.js"></script>
+    <script src="../../../public/js/modalDevolucion.js"></script>
 </body>
 </html>

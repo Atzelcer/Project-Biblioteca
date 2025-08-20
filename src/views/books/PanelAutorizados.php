@@ -114,7 +114,6 @@ $totalResultados = count($reservas);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../public/css/solicitud.css">
     <title>Panel de Autorizados - Bibliotecario</title>
-    <script src="../../../public/js/modalDevolucion.js"></script>
 </head>
 <body>
     
@@ -225,39 +224,39 @@ $totalResultados = count($reservas);
     <table border="1">
         <thead>
             <tr>
-                <th style="padding: 8px;">Ticket</th>
-                <th style="padding: 8px;">Usuario</th>
-                <th style="padding: 8px;">CI</th>
-                <th style="padding: 8px;">Libro</th>
-                <th style="padding: 8px;">Autor</th>
-                <th style="padding: 8px;">F. Reserva</th>
-                <th style="padding: 8px;">F. Devolucion</th>
-                <th style="padding: 8px;">Acciones</th>
+                <th>Ticket</th>
+                <th>Usuario</th>
+                <th>CI</th>
+                <th>Libro</th>
+                <th>Autor</th>
+                <th>F. Reserva</th>
+                <th>F. Devolucion</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php if (count($reservas) > 0): ?>
                 <?php foreach ($reservas as $reserva): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($reserva['fichaReserva']); ?></td>
-                        <td><?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido']); ?></td>
-                        <td><?php echo htmlspecialchars($reserva['CI']); ?></td>
-                        <td><?php echo htmlspecialchars($reserva['libro_nombre']); ?></td>
-                        <td><?php echo htmlspecialchars($reserva['autor']); ?></td>
+                        <td><?php echo $reserva['fichaReserva']; ?></td>
+                        <td><?php echo $reserva['nombre'] . ' ' . $reserva['apellido']; ?></td>
+                        <td><?php echo $reserva['CI']; ?></td>
+                        <td><?php echo $reserva['libro_nombre']; ?></td>
+                        <td><?php echo $reserva['autor']; ?></td>
                         <td><?php echo $reserva['fechaReserva'] ? date('d/m/Y H:i', strtotime($reserva['fechaReserva'])) : 'N/A'; ?></td>
                         <td><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : 'N/A'; ?></td>
                         <td>
                             <button type="button" 
                                 onclick="abrirModalDevolucion(
                                     '<?php echo $reserva['id_reserva']; ?>',
-                                    '<?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido'], ENT_QUOTES); ?>',
+                                    '<?php echo $reserva['nombre'] . ' ' . $reserva['apellido']; ?>',
                                     '<?php echo $reserva['CI']; ?>',
-                                    '<?php echo htmlspecialchars($reserva['libro_nombre'], ENT_QUOTES); ?>',
-                                    '<?php echo htmlspecialchars($reserva['autor'], ENT_QUOTES); ?>',
+                                    '<?php echo $reserva['libro_nombre']; ?>',
+                                    '<?php echo $reserva['autor']; ?>',
                                     '<?php echo $reserva['fotografia'] ? '../../../public/images/usersFotos/' . $reserva['fotografia'] : '../../../public/images/usersFotos/default-user.svg'; ?>',
                                     '<?php echo $reserva['foto_libro'] ? '../../../public/images/booksPortada/' . $reserva['foto_libro'] : '../../../public/images/booksPortada/default-book.svg'; ?>'
                                 )">
-                                Registrar Devo
+                                Registrar Devolucion
                             </button>
                             <form method="POST" style="display: inline;">
                                 <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
