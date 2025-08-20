@@ -18,15 +18,22 @@ function abrirModalReserva(idLibro) {
     document.getElementById('reservaModal').style.display = 'block';
     
     // Obtener información del libro con fetch
-    fetch('../src/controllers/books_controller.php', {
+    fetch('../src/controllers/ajax_books.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: 'action=getBookInfo&id=' + idLibro
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Respuesta recibida para getBookInfo:', response);
+        if (!response.ok) {
+            throw new Error('Error HTTP: ' + response.status);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Datos recibidos:', data);
         if (data.success) {
             document.getElementById('infoLibro').innerHTML = `
                 <h4 style="margin: 0 0 10px 0;">Información del Libro:</h4>
@@ -35,12 +42,13 @@ function abrirModalReserva(idLibro) {
                 <p><strong>Estado:</strong> <span style="color: green; font-weight: bold;">${data.libro.estado}</span></p>
             `;
         } else {
-            document.getElementById('infoLibro').innerHTML = '<p>Error al cargar la información del libro.</p>';
+            console.error('Error del servidor:', data.message);
+            document.getElementById('infoLibro').innerHTML = '<p>Error: ' + (data.message || 'Error al cargar la información del libro.') + '</p>';
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('infoLibro').innerHTML = '<p>Error al cargar la información del libro.</p>';
+        console.error('Error en fetch:', error);
+        document.getElementById('infoLibro').innerHTML = '<p>Error de conexión: ' + error.message + '</p>';
     });
 }
 
@@ -59,15 +67,22 @@ function confirmarReserva() {
     if (!libroSeleccionado) return;
     
     // Realizar la reserva
-    fetch('../src/controllers/books_controller.php', {
+    fetch('../src/controllers/ajax_books.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: 'action=reservar&id=' + libroSeleccionado
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Respuesta recibida para reservar:', response);
+        if (!response.ok) {
+            throw new Error('Error HTTP: ' + response.status);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Datos de reserva recibidos:', data);
         if (data.success) {
             // Mostrar el ticket de reserva
             mostrarTicketReserva(data.ticket);
@@ -77,8 +92,8 @@ function confirmarReserva() {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar la reserva');
+        console.error('Error en reserva:', error);
+        alert('Error al procesar la reserva: ' + error.message);
     });
 }
 
