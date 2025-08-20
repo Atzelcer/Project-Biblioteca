@@ -16,7 +16,7 @@ include('../../config/verificarSesion.php');
         <nav>
             <ul>
                 <li>
-                    <a href="javascript:cargar('GestionLibros.html')" class="nav-item">
+                    <a href="javascript:cargar('GestionLibros.php')" class="nav-item">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon">
                             <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -26,10 +26,19 @@ include('../../config/verificarSesion.php');
                 <li>
                     <a href="javascript:cargar('GestionReservas.php')" class="nav-item">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript:cargar('PanelAutorizados.php')" class="nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
                         </svg>
                     </a>
                 </li>
+
                 <li>
                     <a href="javascript:cargar('GestionUsuarios.php')" class="nav-item">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon">
