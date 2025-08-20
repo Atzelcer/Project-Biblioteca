@@ -65,6 +65,14 @@ h1 {
     padding: 30px;
 }
 
+img.logo {
+    position: fixed;
+    margin: auto;
+    margin-top: 170px;
+    width: 80%;
+    right: 10%;
+}
+
 main#contenedor {
     padding: 20px;
     background-color: var(--color-fondo);
@@ -73,12 +81,11 @@ main#contenedor {
 /* Estilos para el pie de página */
 
 footer {
+    bottom: 0;
+    left: 10%;
     background-color: var(--barra-lateral);
     color: var(--texto-secundario);
     text-align: center;
     padding: 15px;
     font-size: 14px;
-    bottom: 0;
-    width: 90%;
-    right: 0;
 }
