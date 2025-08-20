@@ -90,83 +90,96 @@ $totalResultados = count($reservas);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="stylesheet" href="../../../public/css/solicitudes.css">
+    <link rel="stylesheet" href="../../../public/css/solicitud.css">
 </head>
 <body>
-    <h1>SOLICITUDES DE RESERVA</h1>
+    <h2>SOLICITUDES DE RESERVA</h2>
 
     <div class="buscador">
-        <form method="GET" action="">
-            <input type="text" id="buscar" value="<?php echo htmlspecialchars($busqueda); ?>">
-            <button type="submit">
+        <form method="GET" action="" class="buscador">
+            <input type="text" id="buscar" value="<?php echo htmlspecialchars($busqueda); ?>" placeholder="Buscar solicitud..." class="buscador">
+            <button type="submit" class="buscador">
                 Buscar
             </button>
         </form>
     </div>
+
     <?php if (isset($busqueda) && !empty($busqueda)): ?>
-        <div style="background-color: #e3f2fd; padding: 10px; margin-bottom: 15px;">
+        <div class="texto">
             Resultados para: "<?php echo htmlspecialchars($busqueda); ?>" - <?php echo $totalResultados; ?> reserva(s) encontrada(s)
         </div>
     <?php else: ?>
-        <div style="background-color: #f5f5f5; padding: 10px; margin-bottom: 15px;">
+        <div class="texto">
             Total de reservas: <?php echo $totalResultados; ?>
         </div>
     <?php endif; ?>
 
     <h3>Lista de Solicitudes de Reserva</h3>
     
-    <table border="1" style="width: 100%; border-collapse: collapse;">
+    <table border="1">
         <thead>
             <tr>
-                <th style="padding: 8px;">Ticket</th>
-                <th style="padding: 8px;">Usuario</th>
-                <th style="padding: 8px;">CI</th>
-                <th style="padding: 8px;">Libro</th>
-                <th style="padding: 8px;">Autor</th>
-                <th style="padding: 8px;">Estado</th>
-                <th style="padding: 8px;">Fecha Reserva</th>
-                <th style="padding: 8px;">Fecha Devolucion</th>
-                <th style="padding: 8px;">Acciones</th>
+                <th>Ticket</th>
+                <th>Usuario</th>
+                <th>CI</th>
+                <th>Libro</th>
+                <th>Autor</th>
+                <th>Estado</th>
+                <th>Fecha Reserva</th>
+                <th>Fecha Devolucion</th>
+                <th>Acciones</th>
             </tr>
         </thead>
+
         <tbody>
             <?php if (!empty($reservas)): ?>
                 <?php foreach ($reservas as $reserva): ?>
                     <tr>
-                        <td style="padding: 8px; font-weight: bold;"><?php echo htmlspecialchars($reserva['fichaReserva']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['CI']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['libro_nombre']); ?></td>
-                        <td style="padding: 8px;"><?php echo htmlspecialchars($reserva['autor']); ?></td>
-                        <td style="padding: 8px; font-weight: bold;"><?php echo strtoupper($reserva['estado']); ?></td>
-                        <td style="padding: 8px;"><?php echo $reserva['fechaReserva'] ? date('d/m/Y H:i', strtotime($reserva['fechaReserva'])) : '-'; ?></td>
-                        <td style="padding: 8px;"><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : '-'; ?></td>
-                        <td style="padding: 8px;">
-                            <?php if ($reserva['estado'] === 'pendiente'): ?>
-                                <button type="button" 
-                                        onclick="abrirModalAutorizar(
-                                            '<?php echo $reserva['id_reserva']; ?>',
-                                            '<?php echo htmlspecialchars($reserva['fichaReserva'], ENT_QUOTES); ?>',
-                                            '<?php echo htmlspecialchars($reserva['libro_nombre'], ENT_QUOTES); ?>',
-                                            '<?php echo htmlspecialchars($reserva['codigo_libro'], ENT_QUOTES); ?>',
-                                            '<?php echo htmlspecialchars($reserva['nombre'] . ' ' . $reserva['apellido'], ENT_QUOTES); ?>'
-                                        )" 
-                                        style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer;">
-                                    Autorizar
-                                </button>
-                                <form method="POST" style="display: inline;">
-                                    <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
-                                    <input type="hidden" name="accion" value="cancelar">
-                                    <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer;" onclick="return confirm('¿Estás seguro de cancelar esta reserva?')">Cancelar</button>
-                                </form>
-                            <?php elseif ($reserva['estado'] === 'autorizada'): ?>
-                                <span style="color: green;">Autorizada</span>
-                            <?php elseif ($reserva['estado'] === 'finalizada'): ?>
-                                <span style="color: blue;">Completada</span>
-                            <?php else: ?>
-                                <span style="color: red;">Cancelada</span>
-                            <?php endif; ?>
+                        <td><?php echo $reserva['fichaReserva']; ?></td>
+                        <td><?php echo $reserva['nombre'] . ' ' . $reserva['apellido']; ?></td>
+                        <td><?php echo $reserva['CI']; ?></td>
+                        <td><?php echo $reserva['libro_nombre']; ?></td>
+                        <td><?php echo $reserva['autor']; ?></td>
+                        <td><?php echo $reserva['estado']; ?></td>
+                        <td><?php echo $reserva['fechaReserva'] ? date('d/m/Y H:i', strtotime($reserva['fechaReserva'])) : '-'; ?></td>
+                        <td><?php echo $reserva['fechaDevolucion'] ? date('d/m/Y H:i', strtotime($reserva['fechaDevolucion'])) : '-'; ?></td>
+                        
+                        <td>
+                            <div class="botones">
+                                <?php if ($reserva['estado'] === 'pendiente'): ?>
+                                    <button type="button" 
+                                            onclick="abrirModalAutorizar(
+                                                '<?php echo $reserva['id_reserva']; ?>',
+                                                '<?php echo $reserva['fichaReserva']; ?>',
+                                                '<?php echo $reserva['libro_nombre']; ?>',
+                                                '<?php echo $reserva['codigo_libro']; ?>',
+                                                '<?php echo $reserva['nombre'] . ' ' . $reserva['apellido']; ?>'
+                                            )">
+                                        Autorizar
+                                    </button>
+                                    
+                                    <form method="POST">
+                                        <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
+                                        <input type="hidden" name="accion" value="cancelar">
+                                        <button type="button" 
+                                            onclick="return confirm(
+                                                '¿Estás seguro de cancelar esta reserva?'
+                                            )">
+                                        Cancelar
+                                    </button>
+                                    
+                                    </form>
+                                <?php elseif ($reserva['estado'] === 'autorizada'): ?>
+                                    <span>Autorizada</span>
+                                <?php elseif ($reserva['estado'] === 'finalizada'): ?>
+                                    <span>Completada</span>
+                                <?php else: ?>
+                                    <span>Cancelada</span>
+                                <?php endif; ?>
+                            </div>
+                            
                         </td>
+
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
@@ -212,7 +225,5 @@ $totalResultados = count($reservas);
         <input type="hidden" name="id_reserva" id="hiddenIdReserva">
         <input type="hidden" name="accion" value="autorizar">
     </form>
-
-    <script src="../../../public/js/autorizarReserva.js"></script>
 </body>
 </html>
