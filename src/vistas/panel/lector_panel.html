@@ -10,7 +10,10 @@
 <body data-base="{{base}}">
   <header class="topbar">
     <div class="brand">Lector</div>
-    <a class="btn danger" href="{{base}}/src/entradas/logout.php">Cerrar sesión</a>
+    <div class="actions">
+      <button id="btnTicket" class="btn ticket" style="display:none"></button>
+      <a class="btn danger" href="{{base}}/src/entradas/logout.php">Cerrar sesión</a>
+    </div>
   </header>
 
   <h2>LECTOR</h2>
@@ -51,10 +54,13 @@
   <div class="overlay" id="mTicket">
     <div class="modal">
       <h3>Información de la reserva</h3>
-      <p class="ticket" id="tFicha">TICK----</p>
+      <p class="ticket">
+        <span id="tFicha">TICK----</span>
+        <span class="dot off"></span>
+      </p>
       <p id="tLibro"></p>
       <p id="tAutor"></p>
-      <p>Estado: pendiente (a autorizar por bibliotecario)</p>
+      <p id="tEstado"></p>
       <p>Las fechas se definirán cuando pase a “No disponible”.</p>
       <footer><button class="btn ok" id="btnCerrarTicket">Entendido</button></footer>
     </div>
