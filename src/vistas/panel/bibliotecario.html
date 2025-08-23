@@ -4,10 +4,33 @@
   <meta charset="utf-8">
   <title>{{titulo}}</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{base}}/public/css/bibliotecario.css">
 </head>
-<body>
-  <h2>Panel bibliotecario</h2>
-  <p>Gestion de libros y reservas</p>
-  <a href="{{base}}/src/entradas/login.php">Volver a login</a>
+<body data-base="{{base}}" data-sec="{{sec}}">
+  <div class="layout">
+    <aside class="lado">
+      <div class="brand">Biblio</div>
+      <nav class="menu">
+        <a href="{{base}}/src/entradas/panel.php?sec=principal" data-sec-link="principal">Principal</a>
+        <a href="{{base}}/src/entradas/panel.php?sec=libros" data-sec-link="libros">Libros</a>
+        <a href="{{base}}/src/entradas/panel.php?sec=usuarios" data-sec-link="usuarios">Usuarios</a>
+        <a href="{{base}}/src/entradas/logout.php">Salir</a>
+      </nav>
+    </aside>
+
+    <main class="contenido">
+      <header class="top">
+        <h1>Biblioteca USFX - Bibliotecario</h1>
+      </header>
+
+      <section class="zona">
+        {{contenido}}
+      </section>
+    </main>
+  </div>
+
+  <script src="{{base}}/public/js/bibliotecario.js"></script>
+  <script src="{{base}}/public/js/biblio_libros.js"></script>
+  <script src="{{base}}/public/js/biblio_usuarios.js"></script>
 </body>
 </html>
