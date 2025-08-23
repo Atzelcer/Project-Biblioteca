@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="100" viewBox="0 0 80 100" fill="none">
+  <rect width="80" height="100" fill="#e9ecef" stroke="#6c757d" stroke-width="2"/>
+  <rect x="10" y="15" width="60" height="3" fill="#6c757d"/>
+  <rect x="10" y="25" width="45" height="2" fill="#adb5bd"/>
+  <rect x="10" y="30" width="50" height="2" fill="#adb5bd"/>
+  <rect x="10" y="35" width="40" height="2" fill="#adb5bd"/>
+  <rect x="20" y="50" width="40" height="30" fill="#f8f9fa" stroke="#6c757d"/>
+  <text x="40" y="90" text-anchor="middle" font-family="Arial" font-size="8" fill="#495057">Libro</text>
+</svg>
