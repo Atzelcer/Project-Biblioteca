@@ -1,31 +1,11 @@
-const contenedor = document.getElementById('contenedor');
-
-window.onload = () => {
-    cargarInicio();
-};
-
-function cargarInicio() {
-    fetch('GestionLibros.php')
-        .then(response => response.text())
-        .then(data => {
-            contenedor.innerHTML = data;
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function cargar(pagina) {
-    fetch(pagina)
-        .then(response => response.text())
-        .then(data => {
-            contenedor.innerHTML = data;
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function cerrarSesion() {
-    fetch('logout.php')
-        .then(() => {
-            window.location.href = '../auth/login.php';
-        })
-        .catch(error => console.error('Error:', error));
-}
+(function(){
+  var sec = document.body.getAttribute('data-sec') || 'principal';
+  var enlaces = document.querySelectorAll('[data-sec-link]');
+  for (var i=0;i<enlaces.length;i++){
+    if (enlaces[i].getAttribute('data-sec-link') === sec) {
+      enlaces[i].classList.add('activo');
+    } else {
+      enlaces[i].classList.remove('activo');
+    }
+  }
+})();

@@ -1,0 +1,46 @@
+<div class="bloque">
+  <h3>Usuarios</h3>
+
+  <div class="bar">
+    <input id="buscaUsr" type="text" placeholder="CI, nombre o apellido">
+    <div class="pills">
+      <button class="pill" data-rol="todos">Todos</button>
+      <button class="pill" data-rol="lector">Lectores</button>
+      <button class="pill" data-rol="bibliotecario">Bibliotecario</button>
+    </div>
+  </div>
+
+  <div class="tabla">
+    <table>
+      <thead>
+      <tr>
+        <th>CI</th><th>Nombre</th><th>Apellido</th><th>Rol</th><th>Información</th>
+      </tr>
+      </thead>
+      <tbody id="tbodyUsuarios"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="overlay" id="mUsr">
+  <div class="modal">
+    <h3 id="tUsr"></h3>
+    <div class="row">
+      <div class="col">
+        <p>CI: <span id="uCI"></span></p>
+        <p>Nombre: <span id="uNom"></span></p>
+        <p>Apellido: <span id="uApe"></span></p>
+        <p>Rol: <span id="uRol"></span></p>
+        <p>Correo: <span id="uCorreo"></span></p>
+        <p>Celular: <span id="uCel"></span></p>
+        <p>Dirección: <span id="uDir"></span></p>
+      </div>
+      <div class="col imgs">
+        <img id="uFoto" src="" alt="Foto usuario">
+      </div>
+    </div>
+    <footer class="modal_foot">
+      <button class="btn ok" id="btnCerrarUsr">Cerrar</button>
+    </footer>
+  </div>
+</div>

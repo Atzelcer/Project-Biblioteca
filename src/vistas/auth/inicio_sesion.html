@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Iniciar sesión</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{base}}/public/css/auth.css">
+  <script defer src="{{base}}/public/js/login.js"></script>
+</head>
+<body class="page-center">
+  <div class="card">
+    <h2>Iniciar sesión</h2>
+
+    <div class="msg ok">{{mensaje_ok}}</div>
+    <div class="msg err">{{mensaje_error}}</div>
+
+    <form method="post" action="{{base}}/src/entradas/login.php" autocomplete="off">
+      <label>Usuario (CI o correo)</label>
+      <input name="usuario" required>
+
+      <label>Contraseña</label>
+      <input name="clave" type="password" required>
+
+      <button type="submit">Iniciar sesión</button>
+    </form>
+
+    <div class="alt">
+      ¿No tienes cuenta?
+      <a href="{{base}}/src/entradas/registro.php">Regístrate</a>
+    </div>
+  </div>
+</body>
+</html>
