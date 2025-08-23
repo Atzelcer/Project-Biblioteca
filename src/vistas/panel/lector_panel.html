@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>{{titulo}}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{base}}/public/css/lector_panel.css">
+  <script defer src="{{base}}/public/js/lector_panel.js"></script>
+</head>
+<body data-base="{{base}}">
+  <header class="topbar">
+    <div class="brand">Lector</div>
+    <a class="btn danger" href="{{base}}/src/entradas/logout.php">Cerrar sesión</a>
+  </header>
+
+  <h2>LECTOR</h2>
+  <p class="flash">{{ok}}</p>
+
+  <form class="bar" method="get" action="{{base}}/src/entradas/panel.php">
+    <input type="text" name="q" value="{{valor_busqueda}}" placeholder="buscar por nombre o autor">
+    <button type="submit">Buscar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr><th>Nombre</th><th>Autor</th><th>Disponibilidad</th><th>Reservar</th></tr>
+    </thead>
+    <tbody>
+      {{filas_libros}}
+    </tbody>
+  </table>
+
+  <div class="overlay" id="mConfirm">
+    <div class="modal">
+      <h3>Reservar libro</h3>
+      <div class="row">
+        <img id="imgLibro" src="" alt="Portada">
+        <div>
+          <p><strong id="nombreLibro"></strong></p>
+          <p>Autor: <span id="autorLibro"></span></p>
+          <p>Horarios: Lun-Vie 8–12 y 14–18</p>
+        </div>
+      </div>
+      <footer>
+        <button class="btn ghost" id="btnCancel">Cancelar</button>
+        <button class="btn ok" id="btnConfirm">Confirmar</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="overlay" id="mTicket">
+    <div class="modal">
+      <h3>Información de la reserva</h3>
+      <p class="ticket" id="tFicha">TICK----</p>
+      <p id="tLibro"></p>
+      <p id="tAutor"></p>
+      <p>Estado: pendiente (a autorizar por bibliotecario)</p>
+      <p>Las fechas se definirán cuando pase a “No disponible”.</p>
+      <footer><button class="btn ok" id="btnCerrarTicket">Entendido</button></footer>
+    </div>
+  </div>
+</body>
+</html>

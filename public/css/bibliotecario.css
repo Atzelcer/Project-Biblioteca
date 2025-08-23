@@ -1,91 +1,43 @@
-/* Estilos generales */
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#0b1223;color:#e5e7eb}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.lado{background:#0f172a;border-right:1px solid #1f2937;padding:16px;display:flex;flex-direction:column;gap:12px}
+.brand{font-weight:800;letter-spacing:.06em;color:#a5b4fc}
+.menu{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.menu a{padding:10px 12px;border-radius:10px;text-decoration:none;color:#e5e7eb;border:1px solid transparent}
+.menu a:hover{background:#111827}
+.menu a.activo{border-color:#8b5cf6;background:#1f1631}
+.contenido{padding:20px}
+.top h1{margin:0 0 16px;font-size:20px}
+.zona{margin-top:8px}
 
-body {
-    font-family: Arial, sans-serif;
-    --color-principal: #E63946;
-    --color-fondo: #01050B;
-    --barra-lateral: #050810;
-    --detalles: #2C2C54;
-    --color-secundario: #1D9BF0;
-    --hover: #0A74DA;
-    --texto-primario: #EAEAEA;
-    --texto-secundario: #B0B0B0;
-    display: flex;
-    margin: 0;
-    color: var(--texto-primario);
-    background-color: var(--color-fondo);
-}
+.cajas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:14px}
+.caja{background:#0f172a;border:1px solid #334155;border-radius:16px;min-height:160px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s}
+.caja:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.25)}
+.caja_titulo{font-size:22px;font-weight:800;letter-spacing:.06em}
 
-/* Estilos para la lista de navegación */
 
-div.container {
-    background-color: var(--barra-lateral);
-    height: 100vh;
-    width: 10%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    border-right: 1px solid var(--detalles);
-}
+.bloque{background:#0f172a;border:1px solid #334155;border-radius:16px;padding:16px}
+.bloque h3{margin:0 0 8px}
 
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-    padding: 50px 0;
-}
+.bar{display:flex;gap:10px;align-items:center;margin:8px 0 12px}
+.bar input{flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#e5e7eb}
+.pills{display:flex;gap:8px}
+.pill{padding:8px 12px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:#e5e7eb;cursor:pointer}
+.pill.on{background:#1f1631;border-color:#8b5cf6}
+.tabla table{width:100%;border-collapse:collapse;background:#0f172a;border-radius:12px;overflow:hidden}
+.tabla th,.tabla td{padding:10px;border-bottom:1px solid #1f2937}
+.tabla thead th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;background:#111827}
+.btn{padding:8px 12px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#e5e7eb;cursor:pointer}
+.btn.ok{background:#22c55e;color:#06220f;border-color:#22c55e}
+.btn.ghost{background:transparent}
+.badge{display:inline-block;padding:4px 8px;border-radius:6px;background:#1f1631;color:#c4b5fd;border:1px solid #8b5cf6}
 
-.icon {
-    width: 30px;
-    height: 30px;
-    stroke: var(--texto-secundario);
-}
-
-.nav-item:hover .icon {
-    stroke: var(--color-secundario);
-}
-
-/* Contenido */
-
-div.contenido {
-    width: 90%;
-    margin-left: 10%; 
-    right: 0;
-}
-
-h1 {
-    color: var(--texto-principal);
-    font-size: 35px;
-    margin: 0;
-    padding: 35px 0 10px 30px;
-}
-
-img.logo {
-    position: fixed;
-    margin: auto;
-    margin-top: 170px;
-    width: 80%;
-    right: 10%;
-}
-
-main#contenedor {
-    padding: 20px;
-    background-color: var(--color-fondo);
-}
-
-/* Estilos para el pie de página */
-
-footer {
-    bottom: 0;
-    left: 10%;
-    background-color: var(--barra-lateral);
-    color: var(--texto-secundario);
-    text-align: center;
-    padding: 15px;
-    font-size: 14px;
-}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;z-index:60}
+.modal{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:16px;max-width:720px;width:95%}
+.modal_head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.row{display:grid;grid-template-columns:1fr 220px;gap:14px}
+.col.imgs{display:flex;flex-direction:column;gap:12px;align-items:center}
+.col.imgs img{width:180px;height:220px;object-fit:cover;border:1px solid #334155;border-radius:8px;background:#111827}
+.modal_foot{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+h4{margin:10px 0 6px}
