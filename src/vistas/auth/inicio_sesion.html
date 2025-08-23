@@ -2,40 +2,32 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>{{titulo}}</title>
+  <title>Iniciar sesión</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="{{base}}/public/css/form.css" rel="stylesheet">
-  <style>
-    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;padding:24px}
-    .msg{margin:10px 0;padding:10px;border-radius:8px}
-    .ok{background:#e6ffe9;color:#0a6d2a;border:1px solid #b8f0c3}
-    .err{background:#ffecec;color:#821b1b;border:1px solid #f3b5b5}
-    form{display:grid;gap:10px;max-width:360px}
-    input,button{padding:10px;border-radius:8px;border:1px solid #ccc}
-    button{cursor:pointer;font-weight:700}
-  </style>
+  <link rel="stylesheet" href="{{base}}/public/css/auth.css">
+  <script defer src="{{base}}/public/js/login.js"></script>
 </head>
-<body>
-  <h2>Iniciar sesion</h2>
+<body class="page-center">
+  <div class="card">
+    <h2>Iniciar sesión</h2>
 
-  <div class="msg ok" style="{{ok}}" hidden>ok</div>
-  <div class="msg err" style="{{error_style}}" hidden>err</div>
+    <div class="msg ok">{{mensaje_ok}}</div>
+    <div class="msg err">{{mensaje_error}}</div>
 
-  <script>
-    const ok = "{{ok}}".trim();
-    const err = "{{error}}".trim();
-    const okBox = document.querySelector('.ok');
-    const errBox = document.querySelector('.err');
-    if(ok){ okBox.textContent = ok; okBox.hidden = false; }
-    if(err){ errBox.textContent = err; errBox.hidden = false; }
-  </script>
+    <form method="post" action="{{base}}/src/entradas/login.php" autocomplete="off">
+      <label>Usuario (CI o correo)</label>
+      <input name="usuario" required>
 
-  <form method="post" action="{{base}}/src/entradas/login.php" autocomplete="off">
-    <label>Correo o CI</label>
-    <input type="text" name="usuario" placeholder="ej: juan.perez@gmail.com o 11111" required>
-    <label>Clave</label>
-    <input type="password" name="clave" required>
-    <button type="submit">Entrar</button>
-  </form>
+      <label>Contraseña</label>
+      <input name="clave" type="password" required>
+
+      <button type="submit">Iniciar sesión</button>
+    </form>
+
+    <div class="alt">
+      ¿No tienes cuenta?
+      <a href="{{base}}/src/entradas/registro.php">Regístrate</a>
+    </div>
+  </div>
 </body>
 </html>

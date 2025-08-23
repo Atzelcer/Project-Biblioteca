@@ -20,7 +20,6 @@ h3 {
     margin-top: 0;
 }
 
-/* Estilos para el buscador */
 
 div.buscador {
     margin-bottom: 20px;
@@ -63,7 +62,6 @@ button.buscador:hover {
     background-color: var(--hover);
 }
 
-/* Estilo de la tabla */
 table {
     width: 90%;
     border-collapse: collapse;
@@ -79,7 +77,6 @@ th {
     color: var(--texto-primario);
 }
 
-/* Estilo de los botones */
 
 div.botones {
     display: flex;

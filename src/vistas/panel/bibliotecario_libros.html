@@ -1,71 +1,71 @@
 <div class="bloque">
-  <h3>Libros</h3>
+    <h3>Libros</h3>
 
-  <div class="bar">
-    <input id="buscaRes" type="text" placeholder="ticket, usuario, libro, autor">
-    <div class="pills">
-      <button class="pill" data-estado="pendiente">Solicitudes</button>
-      <button class="pill" data-estado="autorizada">Autorizados</button>
+    <div class="bar">
+        <input id="buscaRes" type="text" placeholder="ticket, usuario, libro, autor">
+        <div class="pills">
+            <button class="pill" data-estado="pendiente">Solicitudes</button>
+            <button class="pill" data-estado="autorizada">Autorizados</button>
+        </div>
     </div>
-  </div>
 
-  <div class="tabla">
-    <table>
-      <thead id="theadRes"></thead>
-      <tbody id="tbodyReservas"></tbody>
-    </table>
-  </div>
+    <div class="tabla">
+        <table>
+            <thead id="theadRes"></thead>
+            <tbody id="tbodyReservas"></tbody>
+        </table>
+    </div>
 </div>
 
 <div class="overlay" id="mAuth">
-  <div class="modal">
-    <div class="modal_head">
-      <span class="badge">Ticket: <span id="mFicha"></span></span>
-      <h3>Reservar libro</h3>
+    <div class="modal">
+        <div class="modal_head">
+            <span class="badge">Ticket: <span id="mFicha"></span></span>
+            <h3>Reservar libro</h3>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h4>Datos del libro</h4>
+                <p><strong id="mLibro"></strong></p>
+                <p>Autor: <span id="mAutorLibro"></span></p>
+                <h4>Datos del lector</h4>
+                <p>Nombre: <span id="mNom"></span></p>
+                <p>Apellido: <span id="mApe"></span></p>
+                <p>CI: <span id="mCI"></span></p>
+            </div>
+            <div class="col imgs">
+                <img id="mImgLibro" src="" alt="Foto libro">
+                <img id="mImgUser" src="" alt="Foto lector">
+            </div>
+        </div>
+        <footer class="modal_foot">
+            <button class="btn ghost" id="btnCancelAuth">Cancelar</button>
+            <button class="btn ok" id="btnDoAuth">Autorizar</button>
+        </footer>
     </div>
-    <div class="row">
-      <div class="col">
-        <h4>Datos del libro</h4>
-        <p><strong id="mLibro"></strong></p>
-        <p>Autor: <span id="mAutorLibro"></span></p>
-        <h4>Datos del lector</h4>
-        <p>Nombre: <span id="mNom"></span></p>
-        <p>Apellido: <span id="mApe"></span></p>
-        <p>CI: <span id="mCI"></span></p>
-      </div>
-      <div class="col imgs">
-        <img id="mImgLibro" src="" alt="Foto libro">
-        <img id="mImgUser"  src="" alt="Foto lector">
-      </div>
-    </div>
-    <footer class="modal_foot">
-      <button class="btn ghost" id="btnCancelAuth">Cancelar</button>
-      <button class="btn ok" id="btnDoAuth">Autorizar</button>
-    </footer>
-  </div>
 </div>
 
 <div class="overlay" id="mDev">
-  <div class="modal">
-    <h3>Registrar devolución</h3>
-    <div class="row">
-      <div class="col">
-        <h4>Datos del libro</h4>
-        <p><strong id="dLibro"></strong></p>
-        <p>Autor: <span id="dAutorLibro"></span></p>
-        <h4>Datos del lector</h4>
-        <p>Nombre: <span id="dNom"></span></p>
-        <p>Apellido: <span id="dApe"></span></p>
-        <p>CI: <span id="dCI"></span></p>
-      </div>
-      <div class="col imgs">
-        <img id="dImgLibro" src="" alt="Foto libro">
-        <img id="dImgUser"  src="" alt="Foto lector">
-      </div>
+    <div class="modal">
+        <h3>Registrar devolución</h3>
+        <div class="row">
+            <div class="col">
+                <h4>Datos del libro</h4>
+                <p><strong id="dLibro"></strong></p>
+                <p>Autor: <span id="dAutorLibro"></span></p>
+                <h4>Datos del lector</h4>
+                <p>Nombre: <span id="dNom"></span></p>
+                <p>Apellido: <span id="dApe"></span></p>
+                <p>CI: <span id="dCI"></span></p>
+            </div>
+            <div class="col imgs">
+                <img id="dImgLibro" src="" alt="Foto libro">
+                <img id="dImgUser" src="" alt="Foto lector">
+            </div>
+        </div>
+        <footer class="modal_foot">
+            <button class="btn ok" id="btnDoDev">Confirmar devolución</button>
+            <button class="btn ghost" id="btnCancelDev">Cancelar</button>
+        </footer>
     </div>
-    <footer class="modal_foot">
-      <button class="btn ok" id="btnDoDev">Confirmar devolución</button>
-      <button class="btn ghost" id="btnCancelDev">Cancelar</button>
-    </footer>
-  </div>
 </div>

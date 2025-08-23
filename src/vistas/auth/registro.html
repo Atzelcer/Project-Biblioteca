@@ -1,78 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../../public/css/form.css">
-    <title>Registro</title>
+  <meta charset="utf-8">
+  <title>Crear cuenta</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{base}}/public/css/auth.css">
+  <script defer src="{{base}}/public/js/registro.js"></script>
 </head>
-<body>
-    <img src="../../../public/images/fondo.webp" class="fondo">
-    <div class="formulario">
-        <h1>Registro</h1>
-        <form method="POST" action="../../config/procesar_registro.php">
-            <div class="datos">
-                <div class="dato">
-                    <label class="label-register">Nombre:</label>
-                    <input class="login-input" type="text" name="nombre" required>
-                </div>
-                <div class="dato">
-                    <label class="label-register">Apellido:</label>
-                    <input class="login-input" type="text" name="apellido" required>
-                </div>
-            </div>
-            <div class="datos">
-                <div class="dato">
-                    <label class="label-register">CI:</label>
-                    <input class="login-input" type="text" name="ci" pattern="[0-9]+" title="Solo números" maxlength="15" required>
-                </div>
-                <div class="dato">
-                    <label class="label-register">Celular:</label>
-                    <input class="login-input" type="text" name="celular" pattern="[0-9]+" title="Solo números" maxlength="15">
-                </div>
-            </div>
-            <div class="datos">
-                <div class="dato">
-                    <label class="label-register">Correo:</label>
-                    <input class="login-input" type="email" name="correo" required>
-                </div>
-                <div class="dato">
-                    <label class="label-register">Contraseña:</label>
-                    <input class="login-input" type="password" name="password" required>
-                </div>
-            </div>
-            <div class="datos">
-                <div class="dato">
-                    <label class="label-register">Dirección:</label>
-                    <input class="login-input" type="text" name="direccion">
-                </div>
-            </div>
-            
-            <p class="texto">Los siguientes campos son opcionales:</p>
-            <div class="files">
-                <div class="file-upload">
-                    <label for="ci_anverso" class="custom-file-label">Subir CI anverso</label>
-                    <input type="file" id="ci_anverso" name="ci_anverso" onchange="mostrarNombre(this, 'file-anverso')">
-                    <span id="file-anverso" class="file-name"></span>
-                </div>
+<body class="page-center">
+  <div class="grid">
+    <h2>Crear cuenta</h2>
 
-                <div class="file-upload">
-                    <label for="ci_reverso" class="custom-file-label">Subir CI reverso</label>
-                    <input type="file" id="ci_reverso" name="ci_reverso" onchange="mostrarNombre(this, 'file-reverso')">
-                    <span id="file-reverso" class="file-name"></span>
-                </div>
+    <div class="msg err">{{mensaje_error}}</div>
 
-                <div class="file-upload">
-                    <label for="foto_perfil" class="custom-file-label">Subir foto de perfil</label>
-                    <input type="file" id="foto_perfil" name="foto_perfil" onchange="mostrarNombre(this, 'file-perfil')">
-                    <span id="file-perfil" class="file-name"></span>
-                </div>
-            </div>
-            
-            <button type="submit">Registrar</button>
-        </form>
-        <p>¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
+    <form method="post" action="{{base}}/src/entradas/registro.php" enctype="multipart/form-data" autocomplete="off">
+      <div class="row">
+        <div>
+          <label>Nombre</label>
+          <input name="nombre" required>
+        </div>
+        <div>
+          <label>Contraseña</label>
+          <input name="pwd" type="password" required>
+        </div>
+
+        <div>
+          <label>Apellido</label>
+          <input name="apellido" required>
+        </div>
+        <div>
+          <label>Dirección</label>
+          <input name="direccion">
+        </div>
+
+        <div>
+          <label>CI</label>
+          <input name="ci" required>
+        </div>
+        <div>
+          <label>Foto de perfil</label>
+          <input name="foto" type="file" accept="image/*">
+        </div>
+
+        <div>
+          <label>Celular</label>
+          <input name="celular">
+        </div>
+        <div>
+          <label>Correo</label>
+          <input name="correo" type="email" required>
+        </div>
+
+        <div class="full">
+          <button type="submit">Registrar</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="alt">
+      ¿Ya tienes cuenta? <a href="{{base}}/src/entradas/login.php">Iniciar sesión</a>
     </div>
+  </div>
 </body>
 </html>
-

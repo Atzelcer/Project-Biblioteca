@@ -1,42 +1,47 @@
 <?php
-require_once __DIR__ . '/../config/baseDatos.php';
-require_once __DIR__ . '/../modelos/usuario.php';
-
-interface UsuarioRepositorioContrato {
-    public function buscarPorCorreo(string $correo): ?Usuario;
-    public function buscarPorCi(int $ci): ?Usuario;
-}
-
-class UsuarioRepositorio implements UsuarioRepositorioContrato {
+class UsuarioRepositorio {
     private PDO $db;
-    public function __construct(PDO $db){ $this->db=$db; }
+    public function __construct(PDO $db) { $this->db = $db; }
 
-    public function buscarPorCorreo(string $correo): ?Usuario {
-        $st = $this->db->prepare('SELECT id_usuario,fotografia,CI,nombre,apellido,rol,celular,password,direccion,correo FROM usuario WHERE correo=? LIMIT 1');
-        $st->execute([$correo]);
-        $f = $st->fetch();
-        return $f ? $this->map($f) : null;
+    public function buscarPorCIoCorreo(string $usuario): ?array {
+        if (strpos($usuario, '@') !== false) {
+            $st = $this->db->prepare('SELECT * FROM usuario WHERE correo=? LIMIT 1');
+            $st->execute([$usuario]);
+        } else {
+            $st = $this->db->prepare('SELECT * FROM usuario WHERE CI=? LIMIT 1');
+            $st->execute([$usuario]);
+        }
+        $row = $st->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
     }
 
-    public function buscarPorCi(int $ci): ?Usuario {
-        $st = $this->db->prepare('SELECT id_usuario,fotografia,CI,nombre,apellido,rol,celular,password,direccion,correo FROM usuario WHERE CI=? LIMIT 1');
+    public function existeCI(string $ci): bool {
+        $st = $this->db->prepare('SELECT 1 FROM usuario WHERE CI=? LIMIT 1');
         $st->execute([$ci]);
-        $f = $st->fetch();
-        return $f ? $this->map($f) : null;
+        return (bool)$st->fetchColumn();
     }
 
-    private function map(array $f): Usuario {
-        return new Usuario(
-            (int)$f['id_usuario'],
-            $f['fotografia'],
-            (int)$f['CI'],
-            $f['nombre'],
-            $f['apellido'],
-            $f['rol'],
-            $f['celular'] !== null ? (int)$f['celular'] : null,
-            $f['password'],
-            $f['direccion'],
-            $f['correo']
-        );
+    public function existeCorreo(string $correo): bool {
+        $st = $this->db->prepare('SELECT 1 FROM usuario WHERE correo=? LIMIT 1');
+        $st->execute([$correo]);
+        return (bool)$st->fetchColumn();
+    }
+
+    public function crear(Usuario $u): int {
+        $sql = 'INSERT INTO usuario (fotografia,CI,nombre,apellido,rol,celular,password,direccion,correo)
+                VALUES (?,?,?,?,?,?,?,?,?)';
+        $st = $this->db->prepare($sql);
+        $st->execute([
+            $u->getFotografia(),
+            $u->getCI(),
+            $u->getNombre(),
+            $u->getApellido(),
+            $u->getRol(),
+            $u->getCelular(),
+            $u->getPassword(),
+            $u->getDireccion(),
+            $u->getCorreo()
+        ]);
+        return (int)$this->db->lastInsertId();
     }
 }

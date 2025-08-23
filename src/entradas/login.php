@@ -11,7 +11,7 @@ $svc  = new AutenticacionServicio($repo);
 $ctl  = new AutenticacionControlador($svc);
 
 if($_SERVER['REQUEST_METHOD']==='POST'){
-    $usuario = trim($_POST['usuario'] ?? ''); 
+    $usuario = trim($_POST['usuario'] ?? '');
     $clave   = trim($_POST['clave'] ?? '');
     $ctl->login($usuario,$clave);
 } else {

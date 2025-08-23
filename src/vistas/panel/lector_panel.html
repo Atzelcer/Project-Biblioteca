@@ -4,34 +4,16 @@
   <meta charset="utf-8">
   <title>{{titulo}}</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;padding:18px;background:#0b1223;color:#e5e7eb}
-    h2{margin:6px 0 16px}
-    .flash{margin-bottom:10px;color:#22c55e;font-weight:700}
-    .bar{display:flex;gap:8px;margin-bottom:12px}
-    .bar input{flex:1;padding:10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#e5e7eb}
-    .bar button{padding:10px 14px;border-radius:8px;border:0;background:#22c55e;color:#06220f;font-weight:700;cursor:pointer}
-    table{width:100%;border-collapse:collapse;background:#0f172a;border-radius:12px;overflow:hidden}
-    th,td{padding:12px;border-bottom:1px solid #1f2937}
-    thead th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;background:#111827}
-    tbody tr:hover{background:#111827}
-    .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
-    .primary{background:#60a5fa;color:#0a1424}
-    /* modal */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;z-index:50}
-    .modal{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:16px;max-width:560px;width:92%}
-    .modal h3{margin:0 0 8px}
-    .modal .row{display:flex;gap:12px;align-items:flex-start}
-    .modal img{width:96px;height:120px;object-fit:cover;border:1px solid #334155;border-radius:8px}
-    .modal footer{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-    .ok{background:#22c55e;color:#06220f}
-    .ghost{background:transparent;border:1px solid #334155;color:#e5e7eb}
-    .ticket{font-size:28px;font-weight:800;letter-spacing:.06em}
-  </style>
+  <link rel="stylesheet" href="{{base}}/public/css/lector_panel.css">
+  <script defer src="{{base}}/public/js/lector_panel.js"></script>
 </head>
 <body data-base="{{base}}">
-  <h2>LECTOR</h2>
+  <header class="topbar">
+    <div class="brand">Lector</div>
+    <a class="btn danger" href="{{base}}/src/entradas/logout.php">Cerrar sesión</a>
+  </header>
 
+  <h2>LECTOR</h2>
   <p class="flash">{{ok}}</p>
 
   <form class="bar" method="get" action="{{base}}/src/entradas/panel.php">
@@ -48,7 +30,6 @@
     </tbody>
   </table>
 
-  <!-- Modal confirmación -->
   <div class="overlay" id="mConfirm">
     <div class="modal">
       <h3>Reservar libro</h3>
@@ -67,7 +48,6 @@
     </div>
   </div>
 
-  <!-- Modal ticket -->
   <div class="overlay" id="mTicket">
     <div class="modal">
       <h3>Información de la reserva</h3>
@@ -79,8 +59,5 @@
       <footer><button class="btn ok" id="btnCerrarTicket">Entendido</button></footer>
     </div>
   </div>
-
-  <!-- JS externo -->
-  <script src="{{base}}/public/js/lector_libros.js"></script>
 </body>
 </html>
