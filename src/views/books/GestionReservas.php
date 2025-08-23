@@ -198,11 +198,11 @@ $totalResultados = count($reservas);
 
     <!-- Modal de confirmación de autorización -->
     <div id="modalAutorizar" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
-        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 500px; border-radius: 5px;">
+        <div style="background-color: #01050B; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 500px; border-radius: 5px;">
             <h3 style="margin-top: 0;">Confirmar Autorización de Reserva</h3>
             <p>¿Está seguro que desea autorizar la siguiente reserva?</p>
             
-            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 3px; margin: 15px 0;">
+            <div style="background-color: #01050B; padding: 15px; border-radius: 3px; margin: 15px 0;">
                 <p><strong>Ticket:</strong> <span id="modalTicket"></span></p>
                 <p><strong>Libro:</strong> <span id="modalLibro"></span></p>
                 <p><strong>Ejemplar:</strong> <span id="modalEjemplar"></span></p>

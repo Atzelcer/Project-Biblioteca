@@ -5,6 +5,7 @@
 
 let reservaSeleccionada = null;
 
+
 /**
  * Abre el modal de confirmación para autorizar una reserva
  */
