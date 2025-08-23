@@ -1,51 +1,41 @@
 <?php
-class User {
-    private $db;
+class Usuario {
+    private int $idUsuario;
+    private ?string $fotografia;
+    private int $ci;
+    private string $nombre;
+    private string $apellido;
+    private string $rol;
+    private ?int $celular;
+    private string $password;
+    private ?string $direccion;
+    private string $correo;
 
-    public function __construct($conexion) {
-        $this->db = $conexion;
+    public function __construct(
+        int $idUsuario,
+        ?string $fotografia,
+        int $ci,
+        string $nombre,
+        string $apellido,
+        string $rol,
+        ?int $celular,
+        string $password,
+        ?string $direccion,
+        string $correo
+    ) {
+        $this->idUsuario=$idUsuario; $this->fotografia=$fotografia; $this->ci=$ci;
+        $this->nombre=$nombre; $this->apellido=$apellido; $this->rol=$rol;
+        $this->celular=$celular; $this->password=$password; $this->direccion=$direccion; $this->correo=$correo;
     }
 
-    public function crear($data) {
-        $sql = "INSERT INTO usuario (fotografia, ci_anverso, ci_reverso, CI, nombre, apellido, rol, celular, password, direccion, correo)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->db->prepare($sql);
-        $hash = sha1($data['password']);
-        $stmt->bind_param("sssisssisss", '', '', '', $data['ci'], $data['nombre'], $data['apellido'], $data['rol'],
-                          $data['celular'], $hash, $data['direccion'], $data['correo']);
-        return $stmt->execute();
-    }
-
-    public function autenticarPorCI($ci, $password) {
-        $sql = "SELECT * FROM usuario WHERE CI = ? AND password = ?";
-        $stmt = $this->db->prepare($sql);
-        $hash = sha1($password);
-        $stmt->bind_param("is", $ci, $hash);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
-    }
-
-    public function obtenerTodos($buscar = '') {
-        $sql = "SELECT * FROM usuario";
-        if (!empty($buscar)) {
-            $sql .= " WHERE CI LIKE ? OR nombre LIKE ? OR apellido LIKE ?";
-        }
-        $sql .= " ORDER BY nombre ASC";
-        
-        $stmt = $this->db->prepare($sql);
-        if (!empty($buscar)) {
-            $search = "%{$buscar}%";
-            $stmt->bind_param("sss", $search, $search, $search);
-        }
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function obtenerPorId($id) {
-        $sql = "SELECT * FROM usuario WHERE id_usuario = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
-    }
+    public function getIdUsuario(): int { return $this->idUsuario; }
+    public function getFotografia(): ?string { return $this->fotografia; }
+    public function getCi(): int { return $this->ci; }
+    public function getNombre(): string { return $this->nombre; }
+    public function getApellido(): string { return $this->apellido; }
+    public function getRol(): string { return $this->rol; }
+    public function getCelular(): ?int { return $this->celular; }
+    public function getPassword(): string { return $this->password; }
+    public function getDireccion(): ?string { return $this->direccion; }
+    public function getCorreo(): string { return $this->correo; }
 }
