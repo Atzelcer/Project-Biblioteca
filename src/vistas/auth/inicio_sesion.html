@@ -9,17 +9,18 @@
 </head>
 <body class="page-center">
   <div class="card">
-    <h2>Iniciar sesión</h2>
+    <h2>Biblioteca Virtual</h2>
+    <h3>Iniciar sesión</h3>
 
     <div class="msg ok">{{mensaje_ok}}</div>
     <div class="msg err">{{mensaje_error}}</div>
 
     <form method="post" action="{{base}}/src/entradas/login.php" autocomplete="off">
       <label>Usuario (CI o correo)</label>
-      <input name="usuario" required>
+      <input name="usuario" autocomplete="off" required>
 
       <label>Contraseña</label>
-      <input name="clave" type="password" required>
+      <input name="clave" type="password" autocomplete="new-password">
 
       <button type="submit">Iniciar sesión</button>
     </form>
