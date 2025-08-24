@@ -12,6 +12,18 @@ class LibroRepositorio implements LibroRepositorioContrato {
     private PDO $db;
     public function __construct(PDO $db){ $this->db = $db; }
 
+    public function listarLibros(): array {
+        $st = $this->db->prepare("SELECT id_libro,codigo_libro,nombre,autor,estado,foto_libro
+                                   FROM libros ORDER BY nombre");
+        $st->execute();
+        $rows = $st->fetchAll();
+        $out = [];
+        foreach($rows as $r){
+            $out[] = new Libro((int)$r['id_libro'],$r['codigo_libro'],$r['nombre'],$r['autor'],$r['estado'],$r['foto_libro']);
+        }
+        return $out;
+    }
+
     public function listarDisponibles(string $q=''): array {
         if ($q==='') {
             $st = $this->db->prepare("SELECT id_libro,codigo_libro,nombre,autor,estado,foto_libro
