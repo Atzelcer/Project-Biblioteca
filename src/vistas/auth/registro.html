@@ -8,52 +8,67 @@
   <script defer src="{{base}}/public/js/registro.js"></script>
 </head>
 <body class="page-center">
-  <div class="grid">
+  <div class="card">
     <h2>Crear cuenta</h2>
 
     <div class="msg err">{{mensaje_error}}</div>
 
-    <form method="post" action="{{base}}/src/entradas/registro.php" enctype="multipart/form-data" autocomplete="off">
+    <form method="post" action="{{base}}/src/entradas/registro.php" enctype="multipart/form-data" autocomplete="off" class="form">
       <div class="row">
-        <div>
-          <label>Nombre</label>
-          <input name="nombre" required>
-        </div>
-        <div>
-          <label>Contraseña</label>
-          <input name="pwd" type="password" required>
+        <div class="column">
+          <div>
+            <label>Nombre</label>
+            <br>
+            <input name="nombre" autocomplete="off" required>
+          </div>
+          <div>
+            <label>CI</label>
+            <br>
+            <input name="ci" autocomplete="off" required>
+          </div>
+          
+          <div>
+            <label>Dirección</label>
+            <br>
+            <input name="direccion" autocomplete="off">
+          </div>
+
+          <div>
+            <label>Celular</label>
+            <br>
+            <input name="celular" autocomplete="off">
+          </div>
+
         </div>
 
-        <div>
-          <label>Apellido</label>
-          <input name="apellido" required>
-        </div>
-        <div>
-          <label>Dirección</label>
-          <input name="direccion">
-        </div>
+        <div class="column">
+          <div>
+            <label>Apellido</label>
+            <br>
+            <input name="apellido" autocomplete="off" required>
+          </div>
+          <div>
+            <label>Contraseña</label>
+            <br>
+            <input name="pwd" type="password" autocomplete="new-password" required>
+          </div>
 
-        <div>
-          <label>CI</label>
-          <input name="ci" required>
-        </div>
-        <div>
-          <label>Foto de perfil</label>
-          <input name="foto" type="file" accept="image/*">
-        </div>
 
-        <div>
-          <label>Celular</label>
-          <input name="celular">
+          
+          <div>
+            <label>Correo</label>
+            <br>
+            <input name="correo" type="email" autocomplete="off" required>
+          </div>
+          <div>
+            <label>Subir Imagen</label>
+            <label for="foto" class="file-label">Foto de perfil</label>
+            <input id="foto" name="foto" type="file" accept="image/*" hidden>
+          </div>
         </div>
-        <div>
-          <label>Correo</label>
-          <input name="correo" type="email" required>
-        </div>
-
-        <div class="full">
-          <button type="submit">Registrar</button>
-        </div>
+      </div>
+      <div class="full">
+        <button type="submit">Registrar</button>
       </div>
     </form>
 

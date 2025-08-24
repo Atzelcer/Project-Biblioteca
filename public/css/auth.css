@@ -1,23 +1,148 @@
-:root {
-  --bg:#0b1223; --panel:#0f172a; --b:#334155; --txt:#e5e7eb; --mut:#94a3b8;
-  --ok:#22c55e; --oktxt:#06220f; --pri:#8b5cf6; --warn:#7f1d1d; --warnbg:#3a1111; --warnfg:#fecaca;
+/* login */
+
+body {
+    font-family: Arial, sans-serif;
+    --color-principal: #E63946;
+    --color-fondo: #01050B;
+    --barra-lateral: #050810;
+    --detalles: #2C2C54;
+    --color-secundario: #1D9BF0;
+    --hover: #0A74DA;
+    --texto-primario: #EAEAEA;
+    --texto-secundario: #B0B0B0;
+    background-color: var(--color-fondo);
+    color: var(--texto-primario);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
 }
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--txt);font-family:system-ui,Segoe UI,Roboto,Arial;margin:0}
-.page-center{display:grid;place-items:center;min-height:100vh;padding:16px}
-.card{width:95%;max-width:380px;background:var(--panel);border:1px solid var(--b);border-radius:14px;padding:18px}
-.grid{width:95%;max-width:820px;background:var(--panel);border:1px solid var(--b);border-radius:14px;padding:18px}
-h2{margin:0 0 12px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.full{grid-column:1/-1}
-label{display:block;font-size:14px;margin:10px 0 6px;color:var(--mut)}
-input{width:100%;padding:10px;border-radius:10px;border:1px solid var(--b);background:#0b1223;color:var(--txt)}
-button{padding:10px;border-radius:10px;border:0;cursor:pointer;font-weight:800}
-.card button{width:100%;margin-top:14px;background:var(--pri);color:#0b1020}
-.grid button{background:var(--ok);color:var(--oktxt)}
-.alt{margin-top:10px;text-align:center;font-size:14px}
-.alt a{color:#93c5fd;text-decoration:none}
-.msg{padding:10px;border-radius:10px;margin-bottom:10px}
-.msg.ok{background:#052e1b;border:1px solid #065f46;color:#a7f3d0}
-.msg.err{background:var(--warnbg);border:1px solid var(--warn);color:var(--warnfg)}
-.msg:empty{display:none}
+
+div.card {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-fondo);
+  border: 2px solid var(--detalles);
+  border-radius: 10px;
+  padding: 20px 40px;
+  box-shadow: var(--detalles) 0 0 10px;
+}
+
+h2, h3 {
+    text-align: center;
+    margin: 0;
+    margin-top: 8px;
+}
+
+h3 {
+    font-weight: normal;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: var(--barra-lateral);
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+label {
+    font-size: 15px;
+    color: var(--texto-primario);
+}
+
+input {
+    padding: 10px;
+    border: 1px solid var(--detalles);
+    border-radius: 5px;
+    background-color: var(--color-fondo);
+    color: var(--texto-primario);
+    margin-bottom: 20px;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-principal);
+    color: var(--texto-primario);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: var(--hover);
+}
+
+div.alt {
+    margin-top: 12px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+a {
+    color: var(--color-secundario);
+    text-decoration: none;
+}
+
+/* registro */
+
+div.row {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+div.column {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+button, .file-label {
+    display: block;        
+    width: 100%;           
+    text-align: center;    
+    margin: 10px 0;
+}
+
+.file-label {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: var(--color-principal);
+    color: var(--texto-primario);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    margin-top: 10px;
+    width: 60%;
+}
+
+.file-label:hover {
+    background-color: var(--hover);
+}
+
+@media (max-width: 600px) {
+    div.row {
+        flex-direction: column;
+    }
+    div.column {
+        width: 100%;
+    }
+}
+
+.form {
+  max-width: 600px;
+  margin: 0 auto;
+}
