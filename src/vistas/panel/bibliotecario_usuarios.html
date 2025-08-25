@@ -7,10 +7,11 @@
       <button class="pill" data-rol="todos">Todos</button>
       <button class="pill" data-rol="lector">Lectores</button>
       <button class="pill" data-rol="bibliotecario">Bibliotecario</button>
+       <button class="pill" data-rol="bloqueados">Bloqueados</button>
     </div>
   </div>
 
-  <div class="tabla">
+  <div class="tabla" id="tablaUsuarios">
     <table>
       <thead>
       <tr>
@@ -18,6 +19,24 @@
       </tr>
       </thead>
       <tbody id="tbodyUsuarios"></tbody>
+    </table>
+  </div>
+  
+  <div class="tabla" id="tablaBloqueados">
+    <table>
+      <thead>
+      <tr>
+        <th>Ticket</th>
+        <th>Usuario</th>
+        <th>CI</th>
+        <th>Libro</th>
+         <th>Autor</th>
+        <th>Fecha Devolucion</th>
+        <th>Dias Expiracion</th>
+        <th>Accion</th>
+      </tr>
+      </thead>
+      <tbody id="tbodyUsuariosBloqueados"></tbody>
     </table>
   </div>
 </div>
