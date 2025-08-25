@@ -31,20 +31,65 @@
     return tr;
   }
 
+  
+  function actualizarVisibilidadTabla() {
+    var tablaBloqueados = document.getElementById('tablaBloqueados');
+    var tablaUsuarios = document.getElementById('tablaUsuarios');
+    
+    if (tablaBloqueados && tablaUsuarios) {
+      if (rol === 'bloqueados') {
+        tablaBloqueados.style.display = 'block';
+        tablaUsuarios.style.display = 'none';
+      } 
+    if(rol === 'todos' || rol ==='lectores' || rol ==='biliotecario'){
+        tablaBloqueados.style.display = 'none';
+        tablaUsuarios.style.display = 'block';
+      }
+    }
+  }
   function cargar(){
+    actualizarVisibilidadTabla();
     var url = api + '?action=list&rol=' + encodeURIComponent(rol) + '&q=' + encodeURIComponent(busca.value||'');
     fetch(url).then(r=>r.json()).then(j=>{
-      tbody.innerHTML = '';
       if(!j.ok) return;
-      j.data.forEach(function(it){ tbody.appendChild(fila(it)); });
-    });
-  }
+      if(rol === 'bloqueados'){
+        var tbodyBloqueados = document.getElementById('tbodyBloqueados');
+        if(tbodyBloqueados){
+          tbodyBloqueados.innerHTML='';
+          if(j.data && j.data.length >0){
+            j.data.forEach(it=>{
+              tbodyBloqueados.appendChild(filaBloqueados(it));
+
+            });}}
+          }else{
+            tbody.innerHTML = '';
+            if(j.data && j.data.length >0){
+              j.data.forEach(it =>{ tbody.appendChild(fila(it)); 
+
+              });
+
+            }
+          }
+          actualizarVisibilidadTabla();
+          });
+        }
+   
+  
 
   document.querySelectorAll('.pill[data-rol]').forEach(function(b){
     b.addEventListener('click', function(){
       rol = this.dataset.rol;
       document.querySelectorAll('.pill[data-rol]').forEach(function(x){ x.classList.remove('on'); });
       this.classList.add('on');
+      var tablaUsuarios = document.getElementById('tablaUsuarios');
+      var tablaBoqueados = document.getElementById('tablaBloqueados');
+      if(rol ==='bloqueados'){
+        if(tablaUsuarios) tablaUsuarios.style.display ='none';
+        if(tablaBloqueados)tablaBoqueados.style.display='block';
+      }else{
+        if(tablaUsuarios) tablaUsuarios.style.display ='block';
+        if(tablaBloqueados)tablaBoqueados.style.display='none';
+      }
       cargar();
     });
   });
