@@ -82,13 +82,13 @@
       document.querySelectorAll('.pill[data-rol]').forEach(function(x){ x.classList.remove('on'); });
       this.classList.add('on');
       var tablaUsuarios = document.getElementById('tablaUsuarios');
-      var tablaBoqueados = document.getElementById('tablaBloqueados');
+      var tablaBloqueados = document.getElementById('tablaBloqueados');
       if(rol ==='bloqueados'){
         if(tablaUsuarios) tablaUsuarios.style.display ='none';
-        if(tablaBloqueados)tablaBoqueados.style.display='block';
+        if(tablaBloqueados) tablaBoqueados.style.display='block';
       }else{
         if(tablaUsuarios) tablaUsuarios.style.display ='block';
-        if(tablaBloqueados)tablaBoqueados.style.display='none';
+        if(tablaBloqueados)tablaBloqueados.style.display='none';
       }
       cargar();
     });
