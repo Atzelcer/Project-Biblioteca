@@ -9,16 +9,40 @@
   function hide(el){el.style.display='none'}
 
   function fillTicket(d){
-    q('#tFicha').textContent = d.fichaReserva || 'TICK----';
+    // Mostrar solo el código de reserva en el campo correspondiente
+    q('#rFichaReserva').textContent = d.fichaReserva || d.ficha || '';
     q('#tLibro').textContent = d.libro ? ('Libro: ' + d.libro) : '';
     q('#tAutor').textContent = d.autor ? ('Autor: ' + d.autor) : '';
     q('#tEstado').textContent = d.estado ? ('Estado: ' + d.estado) : '';
+    // Mostrar botón extender solo si está autorizada
+    var btnExt = q('#btnExtender');
+    if (btnExt) {
+      if (d.estado && d.estado.toLowerCase() === 'autorizada') {
+        btnExt.style.display = 'inline-block';
+      } else {
+        btnExt.style.display = 'none';
+      }
+    }
   }
 
   function toggleTicketButton(){
     var b = q('#btnTicket');
-    if (latest){ b.style.display = 'inline-block'; b.textContent = latest.fichaReserva || 'Ticket'; }
-    else { b.style.display = 'none'; }
+    if (latest) {
+      b.style.display = 'inline-block';
+  b.textContent = latest.fichaReserva || latest.ficha || 'Ticket';
+      // Cambiar color de fondo si está autorizada
+      if (latest.estado && latest.estado.toLowerCase() === 'autorizada') {
+        b.style.backgroundColor = '#3cb371'; // verde
+        b.style.color = '#fff';
+      } else {
+        b.style.backgroundColor = '';
+        b.style.color = '';
+      }
+    } else {
+      b.style.display = 'none';
+      b.style.backgroundColor = '';
+      b.style.color = '';
+    }
   }
 
   function fetchLatest(){
@@ -53,9 +77,14 @@
     }).then(function(r){return r.json()}).then(function(j){
       hide(q('#mConfirm'));
       if(!j.ok){ alert(j.msg||'no se pudo reservar'); return; }
-      latest = { fichaReserva:j.ficha, libro:sel.nombre, autor:sel.autor, estado:'pendiente' };
-      toggleTicketButton();
-      fillTicket(latest);
+      // Después de crear la reserva, recargar el estado real desde el backend
+      fetchLatest();
+      fillTicket({
+        fichaReserva: j.ficha,
+        libro: sel.nombre,
+        autor: sel.autor,
+        estado: j.estado || 'pendiente'
+      });
       show(q('#mTicket'));
       var row = document.querySelector('tr[data-id="'+sel.id+'"]');
       if(row) row.remove();
