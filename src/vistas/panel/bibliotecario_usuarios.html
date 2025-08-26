@@ -27,7 +27,7 @@
       <thead>
       <tr>
         <th>Ticket</th>
-        <th>Usuario</th>
+        <th>Nombre</th>
         <th>CI</th>
         <th>Libro</th>
          <th>Autor</th>
@@ -36,8 +36,32 @@
         <th>Accion</th>
       </tr>
       </thead>
-      <tbody id="tbodyUsuariosBloqueados"></tbody>
+      <tbody id="tbodyBloqueados"></tbody>
     </table>
+  </div>
+
+  <!-- Modal confirmación desbloqueo -->
+  <div class="overlay" id="mDesbloq" style="display:none;">
+    <div class="modal">
+      <h3>Información de Bloqueado</h3>
+      <div class="row">
+        <div class="col">
+          <p><strong>Ticket:</strong> <span id="desbTicket"></span></p>
+          <p><strong>Usuario:</strong> <span id="desbUser"></span> (<span id="desbCI"></span>)</p>
+          <p><strong>Libro:</strong> <span id="desbLibro"></span> - <span id="desbAutor"></span></p>
+          <p><strong>Fecha límite de devolución:</strong> <span id="desbFechaLimite"></span></p>
+          <p><strong>Días de expiración:</strong> <span id="desbDias"></span></p>
+        </div>
+        <div class="col imgs">
+          <img id="desbImgLibro" src="" alt="Portada" style="max-width:120px;">
+          <img id="desbImgUser" src="" alt="Usuario" style="max-width:120px;">
+        </div>
+      </div>
+      <footer class="modal_foot">
+        <button class="btn" id="btnCancelDesbloq">Cancelar</button>
+        <button class="btn ok" id="btnOkDesbloq">Confirmar</button>
+      </footer>
+    </div>
   </div>
 </div>
 
