@@ -14,8 +14,8 @@ class ReservaServicio {
     private function generarFicha(): string {
         $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         do {
-            $f = 'TICK';
-            for($i=0;$i<4;$i++) $f .= $chars[random_int(0, strlen($chars)-1)];
+            $f = '';
+            for($i=0;$i<6;$i++) $f .= $chars[random_int(0, strlen($chars)-1)];
         } while ($this->reservas->existeFicha($f));
         return $f;
     }
@@ -29,6 +29,12 @@ class ReservaServicio {
         $this->reservas->crearPendiente($idUsuario, $idLibro, $ficha);
         $this->libros->actualizarEstado($idLibro, 'Reservado'); 
 
-        return ['ok'=>true,'ficha'=>$ficha,'libroNombre'=>$libro->getNombre(),'libroAutor'=>$libro->getAutor()];
+        return [
+            'ok'=>true,
+            'ficha'=>$ficha,
+            'libroNombre'=>$libro->getNombre(),
+            'libroAutor'=>$libro->getAutor(),
+            'estado'=>'pendiente'
+        ];
     }
 }

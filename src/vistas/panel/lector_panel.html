@@ -11,7 +11,7 @@
   <header class="topbar">
     <div class="brand">Lector</div>
     <div class="actions">
-      <button id="btnTicket" class="btn ticket" style="display:none"></button>
+      <button id="btnTicket" class="btn ticket"></button>
       <a class="btn danger" href="{{base}}/src/entradas/logout.php">Cerrar sesión</a>
     </div>
   </header>
@@ -54,15 +54,15 @@
   <div class="overlay" id="mTicket">
     <div class="modal">
       <h3>Información de la reserva</h3>
-      <p class="ticket">
-        <span id="tFicha">TICK----</span>
-        <span class="dot off"></span>
-      </p>
-      <p id="tLibro"></p>
-      <p id="tAutor"></p>
-      <p id="tEstado"></p>
+  <p id="rFichaReserva"></p>
+  <p id="tLibro"></p>
+  <p id="tAutor"></p>
+  <p id="tEstado"></p>
       <p>Las fechas se definirán cuando pase a “No disponible”.</p>
-      <footer><button class="btn ok" id="btnCerrarTicket">Entendido</button></footer>
+      <footer>
+        <button class="btn ok" id="btnExtender" style="display:none">Extender tiempo</button>
+        <button class="btn ok" id="btnCerrarTicket">Entendido</button>
+      </footer>
     </div>
   </div>
 </body>
