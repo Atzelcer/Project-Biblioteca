@@ -7,18 +7,87 @@
   function qa(s){return Array.from(document.querySelectorAll(s))}
   function show(el){el.style.display='grid'}
   function hide(el){el.style.display='none'}
+  function showAviso(msg){
+    var el = q('#mAviso');
+    if(!el) { alert(msg); return; }
+    q('#avisoMsg').textContent = msg || 'Tienes una reserva pendiente';
+    show(el);
+  }
 
   function fillTicket(d){
-    q('#tFicha').textContent = d.fichaReserva || 'TICK----';
+    // Mostrar solo el código de reserva en el campo correspondiente
+    q('#rFichaReserva').textContent = d.fichaReserva || d.ficha || '';
     q('#tLibro').textContent = d.libro ? ('Libro: ' + d.libro) : '';
     q('#tAutor').textContent = d.autor ? ('Autor: ' + d.autor) : '';
     q('#tEstado').textContent = d.estado ? ('Estado: ' + d.estado) : '';
+    // Mostrar botón extender solo si está autorizada
+    var btnExt = q('#btnExtender');
+    if (btnExt) {
+      if (d.estado && d.estado.toLowerCase() === 'autorizada') {
+        btnExt.style.display = 'inline-block';
+      } else {
+        btnExt.style.display = 'none';
+      }
+    }
   }
+q('#btnExtender').addEventListener('click', function(){
+    show(q('#mExtender'));
+});
+
+q('#btnCancelExt').addEventListener('click', function(){
+    hide(q('#mExtender'));
+});
+
+q('#btnConfirmExt').addEventListener('click', function(){
+    if (!latest || !latest.id_reserva) {
+        alert('Error: No se encontró la información de la reserva');
+        return;
+    }
+
+    var fd = new URLSearchParams();
+    fd.append('id', latest.id_reserva);
+
+    fetch(base + '/src/entradas/api_reservas.php?action=extender', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: fd
+    }).then(r => r.json()).then(j => {
+        if(j.ok){
+           
+            latest.fechaDevolucion = j.nuevaFecha;
+            latest.estado = 'autorizada';
+            toggleTicketButton(); 
+            fillTicket(latest);
+            hide(q('#mExtender'));
+            alert('Se ha extendido el tiempo de la reserva por 1 día más');
+        } else {
+            alert(j.msg || 'No se pudo extender la reserva. Intente nuevamente.');
+        }
+    }).catch(() => {
+        alert('Error en el servidor al procesar la extensión de tiempo');
+    });
+});
+
+
 
   function toggleTicketButton(){
     var b = q('#btnTicket');
-    if (latest){ b.style.display = 'inline-block'; b.textContent = latest.fichaReserva || 'Ticket'; }
-    else { b.style.display = 'none'; }
+    if (latest) {
+      b.style.display = 'inline-block';
+  b.textContent = latest.fichaReserva || latest.ficha || 'Ticket';
+      // Cambiar color de fondo si está autorizada
+      if (latest.estado && latest.estado.toLowerCase() === 'autorizada') {
+        b.style.backgroundColor = '#3cb371'; // verde
+        b.style.color = '#fff';
+      } else {
+        b.style.backgroundColor = '';
+        b.style.color = '';
+      }
+    } else {
+      b.style.display = 'none';
+      b.style.backgroundColor = '';
+      b.style.color = '';
+    }
   }
 
   function fetchLatest(){
@@ -52,10 +121,22 @@
       method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd
     }).then(function(r){return r.json()}).then(function(j){
       hide(q('#mConfirm'));
-      if(!j.ok){ alert(j.msg||'no se pudo reservar'); return; }
-      latest = { fichaReserva:j.ficha, libro:sel.nombre, autor:sel.autor, estado:'pendiente' };
-      toggleTicketButton();
-      fillTicket(latest);
+      if(!j.ok){
+        if (j.code === 'YA_ACTIVA') {
+          showAviso(j.msg || 'Tienes una reserva pendiente');
+          return;
+        }
+        alert(j.msg||'no se pudo reservar');
+        return;
+      }
+      // Después de crear la reserva, recargar el estado real desde el backend
+      fetchLatest();
+      fillTicket({
+        fichaReserva: j.ficha,
+        libro: sel.nombre,
+        autor: sel.autor,
+        estado: j.estado || 'pendiente'
+      });
       show(q('#mTicket'));
       var row = document.querySelector('tr[data-id="'+sel.id+'"]');
       if(row) row.remove();
@@ -69,6 +150,11 @@
     fillTicket(latest);
     show(q('#mTicket'));
   });
+
+  var btnCerrarAviso = q('#btnCerrarAviso');
+  if (btnCerrarAviso) {
+    btnCerrarAviso.addEventListener('click', function(){ hide(q('#mAviso')); });
+  }
 
   fetchLatest();
 })();

@@ -16,6 +16,10 @@ if(!isset($_SESSION['idUsuario'])){
   echo json_encode(['ok'=>false,'msg'=>'sesion no valida']); exit;
 }
 
+if(($_SESSION['rol'] ?? '') !== 'lector'){
+  echo json_encode(['ok'=>false,'msg'=>'solo lectores pueden reservar']); exit;
+}
+
 $idUsuario = (int)$_SESSION['idUsuario'];
 $idLibro   = (int)($_POST['id_libro'] ?? 0);
 if($idLibro <= 0){

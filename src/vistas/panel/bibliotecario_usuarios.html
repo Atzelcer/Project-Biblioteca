@@ -7,10 +7,11 @@
       <button class="pill" data-rol="todos">Todos</button>
       <button class="pill" data-rol="lector">Lectores</button>
       <button class="pill" data-rol="bibliotecario">Bibliotecario</button>
+       <button class="pill" data-rol="bloqueados">Bloqueados</button>
     </div>
   </div>
 
-  <div class="tabla">
+  <div class="tabla" id="tablaUsuarios">
     <table>
       <thead>
       <tr>
@@ -19,6 +20,49 @@
       </thead>
       <tbody id="tbodyUsuarios"></tbody>
     </table>
+  </div>
+  
+  <div class="tabla" id="tablaBloqueados">
+    <table>
+      <thead>
+      <tr>
+        <th>Ticket</th>
+        <th>Nombre</th>
+        <th>CI</th>
+        <th>Libro</th>
+         <th>Autor</th>
+        <th>Fecha Reserva</th>
+         <th>Fecha Devolucion</th>
+        <th>Dias Expiracion</th>
+        <th>Accion</th>
+      </tr>
+      </thead>
+      <tbody id="tbodyBloqueados"></tbody>
+    </table>
+  </div>
+
+  <!-- Modal confirmación desbloqueo -->
+  <div class="overlay" id="mDesbloq" style="display:none;">
+    <div class="modal">
+      <h3>Información de Bloqueado</h3>
+      <div class="row">
+        <div class="col">
+          <p><strong>Ticket:</strong> <span id="desbTicket"></span></p>
+          <p><strong>Usuario:</strong> <span id="desbUser"></span> (<span id="desbCI"></span>)</p>
+          <p><strong>Libro:</strong> <span id="desbLibro"></span> - <span id="desbAutor"></span></p>
+          <p><strong>Fecha límite de devolución:</strong> <span id="desbFechaLimite"></span></p>
+          <p><strong>Días de expiración:</strong> <span id="desbDias"></span></p>
+        </div>
+        <div class="col imgs">
+          <img id="desbImgLibro" src="" alt="Portada" style="max-width:120px;">
+          <img id="desbImgUser" src="" alt="Usuario" style="max-width:120px;">
+        </div>
+      </div>
+      <footer class="modal_foot">
+        <button class="btn" id="btnCancelDesbloq">Cancelar</button>
+        <button class="btn ok" id="btnOkDesbloq">Confirmar</button>
+      </footer>
+    </div>
   </div>
 </div>
 

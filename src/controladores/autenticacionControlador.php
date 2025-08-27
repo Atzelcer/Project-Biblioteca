@@ -29,6 +29,7 @@ class AutenticacionControlador {
             $_SESSION['apellido']  = $u->getApellido();
             $_SESSION['rol']       = $u->getRol();
             $_SESSION['foto']      = $u->getFotografia() ?: 'default-user.png';
+            $_SESSION['estado']    = $u->getEstado();
             header('Location: ' . BASE_URL . '/src/entradas/panel.php');
         } catch (RuntimeException $e) {
             $_SESSION['flash_err'] = $e->getMessage();
