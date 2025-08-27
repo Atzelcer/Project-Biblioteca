@@ -10,6 +10,7 @@ class Usuario {
     private string $password;
     private ?string $direccion = null;
     private string $correo;
+    private ?string $estado = null;
 
     public static function desdeArray(array $a): self {
         $u = new self();
@@ -23,6 +24,7 @@ class Usuario {
         $u->password = $a['password'];
         $u->direccion = $a['direccion'] ?? null;
         $u->correo = $a['correo'];
+        $u->estado = $a['estado'] ?? null;
         return $u;
     }
 
@@ -36,6 +38,7 @@ class Usuario {
     public function getPassword(): string { return $this->password; }
     public function getDireccion(): ?string { return $this->direccion; }
     public function getCorreo(): string { return $this->correo; }
+    public function getEstado(): ?string { return $this->estado; }
 
     public function setFotografia(?string $v): void { $this->fotografia = $v; }
     public function setCI(int $v): void { $this->CI = $v; }
@@ -46,4 +49,6 @@ class Usuario {
     public function setPassword(string $v): void { $this->password = $v; }
     public function setDireccion(?string $v): void { $this->direccion = $v; }
     public function setCorreo(string $v): void { $this->correo = $v; }
+    public function setEstado(?string $v): void { $this->estado = $v; }
 }
+?>
