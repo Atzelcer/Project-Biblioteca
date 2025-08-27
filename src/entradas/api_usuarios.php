@@ -50,8 +50,8 @@ switch ($act) {
                     l.nombre                  AS libro,
                     l.autor                   AS autor,
                     l.foto_libro              AS foto_libro,
-                    DATE_FORMAT(r.fechaDevolucion, '%d-%m-%Y %H:%i')      AS fechaDevolucion,
-                    DATE_FORMAT(r.fechaDevolucionReal, '%d-%m-%Y %H:%i')  AS fechaDevolucionReal,
+                    DATE_FORMAT(r.fechaDevolucion, '%d-%m-%Y')      AS fechaDevolucion,
+                    DATE_FORMAT(r.fechaDevolucionReal, '%d-%m-%Y')  AS fechaDevolucionReal,
                     CASE
                         WHEN r.fechaDevolucionReal IS NULL AND r.fechaDevolucion < CURDATE() THEN DATEDIFF(CURDATE(), r.fechaDevolucion)
                         WHEN r.fechaDevolucionReal IS NOT NULL AND r.fechaDevolucionReal > r.fechaDevolucion THEN DATEDIFF(r.fechaDevolucionReal, r.fechaDevolucion)
