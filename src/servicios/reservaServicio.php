@@ -21,6 +21,11 @@ class ReservaServicio {
     }
 
     public function reservar(int $idUsuario, int $idLibro): array {
+        // Validar que el usuario no tenga ya una reserva activa
+        if ($this->reservas->tieneActiva($idUsuario)) {
+            return ['ok'=>false,'code'=>'YA_ACTIVA','msg'=>'Tienes una reserva pendiente'];
+        }
+
         $libro = $this->libros->obtenerPorId($idLibro);
         if($libro === null) return ['ok'=>false,'msg'=>'libro no existe'];
         if($libro->getEstado() !== 'Disponible') return ['ok'=>false,'msg'=>'no disponible'];

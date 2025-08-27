@@ -7,6 +7,12 @@
   function qa(s){return Array.from(document.querySelectorAll(s))}
   function show(el){el.style.display='grid'}
   function hide(el){el.style.display='none'}
+  function showAviso(msg){
+    var el = q('#mAviso');
+    if(!el) { alert(msg); return; }
+    q('#avisoMsg').textContent = msg || 'Tienes una reserva pendiente';
+    show(el);
+  }
 
   function fillTicket(d){
     // Mostrar solo el código de reserva en el campo correspondiente
@@ -76,7 +82,14 @@
       method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd
     }).then(function(r){return r.json()}).then(function(j){
       hide(q('#mConfirm'));
-      if(!j.ok){ alert(j.msg||'no se pudo reservar'); return; }
+      if(!j.ok){
+        if (j.code === 'YA_ACTIVA') {
+          showAviso(j.msg || 'Tienes una reserva pendiente');
+          return;
+        }
+        alert(j.msg||'no se pudo reservar');
+        return;
+      }
       // Después de crear la reserva, recargar el estado real desde el backend
       fetchLatest();
       fillTicket({
@@ -98,6 +111,11 @@
     fillTicket(latest);
     show(q('#mTicket'));
   });
+
+  var btnCerrarAviso = q('#btnCerrarAviso');
+  if (btnCerrarAviso) {
+    btnCerrarAviso.addEventListener('click', function(){ hide(q('#mAviso')); });
+  }
 
   fetchLatest();
 })();

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../modelos/reserva.php';
 interface ReservaRepositorioContrato {
     public function crearPendiente(int $idUsuario, int $idLibro, string $ficha): int;
     public function existeFicha(string $ficha): bool;
+    public function tieneActiva(int $idUsuario): bool;
 }
 
 class ReservaRepositorio implements ReservaRepositorioContrato {
@@ -22,6 +23,14 @@ class ReservaRepositorio implements ReservaRepositorioContrato {
     public function existeFicha(string $ficha): bool {
         $st = $this->db->prepare("SELECT 1 FROM reservas WHERE fichaReserva=? LIMIT 1");
         $st->execute([$ficha]);
+        return (bool)$st->fetchColumn();
+    }
+
+    public function tieneActiva(int $idUsuario): bool {
+        $st = $this->db->prepare(
+            "SELECT 1 FROM reservas WHERE id_usuario=? AND estado IN ('pendiente','autorizada') LIMIT 1"
+        );
+        $st->execute([$idUsuario]);
         return (bool)$st->fetchColumn();
     }
 }
