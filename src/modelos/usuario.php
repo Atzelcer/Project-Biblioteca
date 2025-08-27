@@ -51,3 +51,4 @@ class Usuario {
     public function setCorreo(string $v): void { $this->correo = $v; }
     public function setEstado(?string $v): void { $this->estado = $v; }
 }
+?>
