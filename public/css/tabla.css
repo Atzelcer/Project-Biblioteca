@@ -1,0 +1,256 @@
+/* Botones generales y dentro de tablas */
+.btn, button, .tabla button, .tabla .btn {
+    background: var(--color-secundario);
+    color: var(--texto-primario);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.10);
+    outline: none;
+}
+.btn:hover, button:hover, .tabla button:hover, .tabla .btn:hover {
+    background: var(--hover);
+    color: var(--texto-primario);
+}
+.btn.ghost, button.ghost, .tabla .btn.ghost, .tabla button.ghost {
+    background: transparent;
+    color: var(--color-secundario);
+    border: 1.5px solid var(--color-secundario);
+}
+.btn.ghost:hover, button.ghost:hover, .tabla .btn.ghost:hover, .tabla button.ghost:hover {
+    background: var(--color-secundario);
+    color: var(--texto-primario);
+}
+.btn.ok, button.ok, .tabla .btn.ok, .tabla button.ok {
+    background: var(--ok);
+    color: var(--oktxt);
+    border: none;
+}
+.btn.ok:hover, button.ok:hover, .tabla .btn.ok:hover, .tabla button.ok:hover {
+    background: var(--color-principal);
+    color: #fff;
+}
+body {
+    font-family: Arial, sans-serif;
+    --color-principal: #E63946;
+    --color-fondo: #01050B;
+    --barra-lateral: #050810;
+    --detalles: #2C2C54;
+    --color-secundario: #1D9BF0;
+    --hover: #0A74DA;
+    --texto-primario: #EAEAEA;
+    --texto-secundario: #B0B0B0;
+    background-color: var(--color-fondo);
+    color: var(--texto-primario);
+    margin: 0;
+}
+
+.bar {
+    color: var(--texto-secundario);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-principal);
+    background: var(--color-fondo);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.bar input[type="text"] {
+    background: var(--barra-lateral);
+    color: var(--texto-primario);
+    border: 1px solid var(--color-principal);
+    border-radius: 6px;
+    padding: 9px 14px;
+    font-size: 1em;
+    outline: none;
+    transition: border 0.2s;
+}
+.bar input[type="text"]:focus {
+    border-color: var(--color-secundario);
+}
+.bar .pills {
+    display: flex;
+    gap: 8px;
+}
+/* Modales */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    place-items: center;
+    z-index: 50;
+}
+.overlay.active { display: grid; }
+.modal {
+    background: var(--color-fondo);
+    border: 1px solid var(--color-principal);
+    border-radius: 12px;
+    padding: 20px 18px;
+    max-width: 520px;
+    width: 96%;
+    color: var(--texto-primario);
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
+}
+.modal h3, .modal h4 {
+    margin-top: 0;
+    color: var(--color-secundario);
+}
+.modal_head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+.modal .badge {
+    background: var(--color-principal);
+    color: #fff;
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 0.98em;
+    font-weight: 600;
+}
+.modal .row {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+.modal .col {
+    flex: 1;
+}
+.modal img {
+    width: 90px;
+    height: 110px;
+    object-fit: cover;
+    border: 1px solid var(--color-secundario);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: var(--barra-lateral);
+}
+.modal_foot {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.tabla {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--color-fondo);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.12);
+    margin-bottom: 18px;
+}
+
+.tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+    color: var(--texto-primario);
+    font-size: 1em;
+}
+
+.tabla thead th {
+    background: var(--detalles);
+    color: var(--texto-primario);
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 14px 10px;
+    border-bottom: 2px solid var(--color-principal);
+    text-align: left;
+}
+
+.tabla tbody td {
+    padding: 13px 10px;
+    border-bottom: 1px solid var(--detalles);
+    color: var(--texto-primario);
+    background: var(--color-fondo);
+}
+
+.tabla tbody tr:hover {
+    background: var(--barra-lateral);
+    transition: background 0.2s;
+}
+
+.tabla tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 800px) {
+    .tabla table, .tabla thead, .tabla tbody, .tabla th, .tabla td, .tabla tr {
+    display: block;
+}
+
+.tabla thead {
+    display: none;
+}
+
+.tabla tbody td {
+    position: relative;
+    padding-left: 50%;
+    min-height: 40px;
+    border-bottom: 1px solid var(--color-principal);
+}
+
+.tabla tbody td:before {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    width: 45%;
+    white-space: nowrap;
+    color: var(--texto-secundario);
+    font-weight: bold;
+    content: attr(data-label);
+}
+
+.tabla tbody tr {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.10);
+    background: var(--color-fondo);
+}
+}
+
+/* Botones dentro de tablas */
+.tabla button, .tabla .btn {
+    background: var(--color-secundario);
+    color: var(--texto-primario);
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.tabla button:hover, .tabla .btn:hover {
+    background: var(--hover);
+}
+
+/* Etiquetas y pills */
+.tabla .pill {
+    background: var(--color-principal);
+    color: #fff;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.95em;
+    margin-right: 6px;
+    border: none;
+}
+
+.tabla .pill[data-estado="autorizada"] {
+    background: var(--ok);
+    color: var(--oktxt);
+}
+
+.tabla .pill[data-estado="pendiente"] {
+    background: var(--color-secundario);
+    color: #fff;
+}
