@@ -30,6 +30,45 @@
       }
     }
   }
+q('#btnExtender').addEventListener('click', function(){
+    show(q('#mExtender'));
+});
+
+q('#btnCancelExt').addEventListener('click', function(){
+    hide(q('#mExtender'));
+});
+
+q('#btnConfirmExt').addEventListener('click', function(){
+    if (!latest || !latest.id_reserva) {
+        alert('Error: No se encontró la información de la reserva');
+        return;
+    }
+
+    var fd = new URLSearchParams();
+    fd.append('id', latest.id_reserva);
+
+    fetch(base + '/src/entradas/api_reservas.php?action=extender', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: fd
+    }).then(r => r.json()).then(j => {
+        if(j.ok){
+           
+            latest.fechaDevolucion = j.nuevaFecha;
+            latest.estado = 'autorizada';
+            toggleTicketButton(); 
+            fillTicket(latest);
+            hide(q('#mExtender'));
+            alert('Se ha extendido el tiempo de la reserva por 1 día más');
+        } else {
+            alert(j.msg || 'No se pudo extender la reserva. Intente nuevamente.');
+        }
+    }).catch(() => {
+        alert('Error en el servidor al procesar la extensión de tiempo');
+    });
+});
+
+
 
   function toggleTicketButton(){
     var b = q('#btnTicket');

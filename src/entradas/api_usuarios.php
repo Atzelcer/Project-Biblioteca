@@ -40,35 +40,35 @@ switch ($act) {
         try {
             $sql = <<<SQL
                 SELECT
-                    r.id_reserva              AS id_reserva,
+                   -- r.id_reserva              AS id_reserva,
                     r.fichaReserva            AS ticket,
-                    r.id_usuario              AS id_usuario,
+                   -- r.id_usuario              AS id_usuario,
                     u.nombre                  AS nombre,
-                    u.apellido                AS apellido,
+                    --u.apellido                AS apellido,
                     u.CI                      AS CI,
-                    u.fotografia              AS fotografia,
+                   -- u.fotografia              AS fotografia,
                     l.nombre                  AS libro,
                     l.autor                   AS autor,
-                    l.foto_libro              AS foto_libro,
-                    DATE_FORMAT(r.fechaDevolucion, '%d-%m-%Y')      AS fechaDevolucion,
-                    DATE_FORMAT(r.fechaDevolucionReal, '%d-%m-%Y')  AS fechaDevolucionReal,
+                   -- l.foto_libro              AS foto_libro,
+                    DATE_FORMAT(r.fechaReserva, '%d-%m-%Y')      AS fechaReserva,
+                    DATE_FORMAT(r.fechaDevolucion, '%d-%m-%Y')  AS fechaDevolucion,
                     CASE
-                        WHEN r.fechaDevolucionReal IS NULL AND r.fechaDevolucion < CURDATE() THEN DATEDIFF(CURDATE(), r.fechaDevolucion)
-                        WHEN r.fechaDevolucionReal IS NOT NULL AND r.fechaDevolucionReal > r.fechaDevolucion THEN DATEDIFF(r.fechaDevolucionReal, r.fechaDevolucion)
+                        WHEN r.fechaDevolucionReal IS NOT NULL AND r.fechaDevolucionReal > r.fechaDevolucion 
+                            THEN DATEDIFF(r.fechaDevolucionReal, r.fechaDevolucion)
+                        WHEN r.fechaDevolucion < CURDATE() AND TIME(r.fechaDevolucion) > '18:00:00'
+                            THEN DATEDIFF(CURDATE(), r.fechaDevolucion)
                         ELSE 0
                     END AS diasExpiracion
                 FROM reservas r
                 INNER JOIN usuario u ON r.id_usuario = u.id_usuario
                 INNER JOIN libros  l ON r.id_libro   = l.id_libro
-                WHERE (
-                            u.estado = 'bloqueado'
-                     OR (
-                                r.estado = 'autorizada'
-                        AND (
-                                    (r.fechaDevolucionReal IS NULL AND r.fechaDevolucion < CURDATE())
-                             OR (r.fechaDevolucionReal IS NOT NULL AND r.fechaDevolucionReal > r.fechaDevolucion)
-                            )
-                     )
+                WHERE r.estado = 'autorizada'
+                AND (
+                    (r.fechaDevolucionReal IS NOT NULL AND r.fechaDevolucionReal > r.fechaDevolucion)
+                    OR
+                    (r.fechaDevolucion = r.fechaReserva AND TIME(r.fechaDevolucion) > '18:00:00')
+                    OR
+                    (r.fechaDevolucionReal IS NULL AND r.fechaDevolucion < CURDATE() AND TIME(r.fechaDevolucion) > '18:00:00')
                 )
             SQL;
 

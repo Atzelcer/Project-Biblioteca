@@ -56,7 +56,8 @@
       '<td>' + u.CI + '</td>' +
       '<td>' + u.libro + '</td>' +
       '<td>' + u.autor + '</td>' +
-      '<td>' + (u.fechaDevolucionReal || '-') + '</td>' +
+      '<td>' + u.fechaReserva + '</td>' +
+      '<td>' + (u.fechaDevolucion || '-') + '</td>' +
   '<td>' + u.diasExpiracion + '</td>' +
   '<td><button class="btn warning desbloq" data-id="' + u.id_reserva + '">Desbloquear</button></td>';
     return tr;

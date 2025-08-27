@@ -4,11 +4,24 @@ require_once __DIR__ . '/../config/baseDatos.php';
 
 session_start();
 header('Content-Type: application/json');
-if (!isset($_SESSION['idUsuario']) || ($_SESSION['rol'] ?? '') !== 'bibliotecario') {
+/*if (!isset($_SESSION['idUsuario']) || ($_SESSION['rol'] ?? '') !== 'bibliotecario') {
   echo json_encode(['ok'=>false]); exit;
-}
+}*/
 $db = BaseDatos::conexion();
 $act = $_GET['action'] ?? $_POST['action'] ?? 'list';
+
+if ($act === 'extender') {
+    if (!isset($_SESSION['idUsuario'])) {
+        echo json_encode(['ok' => false, 'msg' => 'No autorizado']); 
+        exit;
+    }
+} else { if (!isset($_SESSION['idUsuario']) || ($_SESSION['rol'] ?? '') !== 'bibliotecario') {
+        echo json_encode(['ok'=>false, 'msg' => 'Acceso denegado']); 
+        exit;
+    }
+}
+
+
 
 if ($act === 'list') {
   $estado = $_GET['estado'] ?? 'pendiente';
@@ -80,5 +93,54 @@ if ($act === 'finalizar') {
   $db->prepare("UPDATE libros SET estado='Disponible' WHERE id_libro=?")->execute([(int)$row['id_libro']]);
   $db->commit(); echo json_encode(['ok'=>true]); exit;
 }
+if ($act === 'extender') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        echo json_encode(['ok' => false, 'msg' => 'Método no permitido']);
+        exit;
+    }
 
+    $idReserva = (int)($_POST['id'] ?? 0);
+    
+    if ($idReserva <= 0) {
+        echo json_encode(['ok' => false, 'msg' => 'ID de reserva inválido']);
+        exit;
+    }
+
+    try {
+        $db->beginTransaction();
+        $stmt = $db->prepare("SELECT fechaDevolucion FROM reservas WHERE id_reserva = ? AND id_usuario = ? AND estado = 'autorizada' FOR UPDATE");
+        $stmt->execute([$idReserva, $_SESSION['idUsuario']]);
+        $reserva = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$reserva) {
+            $db->rollBack();
+            echo json_encode(['ok' => false, 'msg' => 'Reserva no encontrada o no autorizada']);
+            exit;
+        }
+          $fechaActual = new DateTime($reserva['fechaDevolucion']);
+        do {
+            $fechaActual->modify('+1 day');
+            $dow = (int)$fechaActual->format('N');
+        } while ($dow === 6 || $dow === 7); // Saltar sábado (6) y domingo (7)
+
+        $nuevaFecha = $fechaActual->format('Y-m-d H:i:s');
+            $stmt = $db->prepare("UPDATE reservas SET fechaDevolucion = ? WHERE id_reserva = ?");
+        $stmt->execute([$nuevaFecha, $idReserva]);
+
+        $db->commit();
+        
+        echo json_encode([
+            'ok' => true,
+            'msg' => 'Tiempo extendido exitosamente',
+            'nuevaFecha' => $nuevaFecha
+        ]);
+    } catch (Exception $e) {
+        $db->rollBack();
+        echo json_encode([
+            'ok' => false, 
+            'msg' => 'Error al procesar la extensión de tiempo: ' . $e->getMessage()
+        ]);
+    }
+    exit;
+}
 echo json_encode(['ok'=>false]);
