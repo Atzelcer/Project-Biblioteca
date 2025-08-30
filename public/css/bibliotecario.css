@@ -15,6 +15,8 @@
     min-width: 320px;
     z-index: 1001;
     box-shadow: 0 4px 32px #0008;
+       
+    border: 1px solid red;
 }
 .btn.desbloquear {
     background: var(--color-principal) !important;
