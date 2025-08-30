@@ -8,4 +8,19 @@
 <div class="libros">
     {{libros}}
 </div>
+
+<div id="modalBibliotecario" class="modal" style="display:none;">
+    <div class="modal-content">
+        <h2>NUEVA RESERVA EN FISICO</h2>
+        <label for="ciReserva">CI:</label>
+        <input type="text" id="ciReserva" placeholder="Introduzca CI del Lector">
+        <div class="modal-footer">
+            <button id="btnCancelarReserva" class="btn"> Cancelar</button>
+            <button id="btnCargarReserva" class="btn primary"> Cargar</button>
+
+        </div>
+
+    </div>
+
+</div>
 <script src="public/js/bibliotecario_principal.js"></script>
