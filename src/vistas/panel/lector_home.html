@@ -1,4 +1,5 @@
 <div class="row section" id="secHome">
+  <!-- HERO -->
   <div class="card hero">
     <div class="heroCopy">
       <h2>Explora categorías de libros</h2>
@@ -15,27 +16,15 @@
     </div>
   </div>
 
+  <!-- CATEGORÍAS (subtarjetas con imagen y tinte) -->
   <div class="card" style="padding:14px">
     <div class="rowHead">
       <h3>Categorías libros</h3>
-      <div class="carouselCtrls">
-        <button class="cBtn" data-cmd="prev">‹</button>
-        <span class="muted tiny">Carrusel &larr;&rarr;</span>
-        <button class="cBtn" data-cmd="next">›</button>
-      </div>
     </div>
-    <div class="catCarousel" id="catCarousel">
-      <a href="#" data-section="reservar" class="catItem">Programación</a>
-      <a href="#" data-section="reservar" class="catItem">Matemáticas</a>
-      <a href="#" data-section="reservar" class="catItem">Física</a>
-      <a href="#" data-section="reservar" class="catItem">Historia</a>
-      <a href="#" data-section="reservar" class="catItem">Idiomas</a>
-      <a href="#" data-section="reservar" class="catItem">Arquitectura</a>
-      <a href="#" data-section="reservar" class="catItem">Química</a>
-      <a href="#" data-section="reservar" class="catItem">Literatura</a>
-    </div>
+    <div id="catsWrap" class="catGrid"></div>
   </div>
 
+  <!-- INFO -->
   <div class="infoGrid">
     <article class="miniCard ticketCard" id="homeTicketCard">
       <span class="pill">Mi reserva</span>

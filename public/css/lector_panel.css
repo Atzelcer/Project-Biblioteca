@@ -227,3 +227,35 @@ html[data-theme="light"] .ticketCard{
   .infoGrid{grid-template-columns:1fr}
   .footCols{grid-template-columns:1fr}
 }
+
+
+/* ====== Categorías (subtarjetas con imagen y tinte) ====== */
+.catGrid{
+  display:grid; gap:var(--gap);
+  grid-template-columns:repeat(6,minmax(0,1fr));
+}
+@media (max-width:1100px){ .catGrid{ grid-template-columns:repeat(4,1fr); } }
+@media (max-width:820px){  .catGrid{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:600px){  .catGrid{ grid-template-columns:repeat(2,1fr); } }
+
+.catCard{
+  position:relative; height:160px; border-radius:14px; overflow:hidden;
+  border:1px solid var(--border); background:var(--panel); cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.catCard::after{
+  content:""; position:absolute; inset:0;
+  background-image:var(--img); background-size:cover; background-position:center;
+  filter:grayscale(.15) saturate(1.2); opacity:.22; pointer-events:none;
+}
+.catCard .tint{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,var(--tint,transparent),transparent 60%);
+  opacity:.55; mix-blend-mode:screen; pointer-events:none;
+}
+.catCard .name{
+  position:absolute; inset:0; display:grid; place-items:center; text-align:center;
+  padding:8px; font-weight:800; font-size:18px; letter-spacing:.02em;
+  text-shadow:0 2px 10px rgba(0,0,0,.45);
+}
+.catCard:hover{ transform:translateY(-2px); box-shadow:0 12px 24px rgba(0,0,0,.25); }
