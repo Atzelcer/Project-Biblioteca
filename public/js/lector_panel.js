@@ -28,26 +28,66 @@
 
   let latest = null; // última reserva
 
+  /* ------- Normalizador súper robusto ------- */
+  function firstKeyLike(obj, patterns){
+    if(!obj) return null;
+    const keys = Object.keys(obj);
+    for(const k of keys){
+      const lk = k.toLowerCase();
+      if(patterns.some(p => lk.includes(p))) return obj[k];
+    }
+    return null;
+  }
+  function getAny(obj, list){
+    for(const k of list){ if(obj && obj[k]!=null && obj[k]!=='') return obj[k]; }
+    return null;
+  }
   function normalize(r){
     if(!r) return null;
-    return {
-      id_reserva: r.id_reserva || r.id || r.reserva_id || null,
-      fichaReserva: r.fichaReserva || r.ficha || '',
-      libro: r.libro || r.libro_nombre || '',
-      autor: r.autor || r.libro_autor || '',
-      estado: r.estado || '',
-      fechaDevolucion: r.fechaDevolucion || null
-    };
+    if(r.data && typeof r.data === 'object') r = r.data; // {data:{...}}
+
+    const id = getAny(r, ['id_reserva','idReserva','reserva_id','id','idreserva']);
+    let ficha = getAny(r, [
+      'fichaReserva','ficha','codigo','codigo_reserva','codigoReserva',
+      'ticket','cod','codigo_res','ficha_reserva','numero','nro'
+    ]);
+    if(!ficha) ficha = firstKeyLike(r, ['ficha','codigo','ticket']);
+
+    let libro = getAny(r, ['libro','libro_nombre','nombre_libro','titulo','nombre','book']);
+    if(!libro)  libro  = firstKeyLike(r, ['libro','titulo','nombre']);
+
+    let autor = getAny(r, ['autor','libro_autor','autor_libro','author']);
+    if(!autor)  autor  = firstKeyLike(r, ['autor','author']);
+
+    const estado = getAny(r, ['estado','status']) || firstKeyLike(r, ['estado','status']);
+    const fechaDevolucion =
+      getAny(r, ['fechaDevolucion','fecha_devolucion','devolucion','fecha_limite']) ||
+      firstKeyLike(r, ['devolu','limite']);
+
+    return { id_reserva:id||null, fichaReserva:ficha||'', libro:libro||'', autor:autor||'', estado:estado||'', fechaDevolucion:fechaDevolucion||null };
   }
+
+  function putText(sel, txt){
+    const el = typeof sel==='string' ? q(sel) : sel;
+    if(el) el.textContent = txt;
+  }
+
   function fillTicket(d){
     d = normalize(d) || {};
-    q('#rFichaReserva') && (q('#rFichaReserva').textContent = d.fichaReserva || '');
-    q('#tLibro') && (q('#tLibro').textContent = d.libro ? ('Libro: '+d.libro) : '');
-    q('#tAutor') && (q('#tAutor').textContent = d.autor ? ('Autor: '+d.autor) : '');
-    q('#tEstado') && (q('#tEstado').textContent = d.estado ? ('Estado: '+d.estado) : '');
-    const code = q('#homeTicketCode'); if(code) code.textContent = d.fichaReserva || '—';
-    const btnExt=q('#btnExtender'); btnExt && (btnExt.style.display=((d.estado||'').toLowerCase()==='autorizada')?'inline-block':'none');
+    putText('#rFichaReserva', d.fichaReserva || '');
+    putText('#tLibro', d.libro ? ('Libro: '+d.libro) : '');
+    putText('#tAutor', d.autor ? ('Autor: '+d.autor) : '');
+    putText('#tEstado', d.estado ? ('Estado: '+d.estado) : '');
+
+    const codeTxt = d.fichaReserva || '—';
+    putText('#homeTicketCode', codeTxt);
+    const alt = document.querySelector('[data-home-ticket]');
+    if(alt) alt.textContent = codeTxt;
+
+    const btnExt = q('#btnExtender');
+    if(btnExt) btnExt.style.display = ((d.estado||'').toLowerCase()==='autorizada') ? 'inline-block' : 'none';
   }
+
   function toggleTicketBtn(){
     const b=q('#btnTicket'); if(!b) return;
     if(latest){
@@ -59,17 +99,30 @@
       b.classList.remove('ticket--ok');
     }
   }
-  function fetchLatest(){
-    fetch(base+'/src/entradas/api_mis_reservas.php?action=ultima')
-      .then(r=>r.json())
-      .then(j=>{ latest = (j && j.ok) ? normalize(j.data) : null; toggleTicketBtn(); fillTicket(latest); })
-      .catch(()=>{ latest=null; toggleTicketBtn(); });
+
+  function unwrapPayload(j){
+    if(!j) return null;
+    return j.data || j.ultima || j.reserva || (Array.isArray(j) ? j[0] : j);
   }
+
+  /* --- fetch prometido + wrapper --- */
+  function fetchLatestPromise(){
+    return fetch(base+'/src/entradas/api_mis_reservas.php?action=ultima')
+      .then(r=>r.json())
+      .then(j=>{
+        const payload = unwrapPayload(j);
+        latest = payload ? normalize(payload) : null;
+        toggleTicketBtn(); fillTicket(latest);
+        return latest;
+      })
+      .catch(()=>{ latest=null; toggleTicketBtn(); return null; });
+  }
+  function fetchLatest(){ fetchLatestPromise(); }
 
   // exposición para módulos
   window.AppLector = {
     base,q,qa,show,hide,getQS,setQS,
-    normalize,fillTicket,fetchLatest,
+    normalize,fillTicket,fetchLatest,fetchLatestPromise,
     get latest(){ return latest; }, set latest(v){ latest=v; toggleTicketBtn(); },
     modals:{ show:id=>show(q(id)), hide:id=>hide(q(id)), hideAll:()=>{} }
   };
@@ -94,38 +147,33 @@
     avatarBtn?.addEventListener('click',openM); mclose?.addEventListener('click',closeM); mback?.addEventListener('click',closeM);
     const uimg = (document.body.dataset.userImg||'').includes('{{')? (base+'/public/images/users/default-user.png') : (document.body.dataset.userImg|| (base+'/public/images/users/default-user.png'));
     const uname = (document.body.dataset.userName||'Lector').trim() || 'Lector';
-    const topImg = q('#avatarImg'); if(topImg) topImg.src = uimg;
-    const modImg = q('#modalUserImg'); if(modImg) modImg.src = uimg;
+    const topImg = q('#avatarImg'); if(topImg){ topImg.src = uimg; topImg.onerror=function(){ this.onerror=null; this.src=base+'/public/images/users/default-user.png'; }; }
+    const modImg = q('#modalUserImg'); if(modImg){ modImg.src = uimg; modImg.onerror=function(){ this.onerror=null; this.src=base+'/public/images/users/default-user.png'; }; }
     const profName = q('#helloUser'); if(profName) profName.textContent = uname;
     const modName  = q('#modalUserName'); if(modName) modName.textContent = uname;
   })();
 
-  /* ============== Modales ticket/aviso/extender ============== */
-  const overlayIds=['#mAviso','#mTicket','#mConfirm','#mExtender','#mPreview'];
-  const hideAll=()=>overlayIds.forEach(id=>{ const el=q(id); el && (el.style.display='none'); });
-  window.AppLector.modals.hideAll = hideAll;
-  function showModal(id){ hideAll(); show(q(id)); }
+  /* ============== Modales ticket/aviso/extender (glass) ============== */
+  const overlays = qa('.overlay');
 
-  q('#btnTicket')?.addEventListener('click', ()=>{ if(latest){ fillTicket(latest); showModal('#mTicket'); } });
-  q('#btnCerrarAviso')?.addEventListener('click', ()=>hide(q('#mAviso')));
-  q('#btnCerrarTicket')?.addEventListener('click', ()=>hide(q('#mTicket')));
-  q('#btnExtender')?.addEventListener('click', ()=>show(q('#mExtender')));
-  q('#btnCancelExt')?.addEventListener('click', ()=>hide(q('#mExtender')));
-  q('#btnConfirmExt')?.addEventListener('click', ()=>{
-    const idRes = latest && latest.id_reserva; if(!idRes){ alert('No se encontró la reserva'); return; }
-    const fd=new URLSearchParams(); fd.append('id', idRes);
-    fetch(base+'/src/entradas/api_reservas.php?action=extender', {
-      method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:fd
-    }).then(r=>r.json()).then(j=>{
-      if(j && j.ok){
-        latest.fechaDevolucion=j.nuevaFecha||latest.fechaDevolucion||null;
-        latest.estado='autorizada'; fillTicket(latest); hide(q('#mExtender')); toggleTicketBtn();
-        alert('Se extendió la reserva por 1 día más');
-      }else{
-        alert((j&&j.msg)?j.msg:'No se pudo extender la reserva');
-      }
-    }).catch(()=>alert('Error en el servidor'));
+  // Asegura que ningún overlay quede con display:none inline
+  overlays.forEach(el => { if(el.style && el.style.display==='none'){ el.style.removeProperty('display'); } });
+
+  function hideAll(){ overlays.forEach(el=> el.classList.remove('show')); }
+  function showModal(id){
+    hideAll();
+    const el = q(id); if(!el) return;
+    el.classList.add('show'); // solo clase; CSS maneja opacity/pointer-events
+  }
+  window.AppLector.modals.hideAll = hideAll;
+  window.AppLector.modals.show = id => showModal(id);
+  window.AppLector.modals.hide = id => { const el=typeof id==='string'?q(id):id; if(!el) return; el.classList.remove('show'); };
+
+  // Cerrar al click fuera / ESC
+  overlays.forEach(el=>{
+    el.addEventListener('click', e=>{ if(e.target===el) window.AppLector.modals.hide(el); });
   });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideAll(); });
 
   /* ============== Router de vistas ============== */
   const VIEW_CANDIDATES = {
@@ -180,6 +228,9 @@
     }
     cont.innerHTML = html;
 
+    // tras inyectar, si ya hay "latest", repinta el código en el home
+    try { if (latest) fillTicket(latest); } catch {}
+
     if(name==='home'){
       loadScriptOnce('home', base+'/public/js/lector_home.js', ()=>{ window.LectorHome && window.LectorHome.init(window.AppLector); });
     }else if(name==='reservar'){
@@ -202,12 +253,32 @@
     loadView('reservar');
   });
 
-  loadView(getQS('q') ? 'reservar' : 'home');
+  /* ============== Abridor universal del ticket ============== */
+  function openTicket(){
+    const ready = latest ? Promise.resolve(latest) : fetchLatestPromise();
+    ready.then(d=>{
+      if(d){
+        fillTicket(d);
+        showModal('#mTicket');
+      }else{
+        alert('Aún no tienes una reserva reciente.');
+      }
+    });
+  }
+  // clicks delegados
+  document.addEventListener('click', (e)=>{
+    if (e.target.closest('#btnTicket')) { e.preventDefault(); openTicket(); }
+    if (e.target.closest('#homeTicketCard')) { e.preventDefault(); openTicket(); }
+  });
+  // y también listeners directos por si algo encapsula eventos
+  q('#btnTicket')?.addEventListener('click', (e)=>{ e.preventDefault(); openTicket(); });
+  q('#homeTicketCard')?.addEventListener('click', (e)=>{ e.preventDefault(); openTicket(); });
 
-  /* ============== Partículas (decorativo) ============== */
+  /* ============== Partículas (decorativo) con soporte a tema ============== */
   (function(){
     const cvs=q('#bgParticles'); if(!cvs) return;
     const ctx=cvs.getContext('2d');
+
     const parts=[], imgs=[]; let w=0,h=0; const dpr=Math.max(1,window.devicePixelRatio||1);
     const bookImgs=[
       base+'/public/images/books/Clean_Code.jpg',
@@ -216,13 +287,34 @@
       base+'/public/images/books/Clean_Architecture.jpg',
       base+'/public/images/books/The_Pragmatic_Programmer.jpg'
     ];
-    function preload(arr,cb){let c=0;arr.forEach(s=>{const im=new Image();im.src=s;im.onload=()=>{imgs.push(im); if(++c===arr.length) cb&&cb();};});}
+
+    let alphaTheme = 1;
+    function applyTheme(){
+      const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      alphaTheme = (theme === 'light') ? 0.6 : 1;
+      cvs.style.mixBlendMode = (theme === 'light') ? 'normal' : 'screen';
+      cvs.style.opacity = (theme === 'light') ? '.28' : '.45';
+      cvs.style.filter = (theme === 'light') ? 'saturate(1.05) contrast(1.05)' : 'none';
+    }
+    applyTheme();
+    new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+    function preload(arr,cb){
+      let c=0;
+      arr.forEach(s=>{
+        const im=new Image(); im.src=s;
+        im.onload=()=>{imgs.push(im); if(++c===arr.length) cb&&cb();};
+        im.onerror=()=>{ if(++c===arr.length) cb&&cb(); };
+      });
+    }
     function resize(){w=innerWidth;h=innerHeight;cvs.width=w*dpr;cvs.height=h*dpr;cvs.style.width=w+'px';cvs.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}
     function rand(a,b){return a+Math.random()*(b-a);} function pick(a){return a[(Math.random()*a.length)|0];}
     function spawn(n){for(let i=0;i<n;i++){parts.push({x:rand(0,w),y:rand(0,h),w:rand(32,64),h:rand(40,80),vx:rand(-.4,.4),vy:rand(-.3,.3),alpha:rand(.35,.65),img:pick(imgs),angle:rand(0,Math.PI*2),va:rand(-.005,.005)})}}
-    function step(){ctx.clearRect(0,0,w,h);for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.angle+=p.va;if(p.x<-80)p.x=w+80;if(p.x>w+80)p.x=-80;if(p.y<-80)p.y=h+80;if(p.y>h+80)p.y=-80;ctx.save();ctx.globalAlpha=p.alpha;ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.drawImage(p.img,-p.w/2,-p.h/2,p.w,p.h);ctx.restore();}requestAnimationFrame(step)}
+    function step(){ctx.clearRect(0,0,w,h);for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.angle+=p.va;if(p.x<-80)p.x=w+80;if(p.x>w+80)p.x=-80;if(p.y<-80)p.y=h+80;if(p.y>h+80)p.y=-80;ctx.save();ctx.globalAlpha=p.alpha*alphaTheme;ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.drawImage(p.img,-p.w/2,-p.h/2,p.w,p.h);ctx.restore();}requestAnimationFrame(step)}
     addEventListener('resize',resize); resize(); preload(bookImgs,()=>{spawn(20);step();});
   })();
 
+  /* ============== bootstrap ============== */
+  loadView(getQS('q') ? 'reservar' : 'home');
   fetchLatest();
 })();
