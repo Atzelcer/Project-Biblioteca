@@ -1,8 +1,8 @@
-<div class="row section" id="secHome">
-  <!-- HERO -->
+<section class="row section" id="homeRoot">
+  <!-- Hero -->
   <div class="card hero">
     <div class="heroCopy">
-      <h2>Explora categorías de libros</h2>
+      <h2>EXPLORA CATEGORÍAS DE LIBROS</h2>
       <p>Encuentra libros nuevos y resérvalos</p>
       <div class="heroActions">
         <a class="btnPrimary" href="#" data-section="reservar">Reservar ahora</a>
@@ -16,15 +16,15 @@
     </div>
   </div>
 
-  <!-- CATEGORÍAS (subtarjetas con imagen y tinte) -->
-  <div class="card" style="padding:14px">
-    <div class="rowHead">
-      <h3>Categorías libros</h3>
+  <!-- CATEGORÍAS (centrado y sin carrusel) -->
+  <div class="card catSection" style="padding:16px">
+    <div class="rowHead rowHead--center">
+      <h3>CATEGORÍAS LIBROS</h3>
     </div>
-    <div id="catsWrap" class="catGrid"></div>
+    <div class="catGrid" id="catsWrap"></div>
   </div>
 
-  <!-- INFO -->
+  <!-- Tarjetas inferiores -->
   <div class="infoGrid">
     <article class="miniCard ticketCard" id="homeTicketCard">
       <span class="pill">Mi reserva</span>
@@ -33,12 +33,15 @@
       <p class="muted">Pulsa para ver tu ticket</p>
     </article>
 
-    <article class="miniCard">
+    <article class="miniCard img" id="cardRecordatorio">
       <h4>Recordatorio</h4>
-      <p class="muted">Devuelve tus libros en la <b>fecha establecida</b> y dentro del horario: <b>08:00–12:00</b> y <b>14:00–18:00</b>.</p>
+      <p class="muted">
+        Devuelve tus libros en la <b>fecha establecida</b> y dentro del horario:
+        <b>08:00–12:00</b> y <b>14:00–18:00</b>.
+      </p>
     </article>
 
-    <article class="miniCard">
+    <article class="miniCard img" id="cardAccesos">
       <h4>Accesos rápidos</h4>
       <div class="shortcuts">
         <a href="#" data-section="reservar" class="btnGhost">Buscar y reservar</a>
@@ -46,4 +49,4 @@
       </div>
     </article>
   </div>
-</div>
+</section>

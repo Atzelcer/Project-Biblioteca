@@ -12,37 +12,32 @@ if (!isset($_SESSION['idUsuario'])) {
 }
 
 $rol = $_SESSION['rol'] ?? 'lector';
-$db   = BaseDatos::conexion();
+$db = BaseDatos::conexion();
 $repo = new LibroRepositorio($db);
 
-/* ===== BIBLIOTECARIO ===== */
 if ($rol === 'bibliotecario') {
     $sec = $_GET['sec'] ?? 'principal';
     $contenido = '';
 
     if ($sec === 'principal') {
         $libros = $repo->listarLibros();
-
         $contenidoLibros = '';
         foreach ($libros as $libro) {
-            $foto = htmlspecialchars($libro->getFotoLibro() ?: BASE_URL . '/public/images/default-book.png', ENT_QUOTES, 'UTF-8');
+            $fotoLibro = $libro->getFotoLibro() ?: 'default-book.png';
             $nombre = htmlspecialchars($libro->getNombre(), ENT_QUOTES, 'UTF-8');
             $autor = htmlspecialchars($libro->getAutor(), ENT_QUOTES, 'UTF-8');
-
             $contenidoLibros .= '
                 <div class="libro">
-                    <img src="../../public/images/books/'.$foto.'" alt="Portada">
+                    <img src="' . BASE_URL . '/public/images/books/' . htmlspecialchars($fotoLibro, ENT_QUOTES, 'UTF-8') . '" alt="Portada">
                     <h3>'.$nombre.'</h3>
                     <p>'.$autor.'</p>
                 </div>';
         }
-
         if ($contenidoLibros === '') {
             $contenidoLibros = '<p>No hay libros disponibles en este momento.</p>';
         }
-
         $contenido = Vista::render('panel/bibliotecario_principal.html', [
-            'base'   => BASE_URL,
+            'base' => BASE_URL,
             'libros' => $contenidoLibros
         ]);
     } elseif ($sec === 'libros') {
@@ -52,30 +47,50 @@ if ($rol === 'bibliotecario') {
     }
 
     echo Vista::render('panel/bibliotecario.html', [
-        'titulo'    => 'Biblioteca USFX - Bibliotecario',
-        'base'      => BASE_URL,
-        'sec'       => $sec,
+        'titulo' => 'Biblioteca USFX - Bibliotecario',
+        'base' => BASE_URL,
+        'sec' => $sec,
         'contenido' => $contenido
     ]);
     exit;
 }
 
-/* ===== LECTOR ===== */
 $q = trim($_GET['q'] ?? '');
+
+$nombre = $_SESSION['nombre'] ?? '';
+$apellido = $_SESSION['apellido'] ?? '';
+$fullName = trim($nombre . ' ' . $apellido);
+
+$fotoRaw = trim((string)($_SESSION['foto'] ?? ''));
+$defaultRel = '/public/images/users/default-user.png';
+$fotoUsuario = '';
+
+if ($fotoRaw !== '' && preg_match('~^https?://~i', $fotoRaw)) {
+    $fotoUsuario = $fotoRaw;
+} else {
+    $file = basename($fotoRaw);
+    $rel = $file ? ('/public/images/users/' . $file) : $defaultRel;
+    $root = dirname(__DIR__, 2);
+    $fs = $root . $rel;
+    if (!is_file($fs)) {
+        $rel = $defaultRel;
+    }
+    $fotoUsuario = rtrim(BASE_URL, '/') . $rel;
+}
+
 $libros = $repo->listarDisponibles($q);
 
 $filas = '';
 foreach ($libros as $l) {
-    $id     = $l->getIdLibro();
-    $nombre = htmlspecialchars($l->getNombre(), ENT_QUOTES, 'UTF-8');
-    $autor  = htmlspecialchars($l->getAutor(),  ENT_QUOTES, 'UTF-8');
-    $foto   = htmlspecialchars($l->getFotoLibro() ?: 'default-book.png', ENT_QUOTES, 'UTF-8');
-
-    $filas .= '<tr data-id="' . $id . '" data-nombre="' . $nombre . '" data-autor="' . $autor . '" data-foto="' . $foto . '">'
-            .   '<td>' . $nombre . '</td>'
-            .   '<td>' . $autor  . '</td>'
-            .   '<td>Disponible</td>'
-            .   '<td><button class="btn primary reservar">Reservar</button></td>'
+    $id = $l->getIdLibro();
+    $nombreL = htmlspecialchars($l->getNombre(), ENT_QUOTES, 'UTF-8');
+    $autorL = htmlspecialchars($l->getAutor(), ENT_QUOTES, 'UTF-8');
+    $fotoL = htmlspecialchars($l->getFotoLibro() ?: 'default-book.png', ENT_QUOTES, 'UTF-8');
+    $filas .= '<tr data-id="' . $id . '" data-nombre="' . $nombreL . '" data-autor="' . $autorL . '" data-foto="' . $fotoL . '">'
+            . '<td>' . $nombreL . '</td>'
+            . '<td>' . $autorL . '</td>'
+            . '<td>Disponible</td>'
+            . '<td><button class="btn primary reservar">Reservar</button></td>'
             . '</tr>';
 }
 
@@ -85,11 +100,10 @@ if ($filas === '') {
 }
 
 echo Vista::render('panel/lector_panel.html', [
-    'titulo'         => 'Panel lector',
-    'base'           => BASE_URL,
+    'titulo' => 'Panel lector',
+    'base' => BASE_URL,
     'valor_busqueda' => htmlspecialchars($q, ENT_QUOTES, 'UTF-8'),
-    'filas_libros'   => $filas,
-    'ok'             => $_SESSION['flash_ok'] ?? ''
+    'filas_libros' => $filas,
+    'nombre_usuario' => $fullName,
+    'foto_usuario' => $fotoUsuario
 ]);
-
-unset($_SESSION['flash_ok']);
