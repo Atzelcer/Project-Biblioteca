@@ -1,5 +1,12 @@
 (function(){
-  if ((document.body.dataset.sec||'') !== 'libros') return;
+  console.log('Iniciando biblio_libros.js - Sección:', document.body.dataset.sec);
+  
+  if ((document.body.dataset.sec||'') !== 'libros') {
+    console.log('No es sección libros, saliendo');
+    return;
+  }
+  
+  console.log('Cargando panel de libros del bibliotecario');
   var base = document.body.dataset.base || '';
   var api  = base + '/src/entradas/api_reservas.php';
   var thead = document.getElementById('theadRes');
@@ -77,12 +84,30 @@
   }
 
   function cargar(){
+    console.log('Cargando reservas - Estado:', estado, 'Búsqueda:', busca.value);
     thead.innerHTML = headerHtml();
     var url = api + '?action=list&estado=' + encodeURIComponent(estado) + '&q=' + encodeURIComponent(busca.value||'');
+    console.log('URL:', url);
+    
     fetch(url).then(r=>r.json()).then(j=>{
+      console.log('Respuesta API:', j);
       tbody.innerHTML = '';
-      if(!j.ok) return;
-      j.data.forEach(function(it){ tbody.appendChild(fila(it)); });
+      if(!j.ok) {
+        console.error('Error en API:', j);
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#999;">Error al cargar datos</td></tr>';
+        return;
+      }
+      if(!j.data || j.data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#999;">No hay reservas en estado: ' + estado + '</td></tr>';
+        return;
+      }
+      j.data.forEach(function(it){ 
+        console.log('Agregando fila:', it);
+        tbody.appendChild(fila(it)); 
+      });
+    }).catch(function(error) {
+      console.error('Error de red:', error);
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#ff3358;">Error de conexión</td></tr>';
     });
   }
 
@@ -161,5 +186,29 @@
   });
 
   document.querySelector('.pill[data-estado="'+estado+'"]').classList.add('on');
+  console.log('Iniciando carga inicial con estado:', estado);
   cargar();
+
+  // Función de debug global
+  window.testReservasAPI = function() {
+    console.log('=== TEST RESERVAS API ===');
+    console.log('Base URL:', base);
+    console.log('API URL:', api);
+    console.log('Estado actual:', estado);
+    
+    var testUrl = api + '?action=list&estado=pendiente';
+    console.log('Test URL:', testUrl);
+    
+    fetch(testUrl)
+      .then(r => {
+        console.log('Status:', r.status);
+        return r.json();
+      })
+      .then(data => {
+        console.log('Respuesta completa:', data);
+      })
+      .catch(err => {
+        console.error('Error:', err);
+      });
+  };
 })();

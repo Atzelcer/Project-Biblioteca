@@ -21,21 +21,34 @@ class ReservaServicio {
     }
 
     public function reservar(int $idUsuario, int $idLibro): array {
-        // Validar que el usuario no tenga ya una reserva activa
-        if ($this->reservas->tieneActiva($idUsuario)) {
-            return ['ok'=>false,'code'=>'YA_ACTIVA','msg'=>'Tienes una reserva pendiente'];
+        // 1. Validar que el usuario no esté bloqueado
+        if ($this->reservas->usuarioBloqueado($idUsuario)) {
+            return ['ok'=>false,'code'=>'USUARIO_BLOQUEADO','msg'=>'El usuario está bloqueado y no puede realizar reservas'];
         }
 
-        $libro = $this->libros->obtenerPorId($idLibro);
-        if($libro === null) return ['ok'=>false,'msg'=>'libro no existe'];
-        if($libro->getEstado() !== 'Disponible') return ['ok'=>false,'msg'=>'no disponible'];
+        // 2. Validar que el usuario no tenga ya una reserva activa
+        if ($this->reservas->tieneActiva($idUsuario)) {
+            return ['ok'=>false,'code'=>'YA_ACTIVA','msg'=>'El usuario ya tiene una reserva activa'];
+        }
 
+        // 3. Validar que el libro exista y esté disponible
+        $libro = $this->libros->obtenerPorId($idLibro);
+        if($libro === null) {
+            return ['ok'=>false,'code'=>'LIBRO_NO_EXISTE','msg'=>'El libro solicitado no existe'];
+        }
+        
+        if($libro->getEstado() !== 'Disponible') {
+            return ['ok'=>false,'code'=>'LIBRO_NO_DISPONIBLE','msg'=>'El libro no está disponible en este momento'];
+        }
+
+        // 4. Crear la reserva
         $ficha = $this->generarFicha();
         $this->reservas->crearPendiente($idUsuario, $idLibro, $ficha);
         $this->libros->actualizarEstado($idLibro, 'Reservado'); 
 
         return [
             'ok'=>true,
+            'msg'=>'Reserva creada exitosamente',
             'ficha'=>$ficha,
             'libroNombre'=>$libro->getNombre(),
             'libroAutor'=>$libro->getAutor(),
