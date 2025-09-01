@@ -1,0 +1,6 @@
+/* public/css/lector_historial.css */
+.timeline{display:grid;gap:12px}
+.timeline .item{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start}
+.timeline .dot{width:10px;height:10px;border-radius:50%;background:var(--violet);margin-top:6px;box-shadow:0 0 0 3px rgba(122,43,255,.18)}
+.timeline .card{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel);box-shadow:var(--shadow)}
+.timeline .meta{color:var(--muted);font-size:12px}
