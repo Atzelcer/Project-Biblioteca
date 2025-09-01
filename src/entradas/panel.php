@@ -92,11 +92,13 @@ if ($rol === 'bibliotecario') {
             $codigo = htmlspecialchars($libro->getCodigoLibro(), ENT_QUOTES, 'UTF-8');
             $idLibro = (int)$libro->getIdLibro();
 
+            $scrollNombre = (mb_strlen($nombre) > 22) ? '<span class="scroll-text" style="display:inline-block;white-space:nowrap;">'.$nombre.'</span>' : '<span style="white-space:nowrap;">'.$nombre.'</span>';
+            $scrollAutor = (mb_strlen($autor) > 22) ? '<span class="scroll-text" style="display:inline-block;white-space:nowrap;">'.$autor.'</span>' : '<span style="white-space:nowrap;">'.$autor.'</span>';
             $contenidoLibros .= '
                 <div class="libro" data-codigo="'.$codigo.'" data-nombre="'.$nombre.'" data-autor="'.$autor.'" data-id="'.$idLibro.'">
                     <img src="../../public/images/books/'.$foto.'" alt="Portada">
-                    <h3>'.$nombre.'</h3>
-                    <p>'.$autor.'</p>
+                    <h3 style="white-space:nowrap;overflow:hidden;">'.$scrollNombre.'</h3>
+                    <p style="white-space:nowrap;overflow:hidden;">'.$scrollAutor.'</p>
                 </div>';
         }
         if ($contenidoLibros === '') {

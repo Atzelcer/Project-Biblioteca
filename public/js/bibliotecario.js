@@ -1,4 +1,13 @@
 (function(){
+  var sidebar = document.getElementById('sidebar');
+  var btnSidebar = document.getElementById('btnSidebarToggle');
+  if(btnSidebar && sidebar){
+    btnSidebar.onclick = function(){
+      sidebar.classList.toggle('mini');
+    };
+  }
+})();
+(function(){
   var sec = document.body.getAttribute('data-sec') || 'principal';
   var enlaces = document.querySelectorAll('[data-sec-link]');
   for (var i=0;i<enlaces.length;i++){

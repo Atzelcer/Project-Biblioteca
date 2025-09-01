@@ -9,13 +9,37 @@
 </head>
 <body data-base="{{base}}" data-sec="{{sec}}">
   <div class="layout">
-    <aside class="lado">
-      <div class="brand">Biblioteca Virtual</div>
-      <nav class="menu">
-        <a href="{{base}}/src/entradas/panel.php?sec=principal" data-sec-link="principal">Principal</a>
-        <a href="{{base}}/src/entradas/panel.php?sec=libros" data-sec-link="libros">Libros</a>
-        <a href="{{base}}/src/entradas/panel.php?sec=usuarios" data-sec-link="usuarios">Usuarios</a>
-        <a href="{{base}}/src/entradas/logout.php">Salir</a>
+    <aside class="lado" id="sidebar">
+      <button id="btnSidebarToggle" style="background:transparent;border:none;cursor:pointer;padding:6px 0 12px 0;display:flex;align-items:center;justify-content:center;width:100%;">
+        <!-- SVG menú -->
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="2" rx="1.1" fill="#7a2bff"/><rect x="3" y="11" width="18" height="2" rx="1.1" fill="#2d7dff"/><rect x="3" y="16" width="18" height="2" rx="1.1" fill="#ff3358"/></svg>
+      </button>
+  <!-- Eliminado el texto de la barra lateral -->
+      <nav class="menu" id="menuSidebar">
+        <a href="{{base}}/src/entradas/panel.php?sec=principal" class="menu-item" data-sec-link="principal">
+          <span class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3.2l8.5 7.1c.3.3.5.7.5 1.1v8.1c0 .8-.7 1.5-1.5 1.5h-4.7a.8.8 0 0 1-.8-.8v-5.2a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v5.2c0 .4-.3.8-.8.8H3.5A1.5 1.5 0 0 1 2 19.5v-8.1c0-.4.2-.8.5-1.1L11 3.2c.6-.5 1.4-.5 2 0z" fill="#7a2bff"/></svg>
+          </span>
+          <span class="text">Principal</span>
+        </a>
+        <a href="{{base}}/src/entradas/panel.php?sec=libros" class="menu-item" data-sec-link="libros">
+          <span class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 19.5V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v13a.5.5 0 0 1-.5.5H6.5A2.5 2.5 0 0 1 4 19.5z" stroke="#7a2bff" stroke-width="1.5" fill="none"/></svg>
+          </span>
+          <span class="text">Libros</span>
+        </a>
+        <a href="{{base}}/src/entradas/panel.php?sec=usuarios" class="menu-item" data-sec-link="usuarios">
+          <span class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3" stroke="#2d7dff" stroke-width="1.5" fill="none"/><circle cx="16" cy="8" r="3" stroke="#ff3358" stroke-width="1.5" fill="none"/><path d="M4 20c0-2.2 2.7-4 6-4s6 1.8 6 4" stroke="#7a2bff" stroke-width="1.5" fill="none"/></svg>
+          </span>
+          <span class="text">Usuarios</span>
+        </a>
+        <a href="{{base}}/src/entradas/logout.php" class="menu-item" data-sec-link="salir">
+          <span class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16 17l5-5-5-5" stroke="#ff3358" stroke-width="1.5" fill="none"/><path d="M21 12H9" stroke="#7a2bff" stroke-width="1.5" fill="none"/><path d="M5 19V5a2 2 0 0 1 2-2h6" stroke="#2d7dff" stroke-width="1.5" fill="none"/></svg>
+          </span>
+          <span class="text">Salir</span>
+        </a>
       </nav>
     </aside>
 
