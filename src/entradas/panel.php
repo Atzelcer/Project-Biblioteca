@@ -88,12 +88,15 @@ if ($rol === 'bibliotecario') {
         foreach ($libros as $libro) {
             $foto = $libro->getFotoLibro() ?: 'default-book.png';
             $nombre = htmlspecialchars($libro->getNombre(), ENT_QUOTES, 'UTF-8');
-            $autor  = htmlspecialchars($libro->getAutor(), ENT_QUOTES, 'UTF-8');
+            $autor = htmlspecialchars($libro->getAutor(), ENT_QUOTES, 'UTF-8');
+            $codigo = htmlspecialchars($libro->getCodigoLibro(), ENT_QUOTES, 'UTF-8');
+            $idLibro = (int)$libro->getIdLibro();
+
             $contenidoLibros .= '
-                <div class="libro">
-                    <img src="' . BASE_URL . '/public/images/books/' . htmlspecialchars($foto, ENT_QUOTES, 'UTF-8') . '" alt="Portada">
-                    <h3>' . $nombre . '</h3>
-                    <p>' . $autor . '</p>
+                <div class="libro" data-codigo="'.$codigo.'" data-nombre="'.$nombre.'" data-autor="'.$autor.'" data-id="'.$idLibro.'">
+                    <img src="../../public/images/books/'.$foto.'" alt="Portada">
+                    <h3>'.$nombre.'</h3>
+                    <p>'.$autor.'</p>
                 </div>';
         }
         if ($contenidoLibros === '') {
