@@ -8,4 +8,20 @@
       enlaces[i].classList.remove('activo');
     }
   }
+
+  var modal = document.getElementById('modalBibliotecario');
+  var btnCancelar = document.getElementById('btnCancelarReserva');
+  var btnCargar = document.getElementById('btnCargarReserva');
+  var inputCI = document.getElementById('ciReserva');
+
+  if (!modal) return;
+  document.querySelectorAll('.libro').forEach(function(libro){
+    libro.addEventListener('click', function(){
+       inputCI.value = '';
+       modal.style.display = 'flex';
+        });
+  });
+
+  btnCancelar?.addEventListener('click', function(){ modal.style.display = 'none'; });
+  
 })();
