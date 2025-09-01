@@ -6,6 +6,18 @@
 <h2>Colecciones</h2>
 
 <div class="libros">
-    {{libros}}
+        {{libros}}
 </div>
-<script src="public/js/bibliotecario_principal.js"></script>
+<!-- Modal para ingresar CI -->
+<div id="modalCI" style="display:none;">
+    <div class="modal-bg" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;"></div>
+    <div class="modal-content" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#181818;color:#fff;padding:32px 28px 22px 28px;border-radius:10px;min-width:320px;z-index:1001;box-shadow:0 4px 32px #0008;">
+        <h3>Ingresar CI del usuario</h3>
+        <input id="inputCI" type="text" placeholder="Carnet de Identidad" style="width:100%;margin:12px 0;">
+        <div style="text-align:right;">
+            <button id="btnBuscarCI" class="btn">Buscar</button>
+            <button id="btnCancelarCI" class="btn">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script src="{{base}}/public/js/bibliotecario_principal.js"></script>

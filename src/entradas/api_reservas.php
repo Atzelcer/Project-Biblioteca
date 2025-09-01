@@ -8,6 +8,29 @@ header('Content-Type: application/json');
 $db = BaseDatos::conexion();
 $act = $_GET['action'] ?? $_POST['action'] ?? 'list';
 
+if ($act === 'crear') {
+  $data = json_decode(file_get_contents('php://input'), true);
+  $id_usuario = (int)($data['id_usuario'] ?? 0);
+  $id_libro = (int)($data['id_libro'] ?? 0);
+  if ($id_usuario <= 0 || $id_libro <= 0) {
+    echo json_encode(['ok'=>false,'msg'=>'Datos inválidos']); exit;
+  }
+  // Generar fichaReserva única
+  $ficha = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),0,6);
+  $st = $db->prepare("INSERT INTO reservas (id_usuario, id_libro, fichaReserva, estado) VALUES (?, ?, ?, 'pendiente')");
+  $ok = $st->execute([$id_usuario, $id_libro, $ficha]);
+  echo json_encode(['ok'=>$ok, 'msg'=>$ok ? 'Reserva creada' : 'Error al crear reserva']); exit;
+}
+<?php
+require_once __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/baseDatos.php';
+
+session_start();
+header('Content-Type: application/json');
+
+$db = BaseDatos::conexion();
+$act = $_GET['action'] ?? $_POST['action'] ?? 'list';
+
 if ($act === 'extender') {
   if (!isset($_SESSION['idUsuario'])) {
     echo json_encode(['ok' => false, 'msg' => 'no autorizado']);

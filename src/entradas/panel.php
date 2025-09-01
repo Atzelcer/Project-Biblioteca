@@ -28,9 +28,11 @@ if ($rol === 'bibliotecario') {
             $foto = htmlspecialchars($libro->getFotoLibro() ?: BASE_URL . '/public/images/default-book.png', ENT_QUOTES, 'UTF-8');
             $nombre = htmlspecialchars($libro->getNombre(), ENT_QUOTES, 'UTF-8');
             $autor = htmlspecialchars($libro->getAutor(), ENT_QUOTES, 'UTF-8');
+            $codigo = htmlspecialchars($libro->getCodigoLibro(), ENT_QUOTES, 'UTF-8');
+            $idLibro = (int)$libro->getIdLibro();
 
             $contenidoLibros .= '
-                <div class="libro">
+                <div class="libro" data-codigo="'.$codigo.'" data-nombre="'.$nombre.'" data-autor="'.$autor.'" data-id="'.$idLibro.'">
                     <img src="../../public/images/books/'.$foto.'" alt="Portada">
                     <h3>'.$nombre.'</h3>
                     <p>'.$autor.'</p>
