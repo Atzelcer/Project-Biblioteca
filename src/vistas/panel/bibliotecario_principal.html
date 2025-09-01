@@ -1,4 +1,9 @@
-<div class="buscador">
+
+<div style="width:100%;display:flex;justify-content:flex-end;align-items:center;margin-bottom:8px;position:relative;top:-8px;">
+    <button id="btnThemeToggle" style="padding:8px 18px;border-radius:12px;background:var(--gradRB);color:#fff;font-weight:600;border:none;box-shadow:0 2px 8px rgba(0,0,0,.12);cursor:pointer;transition:background .3s,filter .2s;">Modo claro</button>
+</div>
+
+<div class="buscador" style="margin-top:0;display:flex;align-items:center;justify-content:center;gap:10px;">
     <input id="buscaLibros" type="text" placeholder="Buscar..." />
     <button id="btnBuscaLibros">Buscar</button>
 </div>
@@ -6,18 +11,21 @@
 <h2>Colecciones</h2>
 
 <div class="libros">
-        {{libros}}
+    {{libros}}
 </div>
 <!-- Modal para ingresar CI -->
 <div id="modalCI" style="display:none;">
-    <div class="modal-bg" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;"></div>
-    <div class="modal-content" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#181818;color:#fff;padding:32px 28px 22px 28px;border-radius:10px;min-width:320px;z-index:1001;box-shadow:0 4px 32px #0008;">
-        <h3>Ingresar CI del usuario</h3>
-        <input id="inputCI" type="text" placeholder="Carnet de Identidad" style="width:100%;margin:12px 0;">
-        <div style="text-align:right;">
-            <button id="btnBuscarCI" class="btn">Buscar</button>
-            <button id="btnCancelarCI" class="btn">Cancelar</button>
-        </div>
+    <div class="modal-bg"></div>
+    <div class="modal-content modal-modern">
+                <h3 class="modal-title" id="modalTitleCI">Ingresar CI del usuario</h3>
+                <div id="modalCIForm">
+                    <input id="inputCI" class="modal-input" type="text" placeholder="Carnet de Identidad">
+                    <div class="modal-actions">
+                            <button id="btnBuscarCI" class="btn modal-btn confirm">Buscar</button>
+                            <button id="btnCancelarCI" class="btn modal-btn cancel">Cancelar</button>
+                    </div>
+                </div>
+                <div id="modalCIResultado" style="display:none;"></div>
     </div>
 </div>
 <script src="{{base}}/public/js/bibliotecario_principal.js"></script>
