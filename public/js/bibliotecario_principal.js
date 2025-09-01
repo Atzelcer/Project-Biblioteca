@@ -144,13 +144,117 @@ document.addEventListener('DOMContentLoaded', function(){
 			inputCI.value = '';
 		};
 		document.getElementById('btnReservarModal').onclick = function(){
-			alert('Reserva creada correctamente (simulado)');
-			modalCI.style.display = 'none';
-			modalForm.style.display = 'block';
-			modalTitle.style.display = 'block';
-			modalResultado.style.display = 'none';
-			modalContent.classList.remove('grande');
-			inputCI.value = '';
+			// Obtener datos necesarios
+			var ciIngresado = inputCI.value.trim();
+			var idLibro = libroSeleccionado?.id || '';
+			
+			if(!ciIngresado) {
+				showErrorModal('Error', 'Por favor ingresa el CI del usuario');
+				return;
+			}
+			
+			if(!idLibro) {
+				showErrorModal('Error', 'Error al obtener la información del libro seleccionado');
+				return;
+			}
+
+			// Buscar el usuario por CI para obtener su ID
+			fetch(window.baseUrl + '/src/entradas/api_usuarios.php?action=list&q=' + encodeURIComponent(ciIngresado))
+				.then(response => response.json())
+				.then(function(userData){
+					if(!userData.ok || !userData.data || !userData.data.length) {
+						showErrorModal('Error', 'No se encontró un usuario con el CI: ' + ciIngresado);
+						return;
+					}
+
+					var usuario = userData.data[0];
+					var idUsuario = usuario.id_usuario;
+
+					// Mostrar estado de carga en el botón
+					var btnReservar = document.getElementById('btnReservarModal');
+					var textoOriginal = btnReservar.textContent;
+					btnReservar.disabled = true;
+					btnReservar.textContent = 'Procesando...';
+					btnReservar.style.opacity = '0.6';
+
+					// Crear la reserva con todas las validaciones
+					fetch(window.baseUrl + '/src/entradas/api_reservas.php?action=crear', {
+						method: 'POST',
+						headers: {'Content-Type': 'application/json'},
+						body: JSON.stringify({
+							id_usuario: idUsuario,
+							id_libro: idLibro
+						})
+					})
+					.then(response => response.json())
+					.then(function(resultado){
+						// Restaurar el botón
+						btnReservar.disabled = false;
+						btnReservar.textContent = textoOriginal;
+						btnReservar.style.opacity = '1';
+
+						if(resultado.ok){
+							// ✅ RESERVA EXITOSA
+							showSuccessModal('¡Reserva Exitosa!', 
+								resultado.msg || 'La reserva se ha creado correctamente para el usuario ' + usuario.nombre);
+							
+							// Cerrar el modal principal después de mostrar el éxito
+							setTimeout(() => {
+								modalCI.style.display = 'none';
+								modalForm.style.display = 'block';
+								modalTitle.style.display = 'block';
+								modalResultado.style.display = 'none';
+								modalContent.classList.remove('grande');
+								inputCI.value = '';
+							}, 2000);
+						} else {
+							// Manejar diferentes tipos de error según el código
+							switch(resultado.code) {
+								case 'USUARIO_BLOQUEADO':
+									// ❌ USUARIO BLOQUEADO
+									showErrorModal('Usuario Bloqueado', 
+										'El usuario está bloqueado y no puede realizar reservas en este momento');
+									break;
+								
+								case 'YA_ACTIVA':
+									// ⚠️ YA TIENE UNA RESERVA
+									showWarningModal('Reserva Existente', 
+										'El usuario ya tiene una reserva activa. Debe completar la reserva actual antes de crear una nueva');
+									break;
+								
+								case 'LIBRO_NO_DISPONIBLE':
+									// ⚠️ LIBRO NO DISPONIBLE
+									showWarningModal('Libro No Disponible', 
+										'El libro seleccionado no está disponible en este momento');
+									break;
+								
+								case 'LIBRO_NO_EXISTE':
+									// ❌ LIBRO NO EXISTE
+									showErrorModal('Error', 
+										'El libro solicitado no existe en el sistema');
+									break;
+								
+								default:
+									// ❌ ERROR GENERAL
+									showErrorModal('Error', 
+										resultado.msg || 'No se pudo crear la reserva. Intenta nuevamente');
+							}
+						}
+					})
+					.catch(function(error) {
+						// Restaurar el botón en caso de error de red
+						btnReservar.disabled = false;
+						btnReservar.textContent = textoOriginal;
+						btnReservar.style.opacity = '1';
+						
+						showErrorModal('Error de Conexión', 
+							'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente');
+					});
+				})
+				.catch(function(error) {
+					showErrorModal('Error de Conexión', 
+						'No se pudo buscar la información del usuario. Verifica tu conexión e intenta nuevamente');
+				});
 		};
 	});
 	// Evento cancelar principal
@@ -166,6 +270,126 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	// Guardar baseUrl global para fetch
 	window.baseUrl = document.body.dataset.base || '';
+
+	// Sistema de modales personalizados
+	window.showSuccessModal = function(title, message) {
+		createAndShowModal(title, message, 'success');
+	};
+
+	window.showErrorModal = function(title, message) {
+		createAndShowModal(title, message, 'error');
+	};
+
+	window.showWarningModal = function(title, message) {
+		createAndShowModal(title, message, 'warning');
+	};
+
+	window.createAndShowModal = function(title, message, type = 'info') {
+		// Eliminar modal existente si existe
+		const existingModal = document.getElementById('customModal');
+		if (existingModal) {
+			existingModal.remove();
+		}
+
+		// Crear modal HTML
+		const modal = document.createElement('div');
+		modal.id = 'customModal';
+		modal.style.cssText = `
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.6);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 10000;
+		`;
+
+		const colors = {
+			success: { bg: '#d4edda', border: '#28a745', text: '#155724', icon: '✅' },
+			error: { bg: '#f8d7da', border: '#dc3545', text: '#721c24', icon: '❌' },
+			warning: { bg: '#fff3cd', border: '#ffc107', text: '#856404', icon: '⚠️' },
+			info: { bg: '#d1ecf1', border: '#17a2b8', text: '#0c5460', icon: 'ℹ️' }
+		};
+
+		const color = colors[type] || colors.info;
+
+		modal.innerHTML = `
+			<div style="
+				background: white;
+				padding: 30px;
+				border-radius: 10px;
+				box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+				max-width: 450px;
+				width: 90%;
+				text-align: center;
+				border-left: 6px solid ${color.border};
+			">
+				<div style="
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-bottom: 20px;
+				">
+					<span style="
+						font-size: 28px;
+						margin-right: 12px;
+					">${color.icon}</span>
+					<h3 style="
+						margin: 0;
+						color: ${color.text};
+						font-size: 20px;
+						font-weight: 600;
+					">${title}</h3>
+				</div>
+				<div style="
+					background: ${color.bg};
+					padding: 18px;
+					border-radius: 8px;
+					border: 1px solid ${color.border};
+					margin-bottom: 25px;
+				">
+					<p style="
+						margin: 0;
+						color: ${color.text};
+						font-size: 15px;
+						line-height: 1.4;
+					">${message}</p>
+				</div>
+				<button onclick="hideCustomModal()" style="
+					background: ${color.border};
+					color: white;
+					border: none;
+					padding: 12px 25px;
+					border-radius: 6px;
+					cursor: pointer;
+					font-size: 15px;
+					font-weight: 500;
+					transition: all 0.3s ease;
+				" 
+				onmouseover="this.style.opacity='0.9'"
+				onmouseout="this.style.opacity='1'">Cerrar</button>
+			</div>
+		`;
+
+		document.body.appendChild(modal);
+
+		// Auto-cerrar éxito en 4 segundos
+		if (type === 'success') {
+			setTimeout(() => {
+				hideCustomModal();
+			}, 4000);
+		}
+	};
+
+	window.hideCustomModal = function() {
+		const modal = document.getElementById('customModal');
+		if (modal) {
+			modal.remove();
+		}
+	};
 });
 // JS principal para el panel del bibliotecario
 // Puedes agregar aquí la lógica del modal y eventos de libros

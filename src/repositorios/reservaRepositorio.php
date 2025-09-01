@@ -6,6 +6,7 @@ interface ReservaRepositorioContrato {
     public function crearPendiente(int $idUsuario, int $idLibro, string $ficha): int;
     public function existeFicha(string $ficha): bool;
     public function tieneActiva(int $idUsuario): bool;
+    public function usuarioBloqueado(int $idUsuario): bool;
 }
 
 class ReservaRepositorio implements ReservaRepositorioContrato {
@@ -30,6 +31,12 @@ class ReservaRepositorio implements ReservaRepositorioContrato {
         $st = $this->db->prepare(
             "SELECT 1 FROM reservas WHERE id_usuario=? AND estado IN ('pendiente','autorizada') LIMIT 1"
         );
+        $st->execute([$idUsuario]);
+        return (bool)$st->fetchColumn();
+    }
+
+    public function usuarioBloqueado(int $idUsuario): bool {
+        $st = $this->db->prepare("SELECT 1 FROM usuario WHERE id_usuario=? AND estado='bloqueado' LIMIT 1");
         $st->execute([$idUsuario]);
         return (bool)$st->fetchColumn();
     }
