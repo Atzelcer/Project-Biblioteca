@@ -1,40 +1,179 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <title>{{titulo}}</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="{{base}}/public/css/lector_panel.css">
-  <script defer src="{{base}}/public/js/lector_panel.js"></script>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{{base}}/public/css/lector_panel.css?v=24">
+  <link rel="stylesheet" href="{{base}}/public/css/lector_home.css?v=24">
+  <link rel="stylesheet" href="{{base}}/public/css/lector_reservas.css?v=24">
+  <link rel="stylesheet" href="{{base}}/public/css/lector_historial.css?v=24">
 </head>
-<body data-base="{{base}}">
-  <header class="topbar">
-    <div class="brand">Lector</div>
-    <div class="actions">
-      <button id="btnTicket" class="btn ticket"></button>
-      <a class="btn danger" href="{{base}}/src/entradas/logout.php">Cerrar sesión</a>
+
+<body data-base="{{base}}" data-sec="lector" data-user-img="{{foto_usuario}}" data-user-name="{{nombre_usuario}}">
+  <canvas id="bgParticles" aria-hidden="true"></canvas>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sideTop">
+      <button class="sideToggle" id="sideToggle" aria-label="toggle">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <div class="brand"><span class="brandName">Biblioteca</span></div>
     </div>
-  </header>
 
-  <h2>LECTOR</h2>
-  <p class="flash">{{ok}}</p>
+    <nav class="nav">
+      <a class="navItem active" href="#" data-section="home" title="Principal">
+        <svg class="navIconSvg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3.2l8.5 7.1c.3.3.5.7.5 1.1v8.1c0 .8-.7 1.5-1.5 1.5h-4.7a.8.8 0 0 1-.8-.8v-5.2a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v5.2c0 .4-.3.8-.8.8H3.5A1.5 1.5 0 0 1 2 19.5v-8.1c0-.4.2-.8.5-1.1L11 3.2c.6-.5 1.4-.5 2 0z" fill="url(#gHome)"/>
+          <defs>
+            <linearGradient id="gHome" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff3358"/>
+              <stop offset="0.5" stop-color="#7a2bff"/>
+              <stop offset="1" stop-color="#2d7dff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="navText">Principal</span>
+      </a>
 
-  <form class="bar" method="get" action="{{base}}/src/entradas/panel.php">
-    <input type="text" name="q" value="{{valor_busqueda}}" placeholder="buscar por nombre o autor">
-    <button type="submit">Buscar</button>
-  </form>
+      <a class="navItem" href="#" data-section="reservar" title="Reservar">
+        <img class="navIconImg" src="{{base}}/public/images/icons/file.png" alt="">
+        <span class="navText">Reservar</span>
+      </a>
 
-  <table>
-    <thead>
-      <tr><th>Nombre</th><th>Autor</th><th>Disponibilidad</th><th>Reservar</th></tr>
-    </thead>
-    <tbody>
-      {{filas_libros}}
-    </tbody>
-  </table>
+      <a class="navItem" href="#" data-section="historial" title="Historial">
+        <img class="navIconImg" src="{{base}}/public/images/icons/menu.png" alt="">
+        <span class="navText">Historial</span>
+      </a>
 
+      <a class="navItem" href="{{base}}/src/entradas/logout.php" title="Salir">
+        <img class="navIconImg" src="{{base}}/public/images/icons/users.png" alt="">
+        <span class="navText">Salir</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="topbar" id="topbar">
+      <div class="hello" id="hello">
+        <h1 id="helloTitle">Hola, <span id="helloUser">Lector</span></h1>
+        <p class="helloSub" id="helloSub">Listo para reservar un libro</p>
+      </div>
+
+      <!-- Buscador + Filtros (solo en Reservar) -->
+      <div class="searchWrap" id="searchWrap" style="display:none">
+        <form class="search" id="searchBox" method="get" action="{{base}}/src/entradas/panel.php">
+          <input id="searchInput" name="q" type="text" placeholder="Buscar libros..." value="{{valor_busqueda}}">
+          <button id="searchBtn" type="submit">Buscar</button>
+        </form>
+
+        <!-- Barra de filtros: 13 chips (se llenan desde JS) -->
+        <div id="filtersWrap" class="filtersWrap" style="display:none">
+          <div id="filtersBar" class="filtersBar" role="tablist" aria-label="Categorías"></div>
+        </div>
+      </div>
+
+      <div class="userWrap">
+        <!-- Tema -->
+        <label class="themeSwitch" title="Cambiar tema">
+          <input id="themeToggle" type="checkbox" aria-label="Cambiar entre claro/oscuro">
+          <span class="track">
+            <svg class="i sun" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.2" fill="#ffd36e"/>
+              <g stroke="#ffb64d" stroke-width="1.6" stroke-linecap="round">
+                <line x1="12" y1="2"  x2="12" y2="5"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="2"  y1="12" x2="5"  y2="12"/>
+                <line x1="19" y1="12" x2="22" y2="12"/>
+              </g>
+            </svg>
+            <svg class="i moon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 13.2A8.8 8.8 0 1 1 10.8 3a7.2 7.2 0 1 0 10.2 10.2z" fill="#9dd0ff"/>
+            </svg>
+            <span class="knob"></span>
+          </span>
+        </label>
+
+        <!-- Botón ticket -->
+        <button id="btnTicket" class="btn ticketGreen" title="Última reserva" style="display:none"></button>
+
+        <!-- Avatar -->
+        <button class="avatarBtn" id="avatarBtn" aria-label="perfil">
+          <img id="avatarImg" src="{{base}}/public/images/users/default-user.png" alt="">
+        </button>
+      </div>
+    </header>
+
+    <!-- Contenido inyectado (home / reservar / historial) -->
+    <section id="content" class="section">
+      <div style="opacity:.6">Cargando…</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foot">
+      <div class="footCols">
+        <div class="col">
+          <h4>Horarios de atención</h4>
+          <p>Lunes a viernes <strong>08:00–12:00</strong> y <strong>14:00–18:00</strong></p>
+          <span class="badge warn">Las devoluciones se registran solo en estos horarios</span>
+        </div>
+        <div class="col">
+          <h4>Normas y recordatorios</h4>
+          <ul class="list">
+            <li>Devuelve los libros en la <strong>fecha establecida</strong>.</li>
+            <li>Renovaciones sujetas a disponibilidad y sin reservas pendientes.</li>
+            <li>Cuidar el material: sin subrayados, marcas o dobleces.</li>
+            <li>Retrasos pueden generar suspensión temporal de préstamos.</li>
+          </ul>
+          <p class="muted sm">Ayuda y consultas: mesa de ayuda en el portal o ventanilla de informes.</p>
+        </div>
+        <div class="col">
+          <h4>Servicios</h4>
+          <ul class="list">
+            <li>Catálogo en línea y reservas.</li>
+            <li>Wi-Fi y equipos de consulta.</li>
+            <li>Impresión / escaneo.</li>
+            <li>Salas de estudio (reserva previa).</li>
+          </ul>
+          <p class="muted sm">Para soporte, usa el botón de ayuda.</p>
+        </div>
+      </div>
+      <div class="footBottom"><span>Biblioteca USFX</span><span class="dot"></span><span>Panel lector</span></div>
+    </footer>
+  </main>
+
+  <!-- Modal Perfil -->
+  <div class="modal" id="profileModal" aria-hidden="true">
+    <div class="modalBackdrop" id="modalBackdrop"></div>
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modalHead">
+        <h3 id="modalTitle">Perfil</h3>
+        <button class="modalClose" id="modalClose" aria-label="close">×</button>
+      </header>
+      <div class="modalBody">
+        <div class="modalUser">
+          <img id="modalUserImg" src="{{base}}/public/images/users/default-user.png" alt="">
+          <div>
+            <h4 id="modalUserName">Usuario</h4>
+            <p class="muted">Gestiona tu cuenta</p>
+          </div>
+        </div>
+        <div class="modalActions">
+          <a href="#" class="btnPrimary w100" id="perfilVer">Ver perfil</a>
+          <a href="#" class="btnGhost w100" id="perfilEditar">Editar perfil</a>
+          <a href="#" class="btnDanger w100" id="perfilEliminar">Eliminar usuario</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlays (compatibles con backend actual) -->
   <div class="overlay" id="mConfirm">
-    <div class="modal">
+    <div class="modalBase">
       <h3>Reservar libro</h3>
       <div class="row">
         <img id="imgLibro" src="" alt="Portada">
@@ -52,40 +191,67 @@
   </div>
 
   <div class="overlay" id="mTicket">
-    <div class="modal">
+    <div class="modalBase">
       <h3>Información de la reserva</h3>
-  <p id="rFichaReserva"></p>
-  <p id="tLibro"></p>
-  <p id="tAutor"></p>
-  <p id="tEstado"></p>
+      <p id="rFichaReserva"></p>
+      <p id="tLibro"></p>
+      <p id="tAutor"></p>
+      <p id="tEstado"></p>
       <p>Las fechas se definirán cuando pase a “No disponible”.</p>
       <footer>
         <button class="btn ok" id="btnExtender" style="display:none">Extender tiempo</button>
         <button class="btn ok" id="btnCerrarTicket">Entendido</button>
       </footer>
     </div>
-    
   </div>
-  <div class="overlay" id="mExtender" style="display:none;">
-  <div class="modal">
-    <h3>Extender tiempo de la reserva</h3>
-    <p>¿Deseas extender el tiempo de devolución por 1 día más?</p>
-    <footer>
-      <button class="btn ghost" id="btnCancelExt">Cancelar</button>
-      <button class="btn ok" id="btnConfirmExt">Aceptar</button>
-    </footer>
-  </div>
-</div>
 
-  <!-- Modal de aviso genérico -->
-  <div class="overlay" id="mAviso" style="display:none">
-    <div class="modal">
-      <h3>Aviso</h3>
-      <p id="avisoMsg">Tienes una reserva pendiente</p>
+  <div class="overlay" id="mExtender" style="display:none;">
+    <div class="modalBase">
+      <h3>Extender tiempo de la reserva</h3>
+      <p>¿Deseas extender el tiempo de devolución por 1 día más?</p>
       <footer>
-        <button class="btn ok" id="btnCerrarAviso">Entendido</button>
+        <button class="btn ghost" id="btnCancelExt">Cancelar</button>
+        <button class="btn ok" id="btnConfirmExt">Aceptar</button>
       </footer>
     </div>
   </div>
+
+  <div class="overlay" id="mAviso" style="display:none">
+    <div class="modalBase">
+      <h3>Aviso</h3>
+      <p id="avisoMsg">Tienes una reserva pendiente</p>
+      <footer><button class="btn ok" id="btnCerrarAviso">Entendido</button></footer>
+    </div>
+  </div>
+
+  <!-- Preview de portada (galería) -->
+  <div class="overlay" id="mPreview" style="display:none">
+    <div class="modalBase">
+      <h3 id="pvTitle">Portada</h3>
+      <div class="row">
+        <img id="pvImg" src="" alt="Portada grande">
+        <div>
+          <p id="pvAutor" class="muted"></p>
+          <p id="pvInfo" class="muted sm">Pulsa reservar para continuar.</p>
+        </div>
+      </div>
+      <footer>
+        <button class="btn ghost" id="pvClose">Cerrar</button>
+        <button class="btn ok" id="pvReservar" style="display:none">Reservar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Fuente de datos del backend (para la galería de Reservar) -->
+  <div class="dataSource" style="display:none">
+    <table id="tablaDisponibles">
+      <tbody>{{filas_libros}}</tbody>
+    </table>
+  </div>
+
+  <!-- Scripts -->
+  <script src="{{base}}/public/js/lector_panel.js?v=24"></script>
+  <script src="{{base}}/public/js/lector_home.js?v=24"></script>
+  <script src="{{base}}/public/js/lector_reservas.js?v=24"></script>
 </body>
 </html>
