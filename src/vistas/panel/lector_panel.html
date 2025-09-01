@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="es" data-theme="dark">
-
 <head>
   <meta charset="utf-8">
   <title>{{titulo}}</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="{{base}}/public/css/lector_panel.css?v=23">
-  <link rel="stylesheet" href="{{base}}/public/css/lector_home.css?v=23">
-  <link rel="stylesheet" href="{{base}}/public/css/lector_reservas.css?v=23">
-  <link rel="stylesheet" href="{{base}}/public/css/lector_historial.css?v=23">
 
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{{base}}/public/css/lector_panel.css?v=24">
+  <link rel="stylesheet" href="{{base}}/public/css/lector_home.css?v=24">
+  <link rel="stylesheet" href="{{base}}/public/css/lector_reservas.css?v=24">
+  <link rel="stylesheet" href="{{base}}/public/css/lector_historial.css?v=24">
 </head>
 
 <body data-base="{{base}}" data-sec="lector" data-user-img="{{foto_usuario}}" data-user-name="{{nombre_usuario}}">
@@ -23,17 +23,16 @@
       </button>
       <div class="brand"><span class="brandName">Biblioteca</span></div>
     </div>
+
     <nav class="nav">
       <a class="navItem active" href="#" data-section="home" title="Principal">
         <svg class="navIconSvg" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M12 3.2l8.5 7.1c.3.3.5.7.5 1.1v8.1c0 .8-.7 1.5-1.5 1.5h-4.7a.8.8 0 0 1-.8-.8v-5.2a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v5.2c0 .4-.3.8-.8.8H3.5A1.5 1.5 0 0 1 2 19.5v-8.1c0-.4.2-.8.5-1.1L11 3.2c.6-.5 1.4-.5 2 0z"
-            fill="url(#gHome)" />
+          <path d="M12 3.2l8.5 7.1c.3.3.5.7.5 1.1v8.1c0 .8-.7 1.5-1.5 1.5h-4.7a.8.8 0 0 1-.8-.8v-5.2a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v5.2c0 .4-.3.8-.8.8H3.5A1.5 1.5 0 0 1 2 19.5v-8.1c0-.4.2-.8.5-1.1L11 3.2c.6-.5 1.4-.5 2 0z" fill="url(#gHome)"/>
           <defs>
             <linearGradient id="gHome" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#ff3358" />
-              <stop offset="0.5" stop-color="#7a2bff" />
-              <stop offset="1" stop-color="#2d7dff" />
+              <stop offset="0" stop-color="#ff3358"/>
+              <stop offset="0.5" stop-color="#7a2bff"/>
+              <stop offset="1" stop-color="#2d7dff"/>
             </linearGradient>
           </defs>
         </svg>
@@ -65,12 +64,17 @@
         <p class="helloSub" id="helloSub">Listo para reservar un libro</p>
       </div>
 
-      <!-- Buscador (solo Reservar) -->
+      <!-- Buscador + Filtros (solo en Reservar) -->
       <div class="searchWrap" id="searchWrap" style="display:none">
         <form class="search" id="searchBox" method="get" action="{{base}}/src/entradas/panel.php">
           <input id="searchInput" name="q" type="text" placeholder="Buscar libros..." value="{{valor_busqueda}}">
           <button id="searchBtn" type="submit">Buscar</button>
         </form>
+
+        <!-- Barra de filtros: 13 chips (se llenan desde JS) -->
+        <div id="filtersWrap" class="filtersWrap" style="display:none">
+          <div id="filtersBar" class="filtersBar" role="tablist" aria-label="Categorías"></div>
+        </div>
       </div>
 
       <div class="userWrap">
@@ -79,16 +83,16 @@
           <input id="themeToggle" type="checkbox" aria-label="Cambiar entre claro/oscuro">
           <span class="track">
             <svg class="i sun" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="4.2" fill="#ffd36e" />
+              <circle cx="12" cy="12" r="4.2" fill="#ffd36e"/>
               <g stroke="#ffb64d" stroke-width="1.6" stroke-linecap="round">
-                <line x1="12" y1="2" x2="12" y2="5" />
-                <line x1="12" y1="19" x2="12" y2="22" />
-                <line x1="2" y1="12" x2="5" y2="12" />
-                <line x1="19" y1="12" x2="22" y2="12" />
+                <line x1="12" y1="2"  x2="12" y2="5"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="2"  y1="12" x2="5"  y2="12"/>
+                <line x1="19" y1="12" x2="22" y2="12"/>
               </g>
             </svg>
             <svg class="i moon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M21 13.2A8.8 8.8 0 1 1 10.8 3a7.2 7.2 0 1 0 10.2 10.2z" fill="#9dd0ff" />
+              <path d="M21 13.2A8.8 8.8 0 1 1 10.8 3a7.2 7.2 0 1 0 10.2 10.2z" fill="#9dd0ff"/>
             </svg>
             <span class="knob"></span>
           </span>
@@ -104,7 +108,7 @@
       </div>
     </header>
 
-    <!-- Contenido inyectado -->
+    <!-- Contenido inyectado (home / reservar / historial) -->
     <section id="content" class="section">
       <div style="opacity:.6">Cargando…</div>
     </section>
@@ -167,7 +171,7 @@
     </div>
   </div>
 
-  <!-- Modales backend compatibles -->
+  <!-- Overlays (compatibles con backend actual) -->
   <div class="overlay" id="mConfirm">
     <div class="modalBase">
       <h3>Reservar libro</h3>
@@ -238,15 +242,16 @@
     </div>
   </div>
 
-  <!-- Fuente de datos del backend (para galería) -->
+  <!-- Fuente de datos del backend (para la galería de Reservar) -->
   <div class="dataSource" style="display:none">
     <table id="tablaDisponibles">
       <tbody>{{filas_libros}}</tbody>
     </table>
   </div>
 
-  <script src="{{base}}/public/js/lector_panel.js?v=22"></script>
-
+  <!-- Scripts -->
+  <script src="{{base}}/public/js/lector_panel.js?v=24"></script>
+  <script src="{{base}}/public/js/lector_home.js?v=24"></script>
+  <script src="{{base}}/public/js/lector_reservas.js?v=24"></script>
 </body>
-
 </html>
