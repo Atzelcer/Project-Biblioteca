@@ -21,7 +21,7 @@ switch ($act) {
     $rol = $_GET['rol'] ?? 'todos';
     $q = trim($_GET['q'] ?? '');
 
-    $sql = 'SELECT id_usuario, CI, nombre, apellido, rol, correo, celular FROM usuario WHERE 1=1';
+    $sql = 'SELECT id_usuario, CI, nombre, apellido, rol, estado, correo, celular FROM usuario WHERE 1=1';
     $prm = [];
     if ($rol !== 'todos') { $sql .= ' AND rol = ?'; $prm[] = $rol; }
     if ($q !== '') {
@@ -47,6 +47,8 @@ switch ($act) {
           u.nombre                                   AS nombre,
           u.apellido                                 AS apellido,
           u.CI                                       AS CI,
+          u.rol                                      AS rol,
+          u.estado                                   AS estado,
           u.fotografia                               AS fotografia,
           l.nombre                                   AS libro,
           l.autor                                    AS autor,
@@ -89,7 +91,7 @@ switch ($act) {
 
   case 'detalle': {
     $id = (int)($_GET['id'] ?? 0);
-    $st = $db->prepare('SELECT id_usuario, CI, nombre, apellido, rol, correo, celular, direccion, fotografia FROM usuario WHERE id_usuario=?');
+    $st = $db->prepare('SELECT id_usuario, CI, nombre, apellido, rol, estado, correo, celular, direccion, fotografia FROM usuario WHERE id_usuario=?');
     $st->execute([$id]);
     $row = $st->fetch(PDO::FETCH_ASSOC);
     if (!$row) fail('no encontrado');
@@ -121,6 +123,34 @@ switch ($act) {
       ok(['msg'=>'usuario desbloqueado y reserva finalizada','id_usuario'=>$idUsuario,'id_reserva'=>$idReserva]);
     } catch (PDOException $e) {
       if ($db->inTransaction()) { $db->rollBack(); }
+      fail('error en servidor', ['error'=>$e->getMessage()]);
+    }
+  break; }
+
+  case 'bloquear': {
+    $idUsuario = (int)($_POST['id']
+      ?? $_POST['id_usuario']
+      ?? $_GET['id']
+      ?? $_GET['id_usuario']
+      ?? 0);
+    if ($idUsuario <= 0) { fail('id invalido'); }
+
+    try {
+      // Verificar que el usuario existe y no está ya bloqueado
+      $st = $db->prepare('SELECT estado, nombre, apellido FROM usuario WHERE id_usuario=? LIMIT 1');
+      $st->execute([$idUsuario]);
+      $row = $st->fetch(PDO::FETCH_ASSOC);
+      if (!$row) { fail('usuario no encontrado'); }
+      
+      if ($row['estado'] === 'bloqueado') { 
+        fail('el usuario ya está bloqueado'); 
+      }
+
+      // Bloquear el usuario
+      $db->prepare("UPDATE usuario SET estado='bloqueado' WHERE id_usuario=?")->execute([$idUsuario]);
+
+      ok(['msg'=>'usuario bloqueado exitosamente','id_usuario'=>$idUsuario,'nombre'=>$row['nombre'].' '.$row['apellido']]);
+    } catch (PDOException $e) {
       fail('error en servidor', ['error'=>$e->getMessage()]);
     }
   break; }

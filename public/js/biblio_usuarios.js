@@ -21,7 +21,9 @@
     cel: document.getElementById('uCel'),
     dir: document.getElementById('uDir'),
     foto: document.getElementById('uFoto'),
-    btn: document.getElementById('btnCerrarUsr')
+    btn: document.getElementById('btnCerrarUsr'),
+    btnBloquear: document.getElementById('btnBloquearUsr'),
+    currentUserId: null
   };
 
   // Modal desbloqueo
@@ -54,6 +56,7 @@
       '<td>'+ (u.nombre||'') +'</td>'+
       '<td>'+ (u.apellido||'') +'</td>'+
       '<td>'+ (u.rol||'') +'</td>'+
+      '<td>'+ (u.estado||'normal') +'</td>'+
       '<td><button class="btn primary" data-id="'+u.id_usuario+'">Ver mas info</button></td>';
     return tr;
   }
@@ -61,14 +64,11 @@
   function filaBloqueados(u){
     var tr = document.createElement('tr');
     tr.innerHTML =
-      '<td>' + (u.ticket||'') + '</td>' +
-      '<td>' + (u.nombre||'') + (u.apellido?(' '+u.apellido):'') + '</td>' +
       '<td>' + (u.CI||'') + '</td>' +
-      '<td>' + (u.libro||'') + '</td>' +
-      '<td>' + (u.autor||'') + '</td>' +
-      '<td>' + (u.fechaReserva||'-') + '</td>' +
-      '<td>' + (u.fechaDevolucion||'-') + '</td>' +
-      '<td>' + (u.diasExpiracion||0) + '</td>' +
+      '<td>' + (u.nombre||'') + '</td>' +
+      '<td>' + (u.apellido||'') + '</td>' +
+      '<td>' + (u.rol||'lector') + '</td>' +
+      '<td>' + (u.estado||'bloqueado') + '</td>' +
       '<td><button class="btn warning desbloq" data-id="' + (u.id_reserva||'') + '">Desbloquear</button></td>';
     return tr;
   }
@@ -77,12 +77,17 @@
     var tablaBloqueados = document.getElementById('tablaBloqueados');
     var tablaUsuarios = document.getElementById('tablaUsuarios');
     if(!tablaBloqueados || !tablaUsuarios) return;
+    
     if(rol === 'bloqueados'){
       tablaBloqueados.style.display = 'block';
       tablaUsuarios.style.display = 'none';
+      // Limpiar tabla al mostrarla
+      if(tbodyBloq) tbodyBloq.innerHTML = '';
     }else{
       tablaBloqueados.style.display = 'none';
       tablaUsuarios.style.display = 'block';
+      // Limpiar tabla al mostrarla
+      if(tbody) tbody.innerHTML = '';
     }
   }
 
@@ -96,9 +101,9 @@
     getJSON(url).then(function(j){
       if(!j.ok){
         if(rol === 'bloqueados'){
-          if(tbodyBloq){ tbodyBloq.innerHTML = '<tr><td colspan="9">'+(j.msg||'No autorizado o error')+'</td></tr>'; }
+          if(tbodyBloq){ tbodyBloq.innerHTML = '<tr><td colspan="6">'+(j.msg||'No autorizado o error')+'</td></tr>'; }
         }else{
-          if(tbody){ tbody.innerHTML = '<tr><td colspan="5">'+(j.msg||'No autorizado o error')+'</td></tr>'; }
+          if(tbody){ tbody.innerHTML = '<tr><td colspan="6">'+(j.msg||'No autorizado o error')+'</td></tr>'; }
         }
         return;
       }
@@ -106,11 +111,13 @@
       if(rol === 'bloqueados'){
         cache.bloqueados = j.data || [];
         if(!tbodyBloq) return;
-        tbodyBloq.innerHTML = '';
+        tbodyBloq.innerHTML = ''; // Limpiar completamente la tabla
         if(cache.bloqueados.length){
-          cache.bloqueados.forEach(function(it){ tbodyBloq.appendChild(filaBloqueados(it)); });
+          cache.bloqueados.forEach(function(it){ 
+            tbodyBloq.appendChild(filaBloqueados(it)); 
+          });
         }else{
-          tbodyBloq.innerHTML = '<tr><td colspan="9">Sin resultados</td></tr>';
+          tbodyBloq.innerHTML = '<tr><td colspan="6">Sin resultados</td></tr>';
         }
       }else{
         if(!tbody) return;
@@ -118,14 +125,14 @@
         if(j.data && j.data.length){
           j.data.forEach(function(it){ tbody.appendChild(fila(it)); });
         }else{
-          tbody.innerHTML = '<tr><td colspan="5">Sin resultados</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6">Sin resultados</td></tr>';
         }
       }
     }).catch(function(){
       if(rol === 'bloqueados'){
-        if(tbodyBloq){ tbodyBloq.innerHTML = '<tr><td colspan="9">Error de red o del servidor</td></tr>'; }
+        if(tbodyBloq){ tbodyBloq.innerHTML = '<tr><td colspan="6">Error de red o del servidor</td></tr>'; }
       }else{
-        if(tbody){ tbody.innerHTML = '<tr><td colspan="5">Error de red o del servidor</td></tr>'; }
+        if(tbody){ tbody.innerHTML = '<tr><td colspan="6">Error de red o del servidor</td></tr>'; }
       }
     });
   }
@@ -150,6 +157,7 @@
     getJSON(api + '?action=detalle&id=' + encodeURIComponent(id)).then(function(j){
       if(!j.ok) return;
       var d = j.data;
+      m.currentUserId = id;
       m.t.textContent   = 'Informacion Usuario ' + (d.nombre||'');
       m.ci.textContent  = d.CI || '';
       m.nom.textContent = d.nombre || '';
@@ -159,11 +167,50 @@
       m.cel.textContent = d.celular || '';
       m.dir.textContent = d.direccion || '';
       m.foto.src = base + '/public/images/users/' + ((d.fotografia && d.fotografia.trim()) ? d.fotografia : 'default-user.png');
+      
+      // Mostrar/ocultar botón de bloquear según el estado del usuario
+      if(m.btnBloquear) {
+        if(d.estado === 'normal') {
+          m.btnBloquear.style.display = 'inline-block';
+          m.btnBloquear.textContent = 'Bloquear Usuario';
+        } else {
+          m.btnBloquear.style.display = 'none';
+        }
+      }
+      
       m.box.style.display = 'grid';
     });
   });
 
-  m.btn && m.btn.addEventListener('click', function(){ m.box.style.display = 'none'; });
+  m.btn && m.btn.addEventListener('click', function(){ 
+    m.currentUserId = null;
+    m.box.style.display = 'none'; 
+  });
+
+  // bloquear usuario
+  m.btnBloquear && m.btnBloquear.addEventListener('click', function(){
+    if(!m.currentUserId) { alert('Error: ID de usuario no válido'); return; }
+    
+    var confirmMsg = '¿Estás seguro de que quieres bloquear a este usuario?\n\nEsto restringirá su acceso al sistema.';
+    if(!confirm(confirmMsg)) return;
+    
+    var fd = new FormData();
+    fd.append('id', m.currentUserId);
+    getJSON(api + '?action=bloquear', { method: 'POST', body: fd })
+      .then(function(j){
+        if(!j.ok){ 
+          alert(j.msg || 'No se pudo bloquear el usuario'); 
+          return; 
+        }
+        alert('Usuario bloqueado exitosamente');
+        m.currentUserId = null;
+        m.box.style.display = 'none';
+        cargar(); // refrescar lista
+      })
+      .catch(function(){ 
+        alert('Error de red al intentar bloquear el usuario'); 
+      });
+  });
 
   // abrir modal desbloqueo
   tbodyBloq && tbodyBloq.addEventListener('click', function(e){

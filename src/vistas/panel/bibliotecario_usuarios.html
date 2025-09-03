@@ -15,7 +15,7 @@
     <table>
       <thead>
       <tr>
-  <th>CI</th><th>Nombre</th><th>Apellido</th><th>Rol</th><th>Información</th>
+  <th>CI</th><th>Nombre</th><th>Apellido</th><th>Rol</th><th>Estado</th><th>Información</th>
       </tr>
       </thead>
       <tbody id="tbodyUsuarios"></tbody>
@@ -26,14 +26,11 @@
     <table>
       <thead>
       <tr>
-        <th>Ticket</th>
-        <th>Nombre</th>
         <th>CI</th>
-        <th>Libro</th>
-         <th>Autor</th>
-        <th>Fecha Reserva</th>
-         <th>Fecha Devolucion</th>
-        <th>Dias Expiracion</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Rol</th>
+        <th>Estado</th>
         <th>Accion</th>
       </tr>
       </thead>
@@ -84,6 +81,7 @@
       </div>
     </div>
     <footer class="modal_foot">
+      <button class="btn warning" id="btnBloquearUsr">Bloquear Usuario</button>
       <button class="btn ok" id="btnCerrarUsr">Cerrar</button>
     </footer>
   </div>
